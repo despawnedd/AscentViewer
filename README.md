@@ -6,4 +6,4 @@ DDIV's successor, AscentViewer is available here: [AscentViewer's GitHub Page](h
 
 Requirements: 
 - [PIL/Pillow (ImageTk, Image functions)](https://github.com/python-pillow/Pillow)
-- [resizeimage](https://github.com/VingtCinq/python-resize-image)
+- [resizeimage/python-resize-image](https://github.com/VingtCinq/python-resize-image)
