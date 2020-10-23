@@ -183,10 +183,7 @@ def showImage():
     if imageW >= round(scrnW / 1.3) and not imageH >= round(scrnH / 1.3):
         imageWscaled = round(scrnW / 1.3 + .5)
         mainImage = resizeimage.resize_contain(mainImage, [imageWscaled, round(imageH * (imageWscaled / imageW))])
-    elif imageH >= round(scrnH / 1.3) and not imageW >= round(scrnW / 1.3):
-        imageHscaled = round(scrnH / 1.3 + .5)
-        mainImage = resizeimage.resize_contain(mainImage, [round(imageW * (imageHscaled / imageH)), imageHscaled])
-    elif imageW >= round(scrnW / 1.3) and imageH >= round(scrnH / 1.3):
+    elif imageH >= round(scrnH / 1.3):
         imageHscaled = round(scrnH / 1.3 + .5)
         mainImage = resizeimage.resize_contain(mainImage, [round(imageW * (imageHscaled / imageH)), imageHscaled])
 
