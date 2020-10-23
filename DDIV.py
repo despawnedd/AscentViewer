@@ -181,11 +181,14 @@ def showImage():
     root.title(titleFull + " - " + os.path.basename(filePath))
     
     if imageW >= round(scrnW / 1.3) and not imageH >= round(scrnH / 1.3):
-        mainImage = resizeimage.resize_contain(mainImage, [round(scrnW / 1.3 + .5), imageH])
+        imageWscaled = round(scrnW / 1.3 + .5)
+        mainImage = resizeimage.resize_contain(mainImage, [imageWscaled, round(imageH * (imageWscaled / imageW))])
     elif imageH >= round(scrnH / 1.3) and not imageW >= round(scrnW / 1.3):
-        mainImage = resizeimage.resize_contain(mainImage, [imageW, round(scrnH / 1.3 + .5)])
+        imageHscaled = round(scrnH / 1.3 + .5)
+        mainImage = resizeimage.resize_contain(mainImage, [round(imageW * (imageHscaled / imageH)), imageHscaled])
     elif imageW >= round(scrnW / 1.3) and imageH >= round(scrnH / 1.3):
-        mainImage = resizeimage.resize_contain(mainImage, [imageW, round(scrnH / 1.3 + .5)])
+        imageHscaled = round(scrnH / 1.3 + .5)
+        mainImage = resizeimage.resize_contain(mainImage, [round(imageW * (imageHscaled / imageH)), imageHscaled])
 
     mainImagePhoto = ImageTk.PhotoImage(mainImage)
 
