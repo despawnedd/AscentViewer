@@ -9,6 +9,7 @@ It is written using C# and XAML instead of Python for a cleaner and better user 
 
 - [PIL/Pillow (ImageTk, Image functions)](https://github.com/python-pillow/Pillow)
 - [resizeimage/python-resize-image](https://github.com/VingtCinq/python-resize-image)
+- [Python 3.7+](https://www.python.org/downloads/)
 
 ## How to run?
 
