@@ -38,11 +38,15 @@ The procedure is the same as on Windows:
 ### Version Structure (rl_a.b.c-bld)
 
 "**rl**" is the **release branch** indicator (eg. "**master_**")
-___
+
+---
+
 "**a**" is the **major version** number (e.g. "**master_1.0.0**").
 
 "**b**" is the **minor version** number (e.g. "**master_1.3.0**").
 
 "**c**" is the **match version** number (e.g. "**master_1.3.8**").
-___
+
+---
+
 "**bld**" is the **build version** number (e.g. "**master_1.3.8-201204**") (*The build number's pretty much the date the "build" was made in, formatted like this: last two digits of the  year + month + day*).
