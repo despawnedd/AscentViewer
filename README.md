@@ -12,7 +12,7 @@ It is written using C# and XAML instead of Python for a cleaner and better user 
 
 ## How to run?
 
-### Windows 
+### Windows
 
 1. Install Python 3.7+ from [here](https://www.python.org/downloads/)
 2. `py -m pip install -r requirements.txt` (or `pip install -r requirements.txt` if you installed Python on PATH)
@@ -23,6 +23,7 @@ It is written using C# and XAML instead of Python for a cleaner and better user 
 macOS usually comes with a copy of Python but that's an old version which isn't supported.
 
 The procedure is the same as on Windows:
+
 1. 1. Install Python 3.7+ from [here](https://www.python.org/downloads/)
 2. `python3 -m pip install -r requirements.txt`
 3. Run DDIV.py
@@ -35,18 +36,14 @@ The procedure is the same as on Windows:
 
 ## Version naming info
 
-### Version Structure (rl_a.b.c-bld)
+### Version Structure (a.b.c-bld_rl)
 
-"**rl**" is the **release branch** indicator (eg. "**master_**")
+"**a**" is the **major version** number (e.g. "**1.0.0**").
 
----
+"**b**" is the **minor version** number (e.g. "**1.3.0**").
 
-"**a**" is the **major version** number (e.g. "**master_1.0.0**").
+"**c**" is the **match version** number (e.g. "**1.3.8**").
 
-"**b**" is the **minor version** number (e.g. "**master_1.3.0**").
+"**bld**" is the **build version** number (e.g. "**1.3.8-201204**") (*The build number's pretty much the date the "build" was made in, formatted like this: last two digits of the  year + month + day*).
 
-"**c**" is the **match version** number (e.g. "**master_1.3.8**").
-
----
-
-"**bld**" is the **build version** number (e.g. "**master_1.3.8-201204**") (*The build number's pretty much the date the "build" was made in, formatted like this: last two digits of the  year + month + day*).
+"**rl**" is the **release branch** indicator (eg. "**1.3.8-201204_master**")
