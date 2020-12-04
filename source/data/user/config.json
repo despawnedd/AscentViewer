@@ -1,0 +1,9 @@
+{
+    "debug": {
+      "enabled": true
+    },
+
+    "temporary_files": {
+      "clear_logs_on_startup": false
+    }
+}
