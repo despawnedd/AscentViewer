@@ -7,6 +7,20 @@
 
 DDIV's [website](https://despawnedd.acrazytown.com/ddiv).
 
+## New DDIV 
+
+As you may know we've seperated DDIV into 2 versions: **Legacy** and **New**.
+**Legacy DDIV** is every version of DDIV up to **0.1.0.9**.
+**New DDIV** is a complete rewrite of DDIV using **[PyQT](https://riverbankcomputing.com/software/pyqt/)** and classes.
+
+Due to the PyQT's GUI designer, new builds of DDIV should come out quicker than Legacy DDIV, as you simply drag-n-drop to build a GUI.
+
+### New DDIV Status
+
+As of December 5th 2020, **New DDIV** is **0%** finished.
+
+Current status: 
+Development not started yet.
 ## Requirements
 
 - [PIL/Pillow (ImageTk, Image functions)](https://github.com/python-pillow/Pillow)
