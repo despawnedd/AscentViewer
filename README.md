@@ -1,8 +1,10 @@
 # AscentViewer
 
+![AscV Banner](other/banner.png)
+
 ![GitHub all releases](https://img.shields.io/github/downloads/despawnedd/AscentViewer/total?logo=github)
 
-**AscentViewer** is an **image viewer** written in **Python** using [**PyQT**](https://riverbankcomputing.com/software/pyqt/) and [**several other libraries.**](https://github.com/despawnedd/AscentViewer/blob/master/CREDITS.md)
+**AscentViewer** is a powerful **image viewer** written in **Python** using [**PyQT**](https://riverbankcomputing.com/software/pyqt/) and [**several other libraries.**](https://github.com/despawnedd/AscentViewer/blob/master/CREDITS.md)
 
 Here is [**its website**](https://dd.acrazytown.com/AscentViewer/).
 
