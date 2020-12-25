@@ -1,10 +1,11 @@
 # AscentViewer
 
-![AscV Banner](other/banner.png)
+![AscV Banner](other/banner2.png)
 
-![GitHub all releases](https://img.shields.io/github/downloads/despawnedd/AscentViewer/total?logo=github)
+![All downloads shields.io badge](https://img.shields.io/github/downloads/despawnedd/AscentViewer/total?logo=github)
+![License shields.io badge](https://img.shields.io/github/license/despawnedd/AscentViewer?logo=github)
 
-**AscentViewer** is a powerful **image viewer** written in **Python** using [**PyQT**](https://riverbankcomputing.com/software/pyqt/) and [**several other libraries.**](https://github.com/despawnedd/AscentViewer/blob/master/CREDITS.md)
+**AscentViewer** is a powerful **image viewer** written in **Python** using [**PyQT**](https://riverbankcomputing.com/software/pyqt/) and [**several other libraries.**](other/markdown/CREDITS.md)
 
 Here is [**its website**](https://dd.acrazytown.com/AscentViewer/).
 
@@ -12,13 +13,15 @@ Here is [**its website**](https://dd.acrazytown.com/AscentViewer/).
 
 DDIV got renamed to "**AscentViewer**".
 
-The main reason for that is that **@despawnedd** (the owner) is not the only one working on it anymore, and the second reason is that "AscentViewer" just sounds cooler!
+The main reason for that is that [**DespawnedDiamond**](https://github.com/despawnedd) (the owner) is not the only one working on it anymore, and the second reason is that "AscentViewer" just sounds cooler!
 
 Looking for old, pre-rename code? Check out the [**"pre-rename" branch.**](https://github.com/despawnedd/AscentViewer/tree/pre-rename)
 
 ## Version naming info
 
 ### Version Structure (a.b.c-bld-rev_rl)
+
+> *Notice: **This section might and probably will change in the near future.***
 
 "**a**" is the **major version** number (e.g. "**1.0.0**").
 
@@ -30,4 +33,4 @@ Looking for old, pre-rename code? Check out the [**"pre-rename" branch.**](https
 
 "**rev**" is the **revision number** of that build. This will only be used in cases that there are several builds in on day. (e.g. "**1.3.8-201204-4**").
 
-"**rl**" is the **release branch** indicator (eg. "**1.3.8-201204_master**")
+"**rl**" is the **release branch** indicator (eg. "**1.3.8-201204-4_master**")

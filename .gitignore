@@ -1,5 +1,3 @@
-
-.vscode/settings.json
-.vscode/launch.json
+.vscode/*
 .idea/*
-source/.vscode/launch.json
+source/.vscode/*

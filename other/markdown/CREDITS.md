@@ -1,8 +1,6 @@
 # Credits
 
-***Notice**: this document is outdated. It'll be updated soon.*
-
----
+> ***Notice**: this document is outdated. It'll be updated soon.*
 
 Big thanks to:
 
