@@ -14,7 +14,7 @@ date_format_file = "%d%m%Y_%H%M%S"
 date_format = "%d/%m/%Y %H:%M:%S"
 
 logfile = f"data/user/temp/logs/log_{datetime.datetime.now().strftime(date_format_file)}.txt"
-ascv_logger = logging.getLogger("AscV Logger")
+ascvLogger = logging.getLogger("AscV Logger")
 logging.basicConfig(level=logging.DEBUG, handlers=[logging.StreamHandler(), logging.FileHandler(logfile)], format="[%(asctime)s | %(name)s | %(funcName)s | %(levelname)s] %(message)s", datefmt=date_format)
 if os.path.exists(logfile):
     with open(logfile, "w") as f: # this code is a bit messy but all this does is just write the same thing both to the console and the logfile
@@ -22,7 +22,7 @@ if os.path.exists(logfile):
         f.write(f"{m}\n")
         print(m)
 
-ascv_logger.info(f"The OS is {platform.system()}.")
+ascvLogger.info(f"The OS is {platform.system()}.")
 
 if platform.system() == "Windows":
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("ascv") # makes the ascv icon appear in the taskbar, more info here: "https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105"
@@ -34,7 +34,7 @@ class MainClass(QtWidgets.QMainWindow):
         QtWidgets.QWidget.__init__(self)
 
         # non-gui related stuff
-        ascv_logger.info("Initializing GUI.")
+        ascvLogger.info("Initializing GUI.")
         self.dirPath = ""
 
         # gui related stuff
@@ -109,28 +109,28 @@ class MainClass(QtWidgets.QMainWindow):
 
         debugMenu.addAction(logWindowButton)
 
-        ascv_logger.info("GUI has been initialized.")
+        ascvLogger.info("GUI has been initialized.")
     
     # i should clean up these two functions below soon
     def openImage(self):
         self.imgFilePath, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open Image File", "/", "Image files (*.jpg *.jpeg *.gif *.png *.bmp)")
         if self.imgFilePath != "":
-            ascv_logger.info(f"Opened image. Image path: \"{self.imgFilePath}\"")
+            ascvLogger.info(f"Opened image. Image path: \"{self.imgFilePath}\"")
             self.dirPath_ = self.imgFilePath.replace(os.path.basename(self.imgFilePath), "")
-            ascv_logger.info(f"Image's directory path: \"{self.dirPath_}\"")
+            ascvLogger.info(f"Image's directory path: \"{self.dirPath_}\"")
 
-            ascv_logger.debug(f"dirPath: \"{self.dirPath}\", dirPath_: \"{self.dirPath_}\"")
+            ascvLogger.debug(f"dirPath: \"{self.dirPath}\", dirPath_: \"{self.dirPath_}\"")
 
             if self.dirPath != "":
-                ascv_logger.debug("dirPath isn't blank")
+                ascvLogger.debug("dirPath isn't blank")
                 if self.dirPath != self.dirPath_:
-                    ascv_logger.debug("dirPath and dirPath_ aren't the same, creating new dirImageList, and setting dirPath to dirPath_")
+                    ascvLogger.debug("dirPath and dirPath_ aren't the same, creating new dirImageList, and setting dirPath to dirPath_")
                     self.dirPath = self.dirPath_
                     self.dirMakeImageList(1)
                 else:
-                    ascv_logger.debug("dirPath and dirPath_ are the same, not creating new dirImageList")
+                    ascvLogger.debug("dirPath and dirPath_ are the same, not creating new dirImageList")
             else:
-                ascv_logger.debug("dirPath is blank, creating dirImageList")
+                ascvLogger.debug("dirPath is blank, creating dirImageList")
                 self.dirPath = self.dirPath_
                 self.dirMakeImageList(1)
 
@@ -139,25 +139,25 @@ class MainClass(QtWidgets.QMainWindow):
             self.navButtonBack.setEnabled(True)
             self.navButtonForw.setEnabled(True)
         else:
-            ascv_logger.info("imgFilePath is empty!")
+            ascvLogger.info("imgFilePath is empty!")
 
     def openDir(self):
         self.dirPath_ = QtWidgets.QFileDialog.getExistingDirectory(self, "Open a Directory", "/")
         if self.dirPath_ != "":
-            ascv_logger.info(f"Successfully opened directory, directory path is: \"{self.dirPath_}\"")
+            ascvLogger.info(f"Successfully opened directory, directory path is: \"{self.dirPath_}\"")
 
-            ascv_logger.debug(f"dirPath: \"{self.dirPath}\", dirPath_: \"{self.dirPath_}\"")
+            ascvLogger.debug(f"dirPath: \"{self.dirPath}\", dirPath_: \"{self.dirPath_}\"")
 
             if self.dirPath != "":
-                ascv_logger.debug("dirPath isn't blank")
+                ascvLogger.debug("dirPath isn't blank")
                 if self.dirPath != self.dirPath_:
-                    ascv_logger.debug("dirPath and dirPath_ aren't the same, creating new dirImageList, and setting dirPath to dirPath_")
+                    ascvLogger.debug("dirPath and dirPath_ aren't the same, creating new dirImageList, and setting dirPath to dirPath_")
                     self.dirPath = self.dirPath_
                     self.dirMakeImageList(0)
                 else:
-                    ascv_logger.debug("dirPath and dirPath_ are the same, not creating new dirImageList")
+                    ascvLogger.debug("dirPath and dirPath_ are the same, not creating new dirImageList")
             else:
-                ascv_logger.debug("dirPath is blank, creating dirImageList")
+                ascvLogger.debug("dirPath is blank, creating dirImageList")
                 self.dirPath = self.dirPath_
                 self.dirMakeImageList(0)
 
@@ -165,7 +165,7 @@ class MainClass(QtWidgets.QMainWindow):
             self.navButtonBack.setEnabled(True)
             self.navButtonForw.setEnabled(True)
         else:
-            ascv_logger.info("dirPath_ is blank!")
+            ascvLogger.info("dirPath_ is blank!")
 
     def dirMakeImageList(self, hasOpenedImage):
         fileTypes = ("*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif")
@@ -177,8 +177,8 @@ class MainClass(QtWidgets.QMainWindow):
         self.dirImageList = [files.replace('\\', '/') for files in self.dirImageList]
         self.dirImageList.sort(key=str.lower)
         
-        ascv_logger.info(f"Succesfully created dirImageList, dirImageList length: {len(self.dirImageList)}")
-        # ascv_logger.debug(f"dirImageList: {self.dirImageList}") # ---> this SOMETIMES pukes out a unicode error, "UnicodeEncodeError: 'charmap' codec can't encode character '\u010d' in position 1125: character maps to <undefined>", no idea why, probably something with the files that you open
+        ascvLogger.info(f"Succesfully created dirImageList, dirImageList length: {len(self.dirImageList)}")
+        # ascvLogger.debug(f"dirImageList: {self.dirImageList}") # ---> this pukes out a unicode error if there's a special character in the list (e.g. "UnicodeEncodeError: 'charmap' codec can't encode character '\u010d' in position 1125: character maps to <undefined>"), probably a problem with the logging module
 
         if hasOpenedImage == 1:
             self.imageNumber = self.dirImageList.index(self.imgFilePath)
@@ -240,7 +240,7 @@ class MainClass(QtWidgets.QMainWindow):
             x = reply.exec_()
 
             if x == QtWidgets.QMessageBox.Yes:
-                ascv_logger.info("Exiting...")
+                ascvLogger.info("Exiting...")
                 event.accept()
             else:
                 print("Not exiting.")

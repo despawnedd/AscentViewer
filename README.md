@@ -15,7 +15,7 @@ DDIV got renamed to "**AscentViewer**".
 
 The main reason for that is that [**DespawnedDiamond**](https://github.com/despawnedd) (the owner) is not the only one working on it anymore, and the second reason is that "AscentViewer" just sounds cooler!
 
-Looking for old, pre-rename code? Check out the [**"pre-rename" branch.**](https://github.com/despawnedd/AscentViewer/tree/pre-rename)
+Looking for old, pre-rename/Old Pre-release Beta code? Check out the [**"pre-rename" branch.**](https://github.com/despawnedd/AscentViewer/tree/pre-rename)
 
 ## Version naming info
 
