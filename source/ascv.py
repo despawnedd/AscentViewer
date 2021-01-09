@@ -9,7 +9,7 @@ import glob
 import datetime
 import signal
 
-ver = "Early Test ver 2"
+ver = "early test version"
 date_format_file = "%d%m%Y_%H%M%S"
 date_format = "%d/%m/%Y %H:%M:%S"
 
@@ -25,7 +25,7 @@ if os.path.exists(logfile):
 ascv_logger.info(f"The OS is {platform.system()}.")
 
 if platform.system() == "Windows":
-    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("ascv")
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("ascv") # makes the ascv icon appear in the taskbar, more info here: "https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105"
 
 signal.signal(signal.SIGINT, signal.SIG_DFL) # apparently makes CTRL + C work in console
 
@@ -65,7 +65,7 @@ class MainClass(QtWidgets.QMainWindow):
         fileMenu = mainMenu.addMenu("File")
         navMenu = mainMenu.addMenu("Navigation")
         debugMenu = mainMenu.addMenu("Debug")
-        helpMenu = mainMenu.addMenu("Help")
+        #helpMenu = mainMenu.addMenu("Help")
 
         exitButton = QtWidgets.QAction(QtGui.QIcon("data/assets/door.png"), "Exit", self)
         exitButton.setShortcut("Alt+F4")
@@ -113,7 +113,7 @@ class MainClass(QtWidgets.QMainWindow):
     
     # i should clean up these two functions below soon
     def openImage(self):
-        self.imgFilePath, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open Image File", "C:\\", "Image files (*.jpg *.jpeg *.gif *.png *.bmp)")
+        self.imgFilePath, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open Image File", "/", "Image files (*.jpg *.jpeg *.gif *.png *.bmp)")
         if self.imgFilePath != "":
             ascv_logger.info(f"Opened image. Image path: \"{self.imgFilePath}\"")
             self.dirPath_ = self.imgFilePath.replace(os.path.basename(self.imgFilePath), "")
@@ -142,7 +142,7 @@ class MainClass(QtWidgets.QMainWindow):
             ascv_logger.info("imgFilePath is empty!")
 
     def openDir(self):
-        self.dirPath_ = QtWidgets.QFileDialog.getExistingDirectory(self, "Open a Directory", "C:\\")
+        self.dirPath_ = QtWidgets.QFileDialog.getExistingDirectory(self, "Open a Directory", "/")
         if self.dirPath_ != "":
             ascv_logger.info(f"Successfully opened directory, directory path is: \"{self.dirPath_}\"")
 
@@ -201,19 +201,20 @@ class MainClass(QtWidgets.QMainWindow):
 
     def resizeEvent(self, event):
         self.updateImage()
-
+    
+    # i should change these two too
     def prevImage(self):
-        print("prev image")
+        #print("prev image")
         self.imageNumber -= 1
         self.imgFilePath = self.dirImageList[self.imageNumber]
-        print(self.imageNumber)
+        #print(self.imageNumber)
         self.updateImage()
 
     def nextImage(self):
-        print("next image")
+        #print("next image")
         self.imageNumber += 1
         self.imgFilePath = self.dirImageList[self.imageNumber]
-        print(self.imageNumber)
+        #print(self.imageNumber)
         self.updateImage()
 
     def openLogViewerWin(self):
@@ -266,8 +267,6 @@ class LogViewer(QtWidgets.QMainWindow):
         logTextEdit.resize(600, 400)
         
         logTextEdit.appendPlainText("Coming soon. In t\n====================")
-
-        #logging.info("Log Viewer works!")
             
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
