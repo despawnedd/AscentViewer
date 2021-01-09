@@ -2,6 +2,8 @@
 
 > ***Notice**: this document is outdated. It'll be updated soon.*
 
+---
+
 Big thanks to:
 
 <https://www.sololearn.com/Play/Python>
