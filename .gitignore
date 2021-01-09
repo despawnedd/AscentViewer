@@ -2,6 +2,7 @@
 .idea/*
 source/.vscode/*
 source/ddiv_main_.py
+source/data/user/temp/logs/*
 tests_and_stuff/*
 source.zip
 other/RECOVER_avgui.fla
