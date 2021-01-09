@@ -19,9 +19,9 @@ Looking for old, pre-rename code? Check out the [**"pre-rename" branch.**](https
 
 ## Version naming info
 
-### Version Structure (a.b.c-bld-rev_rl)
-
 > *Notice: **This section might and probably will change in the near future.***
+
+### Version Structure (a.b.c-bld-rev_rl)
 
 "**a**" is the **major version** number (e.g. "**1.0.0**").
 
