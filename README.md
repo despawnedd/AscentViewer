@@ -33,6 +33,6 @@ Looking for old, pre-rename/Old Pre-release Beta code? Check out the [**"pre-ren
 
 "**bld**" is the **build version** number (e.g. "**1.3.8-201204**") (*The build number's pretty much the date the "build" was made in, formatted like this: last two digits of the  year + month + day*).
 
-"**rev**" is the **revision number** of that build. This will only be used in cases that there are several builds in on day. (e.g. "**1.3.8-201204-4**").
+"**rev**" is the **revision number** of that build. This will only be used in cases that there are several builds in one day. (e.g. "**1.3.8-201204-4**").
 
 "**rl**" is the **release branch** indicator (eg. "**1.3.8-201204-4_master**")
