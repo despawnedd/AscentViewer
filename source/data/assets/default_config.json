@@ -4,7 +4,10 @@
         "height": 600
     },
     "debug": {
-        "enableDebugMenu": false
+        "enableDebugMenu": false,
+        "logging": {
+            "loggingLevel": "INFO"
+        }
     },
     "prompts": {
         "enableExitPrompt": true
