@@ -9,26 +9,6 @@ import glob
 import datetime
 import signal
 
-ver = "early test version"
-date_format_file = "%d%m%Y_%H%M%S"
-date_format = "%d/%m/%Y %H:%M:%S"
-
-logfile = f"data/user/temp/logs/log_{datetime.datetime.now().strftime(date_format_file)}.txt"
-ascvLogger = logging.getLogger("AscV Logger")
-logging.basicConfig(level=logging.DEBUG, handlers=[logging.StreamHandler(), logging.FileHandler(logfile)], format="[%(asctime)s | %(name)s | %(funcName)s | %(levelname)s] %(message)s", datefmt=date_format)
-if os.path.exists(logfile):
-    with open(logfile, "w") as f: # this code is a bit messy but all this does is just write the same thing both to the console and the logfile
-        m = "="*15 + "[ BEGIN LOG ]" + "="*15
-        f.write(f"{m}\n")
-        print(m)
-
-ascvLogger.info(f"The OS is {platform.system()}.")
-
-if platform.system() == "Windows":
-    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("ascv") # makes the ascv icon appear in the taskbar, more info here: "https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105"
-
-signal.signal(signal.SIGINT, signal.SIG_DFL) # apparently makes CTRL + C work in console
-
 class MainClass(QtWidgets.QMainWindow):
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
@@ -38,12 +18,11 @@ class MainClass(QtWidgets.QMainWindow):
         self.dirPath = ""
 
         # gui related stuff
-        self.resize(800, 600)
+        self.resize(config["windowProperties"]["width"], config["windowProperties"]["height"])
         self.setWindowTitle(f"AscentViewer {ver}")
-        self.setWindowIcon(QtGui.QIcon("data/assets/icon22.png"))
+        self.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
 
         self.imgFilePath = ""
-        self.exitPromptEnabled = True
 
         self.mainWidget = QtWidgets.QWidget(self)
 
@@ -64,20 +43,21 @@ class MainClass(QtWidgets.QMainWindow):
         mainMenu = self.menuBar()
         fileMenu = mainMenu.addMenu("File")
         navMenu = mainMenu.addMenu("Navigation")
-        debugMenu = mainMenu.addMenu("Debug")
-        #helpMenu = mainMenu.addMenu("Help")
+        if config["debug"]["enableDebugMenu"]:
+            debugMenu = mainMenu.addMenu("Debug")
+        helpMenu = mainMenu.addMenu("Help")
 
-        exitButton = QtWidgets.QAction(QtGui.QIcon("data/assets/door.png"), "Exit", self)
+        exitButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/door.png"), "Exit", self)
         exitButton.setShortcut("Alt+F4")
         exitButton.setStatusTip("Exit application")
         exitButton.triggered.connect(self.close)
 
-        openImgButton = QtWidgets.QAction(QtGui.QIcon("data/assets/file.png"), "Open Image...", self)
+        openImgButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/file.png"), "Open Image...", self)
         openImgButton.setShortcut("CTRL+O")
         openImgButton.setStatusTip("Open an image file")
         openImgButton.triggered.connect(self.openImage)
 
-        openDirButton = QtWidgets.QAction(QtGui.QIcon("data/assets/file.png"), "Open Directory...", self)
+        openDirButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/file.png"), "Open Directory...", self)
         openDirButton.setShortcut("CTRL+Shift+O")
         openDirButton.setStatusTip("Open a directory file")
         openDirButton.triggered.connect(self.openDir)
@@ -92,10 +72,16 @@ class MainClass(QtWidgets.QMainWindow):
         self.navButtonForw.setStatusTip("Go to next image in directory")
         self.navButtonForw.triggered.connect(self.nextImage)
 
-        logWindowButton = QtWidgets.QAction(QtGui.QIcon(), "Log Viewer", self)
-        logWindowButton.setShortcut("CTRL+Shift+L")
-        logWindowButton.setStatusTip("Open the log viewer window.")
-        logWindowButton.triggered.connect(self.openLogViewerWin)
+        if config["debug"]["enableDebugMenu"]:
+            logWindowButton = QtWidgets.QAction(QtGui.QIcon(), "Log Viewer", self)
+            logWindowButton.setShortcut("CTRL+Shift+L")
+            logWindowButton.setStatusTip("Open the log viewer window.")
+            logWindowButton.triggered.connect(self.openLogViewerWin)
+
+        helpButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon22.png"), "Help", self)
+        helpButton.setShortcut("F1")
+        helpButton.setStatusTip("Open the help window.")
+        helpButton.triggered.connect(self.close)
 
         fileMenu.addAction(openImgButton)
         fileMenu.addAction(openDirButton)
@@ -107,10 +93,17 @@ class MainClass(QtWidgets.QMainWindow):
         self.navButtonForw.setEnabled(False)
         navMenu.addAction(self.navButtonForw)
 
-        debugMenu.addAction(logWindowButton)
+        if config["debug"]["enableDebugMenu"]:
+            debugMenu.addAction(logWindowButton)
+
+        helpMenu.addAction(helpButton)
 
         ascvLogger.info("GUI has been initialized.")
     
+    def dumpJson(self):
+        with open("data/user/config.json", "w", encoding="utf-8") as cf:
+            json.dump(config, cf, ensure_ascii=False, indent=4)
+
     # i should clean up these two functions below soon
     def openImage(self):
         self.imgFilePath, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open Image File", "/", "Image files (*.jpg *.jpeg *.gif *.png *.bmp)")
@@ -221,17 +214,25 @@ class MainClass(QtWidgets.QMainWindow):
         self.logViewerWin = LogViewer()
         self.logViewerWin.show()
 
+    def onCloseActions(self):
+        config["windowProperties"]["width"] = self.width()
+        config["windowProperties"]["height"] = self.height()
+        self.dumpJson()
+
+        print("=================================\nThank you for using AscentViewer!\n=================================")
+
     def closeEvent(self, event):
-        if self.exitPromptEnabled != False:
+        if config["prompts"]["enableExitPrompt"]:
             reply = QtWidgets.QMessageBox(self)
-            reply.setWindowIcon(QtGui.QIcon("data/assets/icon22.png"))
+            reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
             reply.setWindowTitle("Exiting AscentViewer")
             reply.setText("<b>Are you sure you want to exit AscentViewer?</b>")
+            reply.setInformativeText("<i>By the way, thank you for using this program!</i>")
             reply.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
             reply.setDefaultButton(QtWidgets.QMessageBox.No)
-            checkbox = QtWidgets.QCheckBox("Do not show this again, instead, exit without asking next time.")
+            checkbox = QtWidgets.QCheckBox("Do not show this again.")
 
-            icon1 = QtGui.QPixmap("data/assets/door.png")
+            icon1 = QtGui.QPixmap("data/assets/img/door.png")
             icon = icon1.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
             reply.setIconPixmap(QtGui.QPixmap(icon))
             reply.setCheckBox(checkbox)
@@ -241,19 +242,22 @@ class MainClass(QtWidgets.QMainWindow):
 
             if x == QtWidgets.QMessageBox.Yes:
                 ascvLogger.info("Exiting...")
+                self.onCloseActions()
                 event.accept()
             else:
-                print("Not exiting.")
+                ascvLogger.info("Not exiting.")
                 event.ignore()
 
             if checkbox.isChecked():
-                print("Disabling prompt...")
-                self.exitPromptEnabled = False
+                ascvLogger.info("Disabling prompt...")
+                config["prompts"]["enableExitPrompt"] = False
             else:
-                print("Not disabling prompt.")
+                ascvLogger.info("Not disabling prompt.")
 
         else:
             print("This entire prompt is disabled, exiting...")
+            self.onCloseActions()
+            event.accept()
 
 class LogViewer(QtWidgets.QMainWindow):
     def __init__(self):
@@ -261,14 +265,50 @@ class LogViewer(QtWidgets.QMainWindow):
 
         self.resize(600, 400)
         self.setWindowTitle("Log Viewer")
-        self.setWindowIcon(QtGui.QIcon("data/assets/icon22.png"))
+        self.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
 
         logTextEdit = QtWidgets.QPlainTextEdit(self)
         logTextEdit.resize(600, 400)
         
-        logTextEdit.appendPlainText("Coming soon. In t\n====================")
+        logTextEdit.appendPlainText("Coming soon.\n====================")
             
 if __name__ == '__main__':
+    ver = "early test version"
+    date_format_file = "%d%m%Y_%H%M%S"
+    date_format = "%d/%m/%Y %H:%M:%S"
+
+    #with open("data/user/config.json", "w", encoding="utf-8") as cf:
+    #    config = json.load(cf)
+
+    #with open("data/user/config.json", "w", encoding="utf-8") as f:
+    #    json.dump(data, f, ensure_ascii=False, indent=4)
+
+    config = json.load(open("data/user/config.json")) # using json instead of qsettings, for now
+
+    if config["temporary_files"]["logs"]["deleteLogsOnStartup"]:
+        logs = glob.glob("data/user/temp/logs/*.txt")
+        #print(files)
+        for f in logs:
+            os.remove(f)
+        print("Erased all logs.")
+    else:
+        print("Not deleting logs.")
+
+    logfile = f"data/user/temp/logs/log_{datetime.datetime.now().strftime(date_format_file)}.txt"
+    ascvLogger = logging.getLogger("AscV Logger")
+    logging.basicConfig(level=logging.DEBUG, handlers=[logging.StreamHandler(), logging.FileHandler(logfile)], format="[%(asctime)s | %(name)s | %(funcName)s | %(levelname)s] %(message)s", datefmt=date_format)
+    if os.path.exists(logfile):
+        with open(logfile, "w") as f: # this code is a bit messy but all this does is just write the same thing both to the console and the logfile
+            m = "="*15 + "[ BEGIN LOG ]" + "="*15
+            f.write(f"{m}\n")
+            print(m)
+
+    ascvLogger.info(f"The OS is {platform.system()}.")
+
+    if platform.system() == "Windows":
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("ascv") # makes the ascv icon appear in the taskbar, more info here: "https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105"
+
+    signal.signal(signal.SIGINT, signal.SIG_DFL) # apparently makes CTRL + C work properly in console
     app = QtWidgets.QApplication(sys.argv)
 
     window = MainClass()
@@ -276,3 +316,7 @@ if __name__ == '__main__':
     window.statusBar().showMessage(f"Succesfully loaded. Version: {ver}")
 
     sys.exit(app.exec_())
+
+    # =================================
+    # Thank you for using AscentViewer!
+    # =================================

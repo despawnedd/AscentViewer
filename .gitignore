@@ -1,7 +1,9 @@
 .vscode/*
 .idea/*
 source/.vscode/*
+source/ddiv_main.py
 source/ddiv_main_.py
 source/zipping_area/*
 source/data/user/temp/logs/*.txt
+source/new_credits.txt
 tests_and_stuff/*
