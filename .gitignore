@@ -5,3 +5,4 @@ source/.vscode
 source/data/user/temp/logs/*.txt
 source/__pycache__
 tests_and_stuff
+tests/__pycache__
