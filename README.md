@@ -17,13 +17,22 @@ The main reason for that is that [**DespawnedDiamond**](https://github.com/despa
 
 Looking for old, pre-rename/Old Pre-release Beta code? Check out the [**"pre-rename" branch.**](https://github.com/despawnedd/AscentViewer/tree/pre-rename)
 
-## Version naming info
+## Credits
 
-> *Notice: **This section might and probably will change in the near future.***
+Credits are coming soon.
 
----
+## Release version naming info
 
-### Version Structure (a.b.c-bld-rev_rl)
+Each version name consists of four elements:
+
+- major version number
+- minor version number
+- revision number
+- additional info (such as the branch)
+
+e.g. **1.0.3_dev-1.3**
+
+<!-- ### Version Structure (a.b.c-bld-rev_rl)
 
 "**a**" is the **major version** number (e.g. "**1.0.0**").
 
@@ -35,4 +44,4 @@ Looking for old, pre-rename/Old Pre-release Beta code? Check out the [**"pre-ren
 
 "**rev**" is the **revision number** of that build. This will only be used in cases that there are several builds in one day. (e.g. "**1.3.8-201204-4**").
 
-"**rl**" is the **release branch** indicator (eg. "**1.3.8-201204-4_master**")
+"**rl**" is the **release branch** indicator (eg. "**1.3.8-201204-4_master**") -->
