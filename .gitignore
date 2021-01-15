@@ -1,10 +1,7 @@
-.vscode/*
-.idea/*
-source/.vs/*
-source/.vscode/*
-source/ddiv_main.py
-source/ddiv_main_.py
-source/zipping_area/*
+.vscode
+.idea
+source/.vs
+source/.vscode
 source/data/user/temp/logs/*.txt
 source/__pycache__
-tests_and_stuff/*
+tests_and_stuff

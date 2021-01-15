@@ -4,7 +4,7 @@
         "height": 600
     },
     "debug": {
-        "enableDebugMenu": false,
+        "enableDebugMenu": true,
         "logging": {
             "loggingLevel": "INFO"
         }

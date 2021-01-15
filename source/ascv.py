@@ -75,12 +75,12 @@ class MainClass(QtWidgets.QMainWindow):
             logWindowButton = QtWidgets.QAction(QtGui.QIcon(), "Log Viewer", self)
             logWindowButton.setShortcut("CTRL+Shift+L")
             logWindowButton.setStatusTip("Open the log viewer window.")
-            logWindowButton.triggered.connect(self.openLogViewerWin)
+            logWindowButton.triggered.connect(self.openLogWin)
 
         helpButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon22.png"), "Help", self)
         helpButton.setShortcut("F1")
         helpButton.setStatusTip("Open the help window.")
-        helpButton.triggered.connect(self.close)
+        helpButton.triggered.connect(self.openHelpWin)
 
         fileMenu.addAction(openImgButton)
         fileMenu.addAction(openDirButton)
@@ -206,9 +206,13 @@ class MainClass(QtWidgets.QMainWindow):
         self.imgFilePath = self.dirImageList[self.imageNumber]
         self.updateImage()
 
-    def openLogViewerWin(self):
-        self.logViewerWin = LogViewer()
-        self.logViewerWin.show()
+    def openLogWin(self):
+        self.lw = LogViewer() # "self." is required here for some reason
+        self.lw.show()
+
+    def openHelpWin(self):
+        self.hw = HelpWindow()
+        self.hw.show()
 
     def onCloseActions(self):
         config["windowProperties"]["width"] = self.width()
@@ -225,14 +229,19 @@ class MainClass(QtWidgets.QMainWindow):
             reply.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
             reply.setDefaultButton(QtWidgets.QMessageBox.No)
             checkbox = QtWidgets.QCheckBox("Do not show this again.")
-
-            icon1 = QtGui.QPixmap("data/assets/img/door.png")
-            icon = icon1.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            icon_ = QtGui.QPixmap("data/assets/img/door.png")
+            icon = icon_.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
             reply.setIconPixmap(QtGui.QPixmap(icon))
             reply.setCheckBox(checkbox)
-
             reply.setModal(True)
+
             x = reply.exec_()
+
+            if checkbox.isChecked():
+                ascvLogger.info("Disabling prompt...")
+                config["prompts"]["enableExitPrompt"] = False
+            else:
+                ascvLogger.info("Not disabling prompt.")
 
             if x == QtWidgets.QMessageBox.Yes:
                 ascvLogger.info("Exiting...")
@@ -241,12 +250,6 @@ class MainClass(QtWidgets.QMainWindow):
             else:
                 ascvLogger.info("Not exiting.")
                 event.ignore()
-
-            if checkbox.isChecked():
-                ascvLogger.info("Disabling prompt...")
-                config["prompts"]["enableExitPrompt"] = False
-            else:
-                ascvLogger.info("Not disabling prompt.")
 
         else:
             ascvLogger.info("Exit prompt is disabled, exiting...")
@@ -262,9 +265,27 @@ class LogViewer(QtWidgets.QMainWindow):
         self.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
 
         logTextEdit = QtWidgets.QPlainTextEdit(self)
-        logTextEdit.resize(600, 400)
+        self.setCentralWidget(logTextEdit)
+        logTextEdit.appendPlainText("Coming soon.")
 
-        logTextEdit.appendPlainText("Coming soon.\n====================")
+class HelpWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        QtWidgets.QWidget.__init__(self)
+
+        self.resize(725, 460)
+        self.setWindowTitle("Log Viewer")
+        self.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
+
+        self.label = QtWidgets.QLabel(self)
+        self.setCentralWidget(self.label)
+        self.label.setText("Coming soon.")
+
+        mainLabelFont = QtGui.QFont()
+        mainLabelFont.setBold(True)
+        mainLabelFont.setPointSize(16)
+        self.label.setFont(mainLabelFont)
+
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
 
 if __name__ == '__main__':
     try:
@@ -272,11 +293,11 @@ if __name__ == '__main__':
     except:
         pass
 
-    ver = "early test version"
+    ver = "early test version (PyQt5)"
     date_format_file = "%d%m%Y_%H%M%S"
     date_format = "%d/%m/%Y %H:%M:%S"
 
-    config = json.load(open("data/user/config.json")) # using json instead of qsettings, for now
+    config = json.load(open("data/user/config.json")) # using json instead of QSettings, for now
 
     if config["temporary_files"]["logs"]["deleteLogsOnStartup"]:
         logs = glob.glob("data/user/temp/logs/*.txt")
@@ -300,7 +321,7 @@ if __name__ == '__main__':
     ascvLogger.info(f"The OS is {platform.system()}.")
 
     if platform.system() == "Windows":
-        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("ascv") # makes the ascv icon appear in the taskbar, more info here: "https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105"
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("ascv") # makes the AscentViewer icon appear in the taskbar, more info here: "https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105"
 
     signal.signal(signal.SIGINT, signal.SIG_DFL) # apparently makes CTRL + C work properly in console ("https://stackoverflow.com/questions/5160577/ctrl-c-doesnt-work-with-pyqt")
     app = QtWidgets.QApplication(sys.argv)
