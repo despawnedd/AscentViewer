@@ -1,4 +1,4 @@
-from PyQt5 import QtGui, QtCore, QtWidgets
+from PyQt6 import QtGui, QtCore, QtWidgets
 import sys
 import ctypes
 import json
@@ -37,7 +37,7 @@ class MainClass(QtWidgets.QMainWindow):
         self.label.setFont(mainLabelFont)
 
         self.label.setMinimumSize(1, 1)
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setAlignment(QtCore.Qt.Alignment.AlignCenter)
 
         mainMenu = self.menuBar()
         fileMenu = mainMenu.addMenu("File")
@@ -45,28 +45,28 @@ class MainClass(QtWidgets.QMainWindow):
         if config["debug"]["enableDebugMenu"]:
             debugMenu = mainMenu.addMenu("Debug")
         helpMenu = mainMenu.addMenu("Help")
-
-        exitButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/door.png"), "Exit", self)
+        
+        exitButton = QtGui.QAction(QtGui.QIcon("data/assets/img/door.png"), "Exit", self)
         exitButton.setShortcut("Alt+F4")
         exitButton.setStatusTip("Exit application")
         exitButton.triggered.connect(self.close)
 
-        openImgButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/file.png"), "Open Image...", self)
+        openImgButton = QtGui.QAction(QtGui.QIcon("data/assets/img/file.png"), "Open Image...", self)
         openImgButton.setShortcut("CTRL+O")
         openImgButton.setStatusTip("Open an image file")
         openImgButton.triggered.connect(self.openImage)
 
-        openDirButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/file.png"), "Open Directory...", self)
+        openDirButton = QtGui.QAction(QtGui.QIcon("data/assets/img/file.png"), "Open Directory...", self)
         openDirButton.setShortcut("CTRL+Shift+O")
         openDirButton.setStatusTip("Open a directory file")
         openDirButton.triggered.connect(self.openDir)
 
-        self.navButtonBack = QtWidgets.QAction(QtGui.QIcon(), "Previous Image", self)
+        self.navButtonBack = QtGui.QAction(QtGui.QIcon(), "Previous Image", self)
         self.navButtonBack.setShortcut("Left")
         self.navButtonBack.setStatusTip("Go to previous image in directory")
         self.navButtonBack.triggered.connect(self.prevImage)
 
-        self.navButtonForw = QtWidgets.QAction(QtGui.QIcon(), "Next Image", self)
+        self.navButtonForw = QtGui.QAction(QtGui.QIcon(), "Next Image", self)
         self.navButtonForw.setShortcut("Right")
         self.navButtonForw.setStatusTip("Go to next image in directory")
         self.navButtonForw.triggered.connect(self.nextImage)
@@ -77,7 +77,7 @@ class MainClass(QtWidgets.QMainWindow):
             logWindowButton.setStatusTip("Open the log viewer window.")
             logWindowButton.triggered.connect(self.openLogViewerWin)
 
-        helpButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon22.png"), "Help", self)
+        helpButton = QtGui.QAction(QtGui.QIcon("data/assets/img/icon22.png"), "Help", self)
         helpButton.setShortcut("F1")
         helpButton.setStatusTip("Open the help window.")
         helpButton.triggered.connect(self.close)
@@ -186,7 +186,7 @@ class MainClass(QtWidgets.QMainWindow):
 
         if self.imgFilePath != "":
             pixmap_ = QtGui.QPixmap(self.imgFilePath)
-            pixmap = pixmap_.scaled(mwWidth, mwHeight, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            pixmap = pixmap_.scaled(mwWidth, mwHeight, QtCore.Qt.AspectRatioMode.KeepAspectRatio, QtCore.Qt.TransformationMode.SmoothTransformation)
             self.label.setPixmap(pixmap)
         self.label.resize(mwWidth, mwHeight)
 
@@ -222,19 +222,18 @@ class MainClass(QtWidgets.QMainWindow):
             reply.setWindowTitle("Exiting AscentViewer")
             reply.setText("<b>Are you sure you want to exit AscentViewer?</b>")
             reply.setInformativeText("<i>By the way, thank you for using this program!</i>")
-            reply.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            reply.setDefaultButton(QtWidgets.QMessageBox.No)
+            reply.setStandardButtons(QtWidgets.QMessageBox.StandardButtons.Yes | QtWidgets.QMessageBox.StandardButtons.No)
             checkbox = QtWidgets.QCheckBox("Do not show this again.")
-
             icon1 = QtGui.QPixmap("data/assets/img/door.png")
-            icon = icon1.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            icon = icon1.scaled(48, 48, QtCore.Qt.AspectRatioMode.KeepAspectRatio, QtCore.Qt.TransformationMode.SmoothTransformation)
             reply.setIconPixmap(QtGui.QPixmap(icon))
             reply.setCheckBox(checkbox)
-
             reply.setModal(True)
-            x = reply.exec_()
 
-            if x == QtWidgets.QMessageBox.Yes:
+            x = reply.exec()
+
+            if x == QtWidgets.QMessageBox.StandardButtons.Yes:
+                print("Hello!")
                 ascvLogger.info("Exiting...")
                 self.onCloseActions()
                 event.accept()
@@ -309,7 +308,7 @@ if __name__ == '__main__':
     window.show()
     window.statusBar().showMessage(f"Succesfully loaded. Version: {ver}")
 
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 
     # =================================
     # Thank you for using AscentViewer!
