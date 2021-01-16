@@ -1,3 +1,7 @@
+# =================================
+# Thank you for using and/or checking out AscentViewer!
+# =================================
+
 from PyQt6 import QtGui, QtCore, QtWidgets
 import sys
 import ctypes
@@ -20,6 +24,8 @@ class MainClass(QtWidgets.QMainWindow):
 
         # gui related stuff
         self.resize(config["windowProperties"]["width"], config["windowProperties"]["height"])
+        self.move(config["windowProperties"]["x"], config["windowProperties"]["y"])
+
         self.setWindowTitle(f"AscentViewer {ver}")
         self.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
 
@@ -217,6 +223,9 @@ class MainClass(QtWidgets.QMainWindow):
     def onCloseActions(self):
         config["windowProperties"]["width"] = self.width()
         config["windowProperties"]["height"] = self.height()
+        config["windowProperties"]["x"] = self.x()
+        config["windowProperties"]["y"] = self.y()
+
         self.dumpJson()
 
     def closeEvent(self, event):
@@ -272,15 +281,14 @@ class HelpWindow(QtWidgets.QMainWindow):
         QtWidgets.QWidget.__init__(self)
 
         self.resize(725, 460)
-        self.setWindowTitle("Log Viewer")
+        self.setWindowTitle("Help")
         self.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
 
         self.label = QtWidgets.QLabel(self)
         self.setCentralWidget(self.label)
-        self.label.setText("Coming soon.")
+        self.label.setText("<b>Coming soon.</b><br /><i>In the meantime, check out the repository's Wiki.</i>")
 
         mainLabelFont = QtGui.QFont()
-        mainLabelFont.setBold(True)
         mainLabelFont.setPointSize(16)
         self.label.setFont(mainLabelFont)
 
@@ -292,7 +300,7 @@ if __name__ == '__main__':
     except:
         pass
 
-    ver = "early test version (PyQt6)"
+    ver = "0.0.1_dev-1.0-PyQt6"
     date_format_file = "%d%m%Y_%H%M%S"
     date_format = "%d/%m/%Y %H:%M:%S"
 
@@ -330,7 +338,3 @@ if __name__ == '__main__':
     window.statusBar().showMessage(f"Succesfully loaded. Version: {ver}")
 
     sys.exit(app.exec())
-
-    # =================================
-    # Thank you for using AscentViewer!
-    # =================================

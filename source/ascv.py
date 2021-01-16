@@ -1,4 +1,9 @@
+# =================================
+# Thank you for using and/or checking out AscentViewer!
+# =================================
+
 from PyQt5 import QtGui, QtCore, QtWidgets
+from random import Random
 import sys
 import ctypes
 import json
@@ -20,24 +25,60 @@ class MainClass(QtWidgets.QMainWindow):
 
         # gui related stuff
         self.resize(config["windowProperties"]["width"], config["windowProperties"]["height"])
+        self.move(config["windowProperties"]["x"], config["windowProperties"]["y"])
+
         self.setWindowTitle(f"AscentViewer {ver}")
         self.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
 
         self.mainWidget = QtWidgets.QWidget(self)
-
         self.setCentralWidget(self.mainWidget)
 
-        self.label = QtWidgets.QLabel(self.mainWidget)
+        hbox = QtWidgets.QHBoxLayout(self.mainWidget)
 
+        self.bottom = QtWidgets.QFrame()
+        self.bottom.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.bottom.setMinimumHeight(100)
+        self.bottom.setMaximumHeight(200)
+
+        btHbox = QtWidgets.QHBoxLayout(self.bottom)
+        btHbox.setAlignment(QtCore.Qt.AlignCenter)
+
+        self.label = QtWidgets.QLabel()
         self.label.setText("Please open an image file.")
-
+        self.label.setMinimumSize(16, 16)
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
         mainLabelFont = QtGui.QFont()
         mainLabelFont.setBold(True)
         mainLabelFont.setPointSize(32)
         self.label.setFont(mainLabelFont)
 
-        self.label.setMinimumSize(1, 1)
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        csIcon = QtWidgets.QLabel()
+        icon_ = QtGui.QPixmap("data/assets/img/icon22.png")
+        icon = icon_.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+        csIcon.setPixmap(QtGui.QPixmap(icon))
+
+        csLabel = QtWidgets.QLabel()
+        csLabel.setText("This panel is coming soon.")
+        csLabelFont = QtGui.QFont()
+        csLabelFont.setBold(True)
+        csLabelFont.setPointSize(14)
+        csLabel.setFont(csLabelFont)
+
+        btHbox.addWidget(csIcon)
+        btHbox.addWidget(csLabel)
+
+        splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        splitter.addWidget(self.label)
+        splitter.addWidget(self.bottom)
+        index = splitter.indexOf(self.bottom)
+        print(splitter.indexOf(self.bottom))
+        print(splitter.indexOf(self.label))
+        splitter.setCollapsible(index, False)
+        splitter.setStretchFactor(0, 1)
+        splitter.setSizes([1, 100])
+        print(splitter.height())
+
+        hbox.addWidget(splitter)
 
         mainMenu = self.menuBar()
         fileMenu = mainMenu.addMenu("File")
@@ -181,8 +222,8 @@ class MainClass(QtWidgets.QMainWindow):
         self.imgFilePath = self.dirImageList[self.imageNumber]
 
     def updateImage(self):
-        mwWidth = self.mainWidget.frameGeometry().width()
-        mwHeight = self.mainWidget.frameGeometry().height()
+        mwWidth = self.label.frameGeometry().width()
+        mwHeight = self.label.frameGeometry().height()
 
         if self.imgFilePath != "":
             pixmap_ = QtGui.QPixmap(self.imgFilePath)
@@ -217,6 +258,10 @@ class MainClass(QtWidgets.QMainWindow):
     def onCloseActions(self):
         config["windowProperties"]["width"] = self.width()
         config["windowProperties"]["height"] = self.height()
+        config["windowProperties"]["x"] = self.x()
+        config["windowProperties"]["y"] = self.y()
+        config["windowProperties"]["bottomSplitterPanelH"] = self.bottom.height()
+
         self.dumpJson()
 
     def closeEvent(self, event):
@@ -273,15 +318,14 @@ class HelpWindow(QtWidgets.QMainWindow):
         QtWidgets.QWidget.__init__(self)
 
         self.resize(725, 460)
-        self.setWindowTitle("Log Viewer")
+        self.setWindowTitle("Help")
         self.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
 
         self.label = QtWidgets.QLabel(self)
         self.setCentralWidget(self.label)
-        self.label.setText("Coming soon.")
+        self.label.setText("<b>Coming soon.</b><br /><i>In the meantime, check out the repository's Wiki.</i>")
 
         mainLabelFont = QtGui.QFont()
-        mainLabelFont.setBold(True)
         mainLabelFont.setPointSize(16)
         self.label.setFont(mainLabelFont)
 
@@ -293,7 +337,7 @@ if __name__ == '__main__':
     except:
         pass
 
-    ver = "early test version (PyQt5)"
+    ver = "0.0.1_dev-1.0-PyQt5"
     date_format_file = "%d%m%Y_%H%M%S"
     date_format = "%d/%m/%Y %H:%M:%S"
 
@@ -321,7 +365,7 @@ if __name__ == '__main__':
     ascvLogger.info(f"The OS is {platform.system()}.")
 
     if platform.system() == "Windows":
-        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("ascv") # makes the AscentViewer icon appear in the taskbar, more info here: "https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105"
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(f"ascv") # makes the AscentViewer icon appear in the taskbar, more info here: "https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105"
 
     signal.signal(signal.SIGINT, signal.SIG_DFL) # apparently makes CTRL + C work properly in console ("https://stackoverflow.com/questions/5160577/ctrl-c-doesnt-work-with-pyqt")
     app = QtWidgets.QApplication(sys.argv)
@@ -331,7 +375,3 @@ if __name__ == '__main__':
     window.statusBar().showMessage(f"Succesfully loaded. Version: {ver}")
 
     sys.exit(app.exec_())
-
-    # =================================
-    # Thank you for using AscentViewer!
-    # =================================
