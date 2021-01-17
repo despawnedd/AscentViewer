@@ -21,6 +21,10 @@ Looking for old, pre-rename/Old Pre-release Beta code? Check out the [**"pre-ren
 
 Credits are coming soon.
 
+## Documentation
+
+It's coming soon, just like the credits.
+
 ## Release version naming info
 
 Each version name consists of four elements:
@@ -31,6 +35,8 @@ Each version name consists of four elements:
 - additional info (such as the branch)
 
 e.g. **1.0.3_dev-1.3**
+
+*Will add more info about this later.*
 
 <!-- ### Version Structure (a.b.c-bld-rev_rl)
 

@@ -3,7 +3,6 @@
 # =================================
 
 from PyQt5 import QtGui, QtCore, QtWidgets
-from random import Random
 import sys
 import ctypes
 import json
@@ -30,18 +29,20 @@ class MainClass(QtWidgets.QMainWindow):
         self.setWindowTitle(f"AscentViewer {ver}")
         self.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
 
+        self.statusBar().setHidden(True)
         self.mainWidget = QtWidgets.QWidget(self)
         self.setCentralWidget(self.mainWidget)
 
-        hbox = QtWidgets.QHBoxLayout(self.mainWidget)
+        vBox = QtWidgets.QVBoxLayout(self.mainWidget)
+        vBox.setContentsMargins(6,6,6,6)
 
         self.bottom = QtWidgets.QFrame()
         self.bottom.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.bottom.setMinimumHeight(100)
         self.bottom.setMaximumHeight(200)
 
-        btHbox = QtWidgets.QHBoxLayout(self.bottom)
-        btHbox.setAlignment(QtCore.Qt.AlignCenter)
+        bthBox = QtWidgets.QHBoxLayout(self.bottom)
+        bthBox.setAlignment(QtCore.Qt.AlignCenter)
 
         self.label = QtWidgets.QLabel()
         self.label.setText("Please open an image file.")
@@ -51,21 +52,22 @@ class MainClass(QtWidgets.QMainWindow):
         mainLabelFont.setBold(True)
         mainLabelFont.setPointSize(32)
         self.label.setFont(mainLabelFont)
+        self.label.setWhatsThis("Main image label")
 
         csIcon = QtWidgets.QLabel()
         icon_ = QtGui.QPixmap("data/assets/img/icon22.png")
         icon = icon_.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
         csIcon.setPixmap(QtGui.QPixmap(icon))
 
-        csLabel = QtWidgets.QLabel()
-        csLabel.setText("This panel is coming soon.")
-        csLabelFont = QtGui.QFont()
-        csLabelFont.setBold(True)
-        csLabelFont.setPointSize(14)
-        csLabel.setFont(csLabelFont)
+        self.csLabel = QtWidgets.QLabel()
+        self.csLabel.setText("This panel is coming soon.")
+        self.csLabelFont = QtGui.QFont()
+        self.csLabelFont.setBold(True)
+        self.csLabelFont.setPointSize(14)
+        self.csLabel.setFont(self.csLabelFont)
 
-        btHbox.addWidget(csIcon)
-        btHbox.addWidget(csLabel)
+        bthBox.addWidget(csIcon)
+        bthBox.addWidget(self.csLabel)
 
         splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
         splitter.addWidget(self.label)
@@ -78,7 +80,26 @@ class MainClass(QtWidgets.QMainWindow):
         splitter.setSizes([1, 100])
         print(splitter.height())
 
-        hbox.addWidget(splitter)
+        separator = QtWidgets.QFrame()
+        separator.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        separator.setFixedHeight(1)
+
+        customStatusBar = QtWidgets.QFrame()
+
+        sbHBox = QtWidgets.QHBoxLayout(customStatusBar)
+        sbHBox.setContentsMargins(1, 1, 1, 1)
+
+        sbText = QtWidgets.QLabel()
+        sbText.setText("This custom status bar is coming soon.")
+        sbtfont = QtGui.QFont()
+        sbtfont.setPointSize(8)
+        sbText.setFont(sbtfont)
+
+        sbHBox.addWidget(sbText)
+
+        vBox.addWidget(splitter)
+        vBox.addWidget(separator)
+        vBox.addWidget(customStatusBar)
 
         mainMenu = self.menuBar()
         fileMenu = mainMenu.addMenu("File")
@@ -272,7 +293,6 @@ class MainClass(QtWidgets.QMainWindow):
             reply.setText("<b>Are you sure you want to exit AscentViewer?</b>")
             reply.setInformativeText("<i>By the way, thank you for using this program!</i>")
             reply.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            reply.setDefaultButton(QtWidgets.QMessageBox.No)
             checkbox = QtWidgets.QCheckBox("Do not show this again.")
             icon_ = QtGui.QPixmap("data/assets/img/door.png")
             icon = icon_.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
@@ -337,7 +357,7 @@ if __name__ == '__main__':
     except:
         pass
 
-    ver = "0.0.1_dev-1.0-PyQt5"
+    ver = "0.0.1_dev-1.1-PyQt5"
     date_format_file = "%d%m%Y_%H%M%S"
     date_format = "%d/%m/%Y %H:%M:%S"
 
@@ -365,7 +385,7 @@ if __name__ == '__main__':
     ascvLogger.info(f"The OS is {platform.system()}.")
 
     if platform.system() == "Windows":
-        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(f"ascv") # makes the AscentViewer icon appear in the taskbar, more info here: "https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105"
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("ascv") # makes the AscentViewer icon appear in the taskbar, more info here: "https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105"
 
     signal.signal(signal.SIGINT, signal.SIG_DFL) # apparently makes CTRL + C work properly in console ("https://stackoverflow.com/questions/5160577/ctrl-c-doesnt-work-with-pyqt")
     app = QtWidgets.QApplication(sys.argv)

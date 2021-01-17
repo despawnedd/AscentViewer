@@ -29,21 +29,77 @@ class MainClass(QtWidgets.QMainWindow):
         self.setWindowTitle(f"AscentViewer {ver}")
         self.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
 
+        self.statusBar().setHidden(True)
         self.mainWidget = QtWidgets.QWidget(self)
-
         self.setCentralWidget(self.mainWidget)
 
-        self.label = QtWidgets.QLabel(self.mainWidget)
+        vBox = QtWidgets.QVBoxLayout(self.mainWidget)
+        vBox.setContentsMargins(6,6,6,6)
 
+        self.bottom = QtWidgets.QFrame()
+        self.bottom.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.bottom.setMinimumHeight(100)
+        self.bottom.setMaximumHeight(200)
+
+        bthBox = QtWidgets.QHBoxLayout(self.bottom)
+        bthBox.setAlignment(bthBox, QtCore.Qt.Alignment.AlignCenter) # this isn't working for some reason
+
+        self.label = QtWidgets.QLabel()
         self.label.setText("Please open an image file.")
-
+        self.label.setMinimumSize(16, 16)
+        self.label.setAlignment(QtCore.Qt.Alignment.AlignCenter)
         mainLabelFont = QtGui.QFont()
         mainLabelFont.setBold(True)
         mainLabelFont.setPointSize(32)
         self.label.setFont(mainLabelFont)
+        self.label.setWhatsThis("Main image label")
 
-        self.label.setMinimumSize(1, 1)
-        self.label.setAlignment(QtCore.Qt.Alignment.AlignCenter)
+        csIcon = QtWidgets.QLabel()
+        icon_ = QtGui.QPixmap("data/assets/img/icon22.png")
+        icon = icon_.scaled(48, 48, QtCore.Qt.AspectRatioMode.KeepAspectRatio, QtCore.Qt.TransformationMode.SmoothTransformation)
+        csIcon.setPixmap(QtGui.QPixmap(icon))
+
+        self.csLabel = QtWidgets.QLabel()
+        self.csLabel.setText("This panel is coming soon.")
+        self.csLabelFont = QtGui.QFont()
+        self.csLabelFont.setBold(True)
+        self.csLabelFont.setPointSize(14)
+        self.csLabel.setFont(self.csLabelFont)
+
+        bthBox.addWidget(csIcon)
+        bthBox.addWidget(self.csLabel)
+
+        splitter = QtWidgets.QSplitter(QtCore.Qt.Orientations.Vertical)
+        splitter.addWidget(self.label)
+        splitter.addWidget(self.bottom)
+        index = splitter.indexOf(self.bottom)
+        print(splitter.indexOf(self.bottom))
+        print(splitter.indexOf(self.label))
+        splitter.setCollapsible(index, False)
+        splitter.setStretchFactor(0, 1)
+        splitter.setSizes([1, 100])
+        print(splitter.height())
+
+        separator = QtWidgets.QFrame()
+        separator.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        separator.setFixedHeight(1)
+
+        customStatusBar = QtWidgets.QFrame()
+
+        sbHBox = QtWidgets.QHBoxLayout(customStatusBar)
+        sbHBox.setContentsMargins(1, 1, 1, 1)
+
+        sbText = QtWidgets.QLabel()
+        sbText.setText("This custom status bar is coming soon.")
+        sbtfont = QtGui.QFont()
+        sbtfont.setPointSize(8)
+        sbText.setFont(sbtfont)
+
+        sbHBox.addWidget(sbText)
+
+        vBox.addWidget(splitter)
+        vBox.addWidget(separator)
+        vBox.addWidget(customStatusBar)
 
         mainMenu = self.menuBar()
         fileMenu = mainMenu.addMenu("File")
@@ -187,8 +243,8 @@ class MainClass(QtWidgets.QMainWindow):
         self.imgFilePath = self.dirImageList[self.imageNumber]
 
     def updateImage(self):
-        mwWidth = self.mainWidget.frameGeometry().width()
-        mwHeight = self.mainWidget.frameGeometry().height()
+        mwWidth = self.label.frameGeometry().width()
+        mwHeight = self.label.frameGeometry().height()
 
         if self.imgFilePath != "":
             pixmap_ = QtGui.QPixmap(self.imgFilePath)
@@ -225,6 +281,7 @@ class MainClass(QtWidgets.QMainWindow):
         config["windowProperties"]["height"] = self.height()
         config["windowProperties"]["x"] = self.x()
         config["windowProperties"]["y"] = self.y()
+        config["windowProperties"]["bottomSplitterPanelH"] = self.bottom.height()
 
         self.dumpJson()
 
@@ -300,7 +357,7 @@ if __name__ == '__main__':
     except:
         pass
 
-    ver = "0.0.1_dev-1.0-PyQt6"
+    ver = "0.0.1_dev-1.1-PyQt6"
     date_format_file = "%d%m%Y_%H%M%S"
     date_format = "%d/%m/%Y %H:%M:%S"
 
