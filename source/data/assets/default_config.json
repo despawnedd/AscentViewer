@@ -1,10 +1,13 @@
 {
     "windowProperties": {
         "width": 800,
-        "height": 600
+        "height": 700,
+        "x": 100,
+        "y": 100,
+        "bottomSplitterPanelH": 100
     },
     "debug": {
-        "enableDebugMenu": false,
+        "enableDebugMenu": true,
         "logging": {
             "loggingLevel": "INFO"
         }
