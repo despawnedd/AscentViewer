@@ -7,3 +7,4 @@ source/data/user/temp/logs/*.txt
 source/__pycache__
 tests_and_stuff
 tests/__pycache__
+source/data/lib/__pycache__
