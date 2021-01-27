@@ -20,7 +20,7 @@ if __name__ == '__main__':
     except:
         pass
 
-    ver = "0.0.1_dev-1.1-PyQt5"
+    ver = "0.0.1_dev-1.2-PyQt5"
     date_format_file = "%d%m%Y_%H%M%S"
     date_format = "%d/%m/%Y %H:%M:%S"
 

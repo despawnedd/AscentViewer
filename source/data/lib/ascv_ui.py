@@ -5,7 +5,7 @@ import os
 import shutil
 
 config = json.load(open("data/user/config.json"))
-ver = "0.0.1_dev-1.1-PyQt5"
+ver = "0.0.1_dev-1.2-PyQt5"
 
 class MainUi(QtWidgets.QMainWindow):
     def __init__(self):
