@@ -3,7 +3,7 @@
 # =================================
 
 from PyQt5 import QtGui, QtCore, QtWidgets
-from data.lib.ascv_ui import MainUi, LogViewer, HelpWindow
+from data.lib.ascv_ui import MainUi
 import sys
 import ctypes
 import json
@@ -19,6 +19,8 @@ if __name__ == '__main__':
         os.chdir(__file__.replace(os.path.basename(__file__), "")) # thanks to Anthony for this
     except:
         pass
+
+    #print(__file__.replace(os.path.basename(__file__), ""))
 
     ver = "0.0.1_dev-1.2-PyQt5"
     date_format_file = "%d%m%Y_%H%M%S"

@@ -4,8 +4,15 @@ import glob
 import os
 import shutil
 
-config = json.load(open("data/user/config.json"))
+#print(__file__.replace(os.path.basename(__file__), ""))
+
+try:
+    os.chdir(__file__.replace(os.path.basename(__file__), "")) # thanks to Anthony for this
+except:
+    pass
+
 ver = "0.0.1_dev-1.2-PyQt5"
+config = json.load(open("../user/config.json"))
 
 class MainUi(QtWidgets.QMainWindow):
     def __init__(self):
