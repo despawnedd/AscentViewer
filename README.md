@@ -1,6 +1,6 @@
 # AscentViewer
 
-![AscV Banner](other/banner.png)
+![AscV Banner](other/banner.jpg)
 
 ![All downloads shields.io badge](https://img.shields.io/github/downloads/despawnedd/AscentViewer/total?logo=github)
 ![License shields.io badge](https://img.shields.io/github/license/despawnedd/AscentViewer?logo=github)
