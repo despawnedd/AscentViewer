@@ -16,7 +16,7 @@ config = json.load(open("../user/config.json"))
 
 class MainUi(QtWidgets.QMainWindow):
     def __init__(self):
-        QtWidgets.QWidget.__init__(self)
+        super().__init__()
 
         # non-gui related stuff
         ##ascvLogger.info("Initializing GUI.")
@@ -25,16 +25,18 @@ class MainUi(QtWidgets.QMainWindow):
         self.saveConfigOnExit = True
 
         # gui related stuff
+        self.setWindowTitle(f"AscentViewer {ver}")
         self.resize(config["windowProperties"]["width"], config["windowProperties"]["height"])
         self.move(config["windowProperties"]["x"], config["windowProperties"]["y"])
         self.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
 
         #self.statusBar().setHidden(True)
-        self.statusBar().setStyleSheet("background: #777CC1;") ##ACF2AC
+        self.statusBar().setStyleSheet("background: #777CC1; color: white;") ##ACF2AC
         #self.statusBar().setStyleSheet("color: white;")
 
+        #self.menuBar().setStyleSheet("QMenu::item {background-color: #777CC1; padding: 0px 0px; border-radius: 0px;}")
+
         self.mainWidget = QtWidgets.QWidget(self)
-        self.mainWidget.setStyleSheet("background: #333333;")
         self.setCentralWidget(self.mainWidget)
         #self.mainWidget.setContentsMargins(0, 0, 0, 0)
 
@@ -53,7 +55,7 @@ class MainUi(QtWidgets.QMainWindow):
 
         self.label = QtWidgets.QLabel()
         self.label.setText("Please open an image file.")
-        self.label.setStyleSheet("color: white;")
+        self.label.setStyleSheet("color: white; background: #2E3440;")
         self.label.setMinimumSize(16, 16)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         mainLabelFont = QtGui.QFont()
@@ -314,11 +316,11 @@ class MainUi(QtWidgets.QMainWindow):
         self.updateImage()
 
     def openLogWin(self):
-        self.lw = LogViewer() # "self." is required here for some reason
+        self.lw = LogViewer(parent=self)
         self.lw.show()
 
     def openHelpWin(self):
-        self.hw = HelpWindow()
+        self.hw = HelpWindow(parent=self)
         self.hw.show()
 
     def onCloseActions(self):
@@ -367,11 +369,21 @@ class MainUi(QtWidgets.QMainWindow):
             self.onCloseActions()
             event.accept()
 
+    def passArgs(self, i):
+        self.args = i
+        print(self.args)
+
 class LogViewer(QtWidgets.QMainWindow):
-    def __init__(self):
-        QtWidgets.QWidget.__init__(self)
+    def __init__(self, parent=None):
+        self.parent = parent
+        super().__init__()
 
         self.resize(600, 400)
+
+        geo = self.geometry()
+        geo.moveCenter(self.parent.geometry().center())
+        self.setGeometry(geo)
+
         self.setWindowTitle("Log Viewer")
         self.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
 
@@ -380,10 +392,16 @@ class LogViewer(QtWidgets.QMainWindow):
         logTextEdit.appendPlainText("Coming soon.")
 
 class HelpWindow(QtWidgets.QMainWindow):
-    def __init__(self):
-        QtWidgets.QWidget.__init__(self)
+    def __init__(self, parent=None):
+        self.parent = parent
+        super().__init__()
 
         self.resize(725, 460)
+
+        geo = self.geometry()
+        geo.moveCenter(self.parent.geometry().center())
+        self.setGeometry(geo)
+
         self.setWindowTitle("Help")
         self.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
 
@@ -396,3 +414,5 @@ class HelpWindow(QtWidgets.QMainWindow):
         self.label.setFont(mainLabelFont)
 
         self.label.setAlignment(QtCore.Qt.AlignCenter)
+
+#window = MainUi()

@@ -2,10 +2,9 @@
 # Thank you for using and/or checking out AscentViewer!
 # =================================
 
-from PyQt5 import QtGui, QtCore, QtWidgets
+from PyQt5 import QtGui, QtCore, QtWidgets, QtWinExtras
 from data.lib.ascv_ui import MainUi
 import sys
-import ctypes
 import json
 import logging
 import os
@@ -13,6 +12,7 @@ import platform
 import glob
 import datetime
 import signal
+import argparse
 
 if __name__ == '__main__':
     try:
@@ -50,13 +50,37 @@ if __name__ == '__main__':
     ascvLogger.info(f"The OS is {platform.system()}.")
 
     if platform.system() == "Windows":
-        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("ascv") # makes the AscentViewer icon appear in the taskbar, more info here: "https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105"
+        # makes the AscentViewer icon appear in the taskbar, more info here: "https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105" (newer comamnd gotten from 15-minute-apps ("https://github.com/learnpyqt/15-minute-apps"))
+        QtWinExtras.QtWin.setCurrentProcessExplicitAppUserModelID(f"DespawnedDiamond.AscentViewer.ascv.{ver}")
 
     signal.signal(signal.SIGINT, signal.SIG_DFL) # apparently makes CTRL + C work properly in console ("https://stackoverflow.com/questions/5160577/ctrl-c-doesnt-work-with-pyqt")
+
     app = QtWidgets.QApplication(sys.argv)
+    #for arg in sys.argv:
+    #    print(arg)
+    #print(sys.argv)
 
     window = MainUi()
     window.show()
-    window.setWindowTitle(f"AscentViewer {ver}")
+    window.passArgs(sys.argv)
+    app.setStyle("Fusion")
+    dark_palette = QtGui.QPalette()
+    dark_palette.setColor(QtGui.QPalette.Window, QtGui.QColor(53, 53, 53))
+    dark_palette.setColor(QtGui.QPalette.WindowText, QtCore.Qt.white)
+    dark_palette.setColor(QtGui.QPalette.Base, QtGui.QColor(25, 25, 25))
+    dark_palette.setColor(QtGui.QPalette.AlternateBase, QtGui.QColor(53, 53, 53))
+    dark_palette.setColor(QtGui.QPalette.ToolTipBase, QtCore.Qt.white)
+    dark_palette.setColor(QtGui.QPalette.ToolTipText, QtCore.Qt.white)
+    dark_palette.setColor(QtGui.QPalette.Text, QtCore.Qt.white)
+    dark_palette.setColor(QtGui.QPalette.Button, QtGui.QColor(53, 53, 53))
+    dark_palette.setColor(QtGui.QPalette.ButtonText, QtCore.Qt.white)
+    dark_palette.setColor(QtGui.QPalette.BrightText, QtCore.Qt.red)
+    dark_palette.setColor(QtGui.QPalette.Link, QtGui.QColor(42, 130, 218))
+    dark_palette.setColor(QtGui.QPalette.Highlight, QtGui.QColor(42, 130, 218))
+    dark_palette.setColor(QtGui.QPalette.HighlightedText, QtCore.Qt.black)
+
+    app.setPalette(dark_palette)
+
+    #app.setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }")
 
     sys.exit(app.exec_())
