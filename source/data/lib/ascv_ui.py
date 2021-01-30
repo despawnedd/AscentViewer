@@ -28,7 +28,7 @@ class MainUi(QtWidgets.QMainWindow):
         self.setWindowTitle(f"AscentViewer {ver}")
         self.resize(config["windowProperties"]["width"], config["windowProperties"]["height"])
         self.move(config["windowProperties"]["x"], config["windowProperties"]["y"])
-        self.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
+        self.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
 
         #self.statusBar().setHidden(True)
         self.statusBar().setStyleSheet("background: #777CC1; color: white;") ##ACF2AC
@@ -65,7 +65,7 @@ class MainUi(QtWidgets.QMainWindow):
         self.label.setWhatsThis("Main image label")
 
         csIcon = QtWidgets.QLabel()
-        icon_ = QtGui.QPixmap("data/assets/img/icon22.png")
+        icon_ = QtGui.QPixmap("data/assets/img/icon3.png")
         icon = icon_.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
         csIcon.setPixmap(QtGui.QPixmap(icon))
 
@@ -163,7 +163,7 @@ class MainUi(QtWidgets.QMainWindow):
             logWindowButton.setStatusTip("Open the log viewer window.")
             logWindowButton.triggered.connect(self.openLogWin)
 
-        helpButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon22.png"), "Help", self)
+        helpButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon3.png"), "Help", self)
         helpButton.setShortcut("F1")
         helpButton.setStatusTip("Open the help window.")
         helpButton.triggered.connect(self.openHelpWin)
@@ -189,13 +189,13 @@ class MainUi(QtWidgets.QMainWindow):
 
     def resetConfigFunc(self):
         reply = QtWidgets.QMessageBox(self)
-        reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
+        reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
         reply.setWindowTitle("Reset config")
         reply.setText("<b>Are you sure you want to reset the configuration file?</b>")
         reply.setInformativeText("<i>This will also prevent the program from dumping the config file on exit for this session.</i>")
         reply.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         checkbox = QtWidgets.QCheckBox("After resetting, exit the program.")
-        icon_ = QtGui.QPixmap("data/assets/img/icon22.png")
+        icon_ = QtGui.QPixmap("data/assets/img/icon3.png")
         icon = icon_.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
         reply.setIconPixmap(QtGui.QPixmap(icon))
         reply.setCheckBox(checkbox)
@@ -336,7 +336,7 @@ class MainUi(QtWidgets.QMainWindow):
     def closeEvent(self, event):
         if config["prompts"]["enableExitPrompt"]:
             reply = QtWidgets.QMessageBox(self)
-            reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
+            reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
             reply.setWindowTitle("Exiting AscentViewer")
             reply.setText("<b>Are you sure you want to exit AscentViewer?</b>")
             reply.setInformativeText("<i>By the way, thank you for using this program!</i>")
@@ -385,7 +385,7 @@ class LogViewer(QtWidgets.QMainWindow):
         self.setGeometry(geo)
 
         self.setWindowTitle("Log Viewer")
-        self.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
+        self.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
 
         logTextEdit = QtWidgets.QPlainTextEdit(self)
         self.setCentralWidget(logTextEdit)
@@ -403,7 +403,7 @@ class HelpWindow(QtWidgets.QMainWindow):
         self.setGeometry(geo)
 
         self.setWindowTitle("Help")
-        self.setWindowIcon(QtGui.QIcon("data/assets/img/icon22.png"))
+        self.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
 
         self.label = QtWidgets.QLabel(self)
         self.setCentralWidget(self.label)
