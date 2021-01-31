@@ -1,0 +1,15 @@
+{
+    "mainUiElements": {
+        "openImgFileText": "Open an image file.",
+        "comingSoonPanelText": "This panel is coming soon.",
+        "menuBar": {
+            "file": {
+                "title": ""
+            },
+            "navigation": "",
+            "debug": "",
+            "tools": "",
+            "help": ""
+        }
+    }
+}

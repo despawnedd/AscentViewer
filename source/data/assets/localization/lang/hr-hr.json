@@ -1,0 +1,15 @@
+{
+    "mainUiElements": {
+        "openImgFileText": "Otvorite sliku.",
+        "comingSoonPanelText": "Ova ploča dolazi uskoro.",
+        "menuBar": {
+            "file": {
+                "title": "Datoteka"
+            },
+            "navigation": "Navigacija",
+            "debug": "Debug",
+            "tools": "Alati",
+            "help": "Pomoć"
+        }
+    }
+}

@@ -4,16 +4,19 @@
         "height": 700,
         "x": 100,
         "y": 100,
-        "bottomSplitterPanelH": 100
+        "bottomSplitterPanelH": 75
+    },
+    "localization": {
+        "lang": "en-us"
+    },
+    "prompts": {
+        "enableExitPrompt": true
     },
     "debug": {
         "enableDebugMenu": true,
         "logging": {
             "loggingLevel": "INFO"
         }
-    },
-    "prompts": {
-        "enableExitPrompt": true
     },
     "temporary_files": {
         "logs": {

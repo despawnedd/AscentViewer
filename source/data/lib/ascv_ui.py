@@ -4,15 +4,17 @@ import glob
 import os
 import shutil
 
-#print(__file__.replace(os.path.basename(__file__), ""))
-
 try:
     os.chdir(__file__.replace(os.path.basename(__file__), "")) # thanks to Anthony for this
 except:
     pass
 
-ver = "0.0.1_dev-1.2-PyQt5"
-config = json.load(open("../user/config.json"))
+ver = "0.0.1_dev-2.0-PyQt5"
+
+config = json.load(open("../user/config.json", encoding="utf-8"))
+
+lang = config["localization"]["lang"]
+localization = json.load(open(f"../assets/localization/lang/{lang}.json", encoding="utf-8"))
 
 class MainUi(QtWidgets.QMainWindow):
     def __init__(self):
@@ -45,8 +47,8 @@ class MainUi(QtWidgets.QMainWindow):
 
         self.bottom = QtWidgets.QFrame()
         #self.bottom.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.bottom.setMinimumHeight(100)
-        self.bottom.setMaximumHeight(200)
+        self.bottom.setMinimumHeight(75)
+        self.bottom.setMaximumHeight(150)
         self.bottom.setContentsMargins(0, 0, 0, 0)
         self.bottom.setStyleSheet("background: #525685;")
 
@@ -54,7 +56,7 @@ class MainUi(QtWidgets.QMainWindow):
         bthBox.setAlignment(QtCore.Qt.AlignCenter)
 
         self.label = QtWidgets.QLabel()
-        self.label.setText("Please open an image file.")
+        self.label.setText(localization["mainUiElements"]["openImgFileText"])
         self.label.setStyleSheet("color: white; background: #2E3440;")
         self.label.setMinimumSize(16, 16)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
@@ -62,7 +64,7 @@ class MainUi(QtWidgets.QMainWindow):
         mainLabelFont.setBold(True)
         mainLabelFont.setPointSize(32)
         self.label.setFont(mainLabelFont)
-        self.label.setWhatsThis("Main image label")
+        #self.label.setWhatsThis("Main image label")
 
         csIcon = QtWidgets.QLabel()
         icon_ = QtGui.QPixmap("data/assets/img/icon3.png")
@@ -70,7 +72,7 @@ class MainUi(QtWidgets.QMainWindow):
         csIcon.setPixmap(QtGui.QPixmap(icon))
 
         self.csLabel = QtWidgets.QLabel()
-        self.csLabel.setText("This panel is coming soon.")
+        self.csLabel.setText(localization["mainUiElements"]["comingSoonPanelText"])
         self.csLabel.setStyleSheet("color: white;")
         self.csLabelFont = QtGui.QFont()
         self.csLabelFont.setItalic(True)
@@ -116,7 +118,7 @@ class MainUi(QtWidgets.QMainWindow):
         #vBox.addWidget(customStatusBar)
 
         mainMenu = self.menuBar()
-        fileMenu = mainMenu.addMenu("File")
+        fileMenu = mainMenu.addMenu(localization["mainUiElements"])
         navMenu = mainMenu.addMenu("Navigation")
         if config["debug"]["enableDebugMenu"]:
             debugMenu = mainMenu.addMenu("Debug")
@@ -124,7 +126,7 @@ class MainUi(QtWidgets.QMainWindow):
         helpMenu = mainMenu.addMenu("Help")
 
         exitButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/door.png"), "Exit", self)
-        exitButton.setShortcut("Alt+F4")
+        exitButton.setShortcut("CTRL+Q")
         exitButton.setStatusTip("Exit application")
         exitButton.triggered.connect(self.close)
 
