@@ -9,6 +9,16 @@
 
 Here is [**its website**](https://dd.acrazytown.com/AscentViewer/).
 
+## Possible switch to C++ Qt
+
+There is a high possibility that we will switch from PyQt to native C++ Qt, due to various reasons, such as:
+
+* More documentation
+* Speed and control
+* etc.
+
+If we do decide to switch to native C++ Qt, we'll make a stable Python version, and then archive it (put it in a different branch, like old DDIV).
+
 ## What happened to DDIV?
 
 DDIV got renamed to "**AscentViewer**".
