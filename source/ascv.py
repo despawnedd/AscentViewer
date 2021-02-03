@@ -12,15 +12,13 @@ import platform
 import glob
 import datetime
 import signal
-import argparse
 
 if __name__ == '__main__':
     try:
-        os.chdir(__file__.replace(os.path.basename(__file__), "")) # thanks to Anthony for this
+        newchdir = __file__.replace(os.path.basename(__file__), "")
+        os.chdir(newchdir) # thanks to Anthony for this
     except:
         pass
-
-    #print(__file__.replace(os.path.basename(__file__), ""))
 
     ver = "0.0.1_dev-2.0-PyQt5"
     date_format_file = "%d%m%Y_%H%M%S"
@@ -63,7 +61,6 @@ if __name__ == '__main__':
 
     window = MainUi()
     window.show()
-    window.passArgs(sys.argv)
 
     # based on https://gist.github.com/QuantumCD/6245215 and https://www.nordtheme.com/docs/colors-and-palettes
     app.setStyle("Fusion")
@@ -83,6 +80,6 @@ if __name__ == '__main__':
     dark_palette.setColor(QtGui.QPalette.HighlightedText, QtCore.Qt.white)
     app.setPalette(dark_palette)
 
-    #app.setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }")
+    app.setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }")
 
     sys.exit(app.exec_())

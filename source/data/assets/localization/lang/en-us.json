@@ -4,12 +4,28 @@
         "comingSoonPanelText": "This panel is coming soon.",
         "menuBar": {
             "file": {
-                "title": ""
+                "title": "&File",
+                "openImgText": "&Open image...",
+                "openDirText": "Open &folder...",
+                "exitText": "&Exit"
             },
-            "navigation": "",
-            "debug": "",
-            "tools": "",
-            "help": ""
+            "navigation": {
+                "title": "&Navigation",
+                "back": "&Previous image",
+                "forw": "&Next image"
+            },
+            "debug": {
+                "title": "&Debug"
+            },
+            "tools": {
+                "title": "&Tools"
+            },
+            "help": {
+                "title": "&Help"
+            }
+        },
+        "statusBar": {
+            "greetMessageBeginning": "Succesfully loaded: "
         }
     }
 }

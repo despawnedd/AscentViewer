@@ -4,12 +4,28 @@
         "comingSoonPanelText": "Ova ploča dolazi uskoro.",
         "menuBar": {
             "file": {
-                "title": "Datoteka"
+                "title": "&Datoteka",
+                "openImgText": "&Otvori sliku...",
+                "openDirText": "Otvori &mapu...",
+                "exitText": "&Izađi"
             },
-            "navigation": "Navigacija",
-            "debug": "Debug",
-            "tools": "Alati",
-            "help": "Pomoć"
+            "navigation": {
+                "title": "&Navigacija",
+                "back": "&Prethodna slika",
+                "forw": "&Sljedeća slika"
+            },
+            "debug": {
+                "title": "D&ebug"
+            },
+            "tools": {
+                "title": "&Alati"
+            },
+            "help": {
+                "title": "&Pomoć"
+            }
+        },
+        "statusBar": {
+            "greetMessageBeginning": "Uspješno učitano. Verzija: "
         }
     }
 }

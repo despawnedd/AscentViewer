@@ -8,3 +8,4 @@ source/__pycache__
 tests_and_stuff
 tests/__pycache__
 source/data/lib/__pycache__
+source/*.ui

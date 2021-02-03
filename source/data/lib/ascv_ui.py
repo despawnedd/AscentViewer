@@ -10,7 +10,6 @@ except:
     pass
 
 ver = "0.0.1_dev-2.0-PyQt5"
-
 config = json.load(open("../user/config.json", encoding="utf-8"))
 
 lang = config["localization"]["lang"]
@@ -32,22 +31,16 @@ class MainUi(QtWidgets.QMainWindow):
         self.move(config["windowProperties"]["x"], config["windowProperties"]["y"])
         self.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
 
-        #self.statusBar().setHidden(True)
-        self.statusBar().setStyleSheet("background: #777CC1; color: white;") ##ACF2AC
-        #self.statusBar().setStyleSheet("color: white;")
-
-        #self.menuBar().setStyleSheet("QMenu::item {background-color: #777CC1; padding: 0px 0px; border-radius: 0px;}")
+        self.statusBar().setStyleSheet("background: #777CC1; color: white;")
 
         self.mainWidget = QtWidgets.QWidget(self)
         self.setCentralWidget(self.mainWidget)
-        #self.mainWidget.setContentsMargins(0, 0, 0, 0)
 
         vBox = QtWidgets.QVBoxLayout(self.mainWidget)
         vBox.setContentsMargins(0, 0, 0, 0)
 
         self.bottom = QtWidgets.QFrame()
-        #self.bottom.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.bottom.setMinimumHeight(75)
+        self.bottom.setMinimumHeight(80)
         self.bottom.setMaximumHeight(150)
         self.bottom.setContentsMargins(0, 0, 0, 0)
         self.bottom.setStyleSheet("background: #525685;")
@@ -88,82 +81,60 @@ class MainUi(QtWidgets.QMainWindow):
         splitter.setCollapsible(1, False)
         splitter.setStretchFactor(0, 1)
         splitter.setSizes([1, config["windowProperties"]["bottomSplitterPanelH"]])
-        #splitter.setStyleSheet("QSplitter::handle{background: #525685; height: 2;}")
         splitter.setStyleSheet("QSplitter::handle{background: #777CC1; height: 2;}")
 
-        #statusBarSeparator = QtWidgets.QFrame()
-        #statusBarSeparator.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        #statusBarSeparator.setFixedHeight(1)
-        #statusBarSeparator.setStyleSheet("background: blue;")
-
-        #infoPanelSeparator = QtWidgets.QFrame()
-        #infoPanelSeparator.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        #infoPanelSeparator.setFixedHeight(1)
-
-        #customStatusBar = QtWidgets.QFrame()
-
-        #sbHBox = QtWidgets.QHBoxLayout(customStatusBar)
-        #sbHBox.setContentsMargins(1, 1, 1, 1)
-
-        #sbText = QtWidgets.QLabel()
-        #sbText.setText("This custom status bar is coming soon.")
-        #sbtfont = QtGui.QFont()
-        #sbtfont.setPointSize(8)
-        #sbText.setFont(sbtfont)
-
-        #sbHBox.addWidget(sbText)
-
         vBox.addWidget(splitter)
-        #vBox.addWidget(statusBarSeparator)
-        #vBox.addWidget(customStatusBar)
 
         mainMenu = self.menuBar()
-        fileMenu = mainMenu.addMenu(localization["mainUiElements"])
-        navMenu = mainMenu.addMenu("Navigation")
+
+        fileMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["file"]["title"])
+
+        navMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["navigation"]["title"])
+
         if config["debug"]["enableDebugMenu"]:
-            debugMenu = mainMenu.addMenu("Debug")
-        toolsMenu = mainMenu.addMenu("Tools")
-        helpMenu = mainMenu.addMenu("Help")
+            debugMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["debug"]["title"])
 
-        exitButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/door.png"), "Exit", self)
-        exitButton.setShortcut("CTRL+Q")
-        exitButton.setStatusTip("Exit application")
-        exitButton.triggered.connect(self.close)
+        toolsMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["tools"]["title"])
 
-        openImgButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/file.png"), "Open Image...", self)
+        helpMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["help"]["title"])
+
+        openImgButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/file.png"), localization["mainUiElements"]["menuBar"]["file"]["openImgText"], self)
         openImgButton.setShortcut("CTRL+O")
         openImgButton.setStatusTip("Open an image file")
         openImgButton.triggered.connect(self.openImage)
 
-        openDirButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/file.png"), "Open Directory...", self)
+        openDirButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/file.png"), localization["mainUiElements"]["menuBar"]["file"]["openDirText"], self)
         openDirButton.setShortcut("CTRL+Shift+O")
         openDirButton.setStatusTip("Open a directory file")
         openDirButton.triggered.connect(self.openDir)
 
-        self.navButtonBack = QtWidgets.QAction(QtGui.QIcon(), "Previous Image", self)
+        exitButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/door.png"), localization["mainUiElements"]["menuBar"]["file"]["exitText"], self)
+        exitButton.setShortcut("CTRL+Q")
+        exitButton.setStatusTip("Exit application")
+        exitButton.triggered.connect(self.close)
+
+        self.navButtonBack = QtWidgets.QAction(QtGui.QIcon(), localization["mainUiElements"]["menuBar"]["navigation"]["back"], self)
         self.navButtonBack.setShortcut("Left")
         self.navButtonBack.setStatusTip("Go to previous image in directory")
         self.navButtonBack.triggered.connect(self.prevImage)
+        self.navButtonBack.setEnabled(False)
 
-        self.navButtonForw = QtWidgets.QAction(QtGui.QIcon(), "Next Image", self)
+        self.navButtonForw = QtWidgets.QAction(QtGui.QIcon(), localization["mainUiElements"]["menuBar"]["navigation"]["forw"], self)
         self.navButtonForw.setShortcut("Right")
         self.navButtonForw.setStatusTip("Go to next image in directory")
         self.navButtonForw.triggered.connect(self.nextImage)
-        self.navButtonBack.setEnabled(False)
-        navMenu.addAction(self.navButtonBack)
         self.navButtonForw.setEnabled(False)
-        navMenu.addAction(self.navButtonForw)
-
-        resetCfg = QtWidgets.QAction(QtGui.QIcon(), "Reset config", self)
-        resetCfg.setShortcut("CTRL+Shift+F9")
-        resetCfg.setStatusTip("Reset the configuration file.")
-        resetCfg.triggered.connect(self.resetConfigFunc)
 
         if config["debug"]["enableDebugMenu"]:
             logWindowButton = QtWidgets.QAction(QtGui.QIcon(), "Log Viewer", self)
             logWindowButton.setShortcut("CTRL+Shift+L")
             logWindowButton.setStatusTip("Open the log viewer window.")
             logWindowButton.triggered.connect(self.openLogWin)
+
+        resetCfg = QtWidgets.QAction(QtGui.QIcon(), "Reset config", self)
+        resetCfg.setShortcut("CTRL+Shift+F9")
+        resetCfg.setStatusTip("Reset the configuration file.")
+        resetCfg.triggered.connect(self.resetConfigFunc)
 
         helpButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon3.png"), "Help", self)
         helpButton.setShortcut("F1")
@@ -175,6 +146,9 @@ class MainUi(QtWidgets.QMainWindow):
         fileMenu.addSeparator()
         fileMenu.addAction(exitButton)
 
+        navMenu.addAction(self.navButtonBack)
+        navMenu.addAction(self.navButtonForw)
+
         if config["debug"]["enableDebugMenu"]:
             debugMenu.addAction(logWindowButton)
 
@@ -182,7 +156,10 @@ class MainUi(QtWidgets.QMainWindow):
 
         helpMenu.addAction(helpButton)
 
-        self.statusBar().showMessage(f"Succesfully loaded. Version: {ver}")
+        self.mainWidget.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
+        self.mainWidget.addAction(openImgButton)
+
+        self.statusBar().showMessage(localization["mainUiElements"]["statusBar"]["greetMessageBeginning"] + ver)
         #ascvLogger.info("GUI has been initialized.")
 
     def dumpJson(self):
