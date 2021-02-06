@@ -13,7 +13,7 @@ import glob
 import datetime
 import signal
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal.SIG_DFL) # apparently makes CTRL + C work properly in console ("https://stackoverflow.com/questions/5160577/ctrl-c-doesnt-work-with-pyqt")
 
     try:
