@@ -3,7 +3,7 @@
 ![AscV Banner](other/banner.png)
 
 ![All downloads shields.io badge](https://img.shields.io/github/downloads/despawnedd/AscentViewer/total?logo=github)
-![License shields.io badge](https://img.shields.io/github/license/despawnedd/AscentViewer?logo=github)
+![License shields.io badge (changed)](https://img.shields.io/github/license/despawnedd/AscentViewer?logo=github)
 
 **AscentViewer** is a powerful **image viewer** written in **Python** using [**PyQt**](https://riverbankcomputing.com/software/pyqt/) and [**several other libraries.**](other/markdown/CREDITS.md)
 
