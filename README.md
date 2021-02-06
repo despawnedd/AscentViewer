@@ -3,9 +3,11 @@
 ![AscV Banner](other/banner.png)
 
 ![All downloads shields.io badge](https://img.shields.io/github/downloads/despawnedd/AscentViewer/total?logo=github)
-![License shields.io badge (changed)](https://img.shields.io/github/license/despawnedd/AscentViewer?logo=github)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/despawnedd/AscentViewer?logo=github)
+![GitHub repo size](https://img.shields.io/github/repo-size/despawnedd/AscentViewer?logo=github)
+![Lines of code](https://img.shields.io/tokei/lines/github/despawnedd/AscentViewer?logo=github)
 
-**AscentViewer** is a powerful **image viewer** written in **Python** using [**PyQt**](https://riverbankcomputing.com/software/pyqt/) and [**several other libraries.**](other/markdown/CREDITS.md)
+**AscentViewer** is an **image viewer** written in **Python** using [**PyQt**](https://riverbankcomputing.com/software/pyqt/) and [**several other libraries.**](other/markdown/CREDITS.md)
 
 Here is [**its website**](https://dd.acrazytown.com/AscentViewer/).
 
@@ -36,6 +38,14 @@ Looking for old, pre-rename/Old Pre-release Beta code? Check out the [**"pre-ren
 ![AscV Banner](other/examples/ascv_0.0.1_pre-release.png)
 
 *AscentViewer 0.0.1_dev-2.0-PyQt5*
+
+## How to install
+
+* Install Python 3.7+ (make sure you install ``pip``)
+* Run ``pip install -r requirements.txt`` while in the root directory, or just manually install the required packages
+* If you're on Linux, you might have to install ``qt5-default`` (on Ubuntu, the command is ``sudo apt install qt5-default``)
+
+And that's it.
 
 ## Credits
 
