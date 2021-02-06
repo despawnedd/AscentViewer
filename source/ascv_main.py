@@ -19,13 +19,21 @@ class MainUi(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # non-gui related stuff
+        # non-gui related stuff:
+
         #ascvLogger.info("Initializing GUI.")
         self.dirPath = ""
         self.imgFilePath = ""
         self.saveConfigOnExit = True
 
-        # gui related stuff
+        # gui related stuff:
+
+        # from https://stackoverflow.com/questions/27955654/how-to-use-non-standard-custom-font-with-stylesheets
+        selawikFonts = glob.glob("data/assets/fonts/selawik/*.ttf")
+        for f in selawikFonts:
+            f = f.replace("\\", "/")
+            QtGui.QFontDatabase.addApplicationFont(f)
+
         self.setWindowTitle(f"AscentViewer {ver}")
         self.resize(config["windowProperties"]["width"], config["windowProperties"]["height"])
         self.move(config["windowProperties"]["x"], config["windowProperties"]["y"])
@@ -53,7 +61,7 @@ class MainUi(QtWidgets.QMainWindow):
         self.label.setStyleSheet("color: white; background: #2E3440;")
         self.label.setMinimumSize(16, 16)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
-        mainLabelFont = QtGui.QFont()
+        mainLabelFont = QtGui.QFont("Selawik")
         mainLabelFont.setBold(True)
         mainLabelFont.setPointSize(32)
         self.label.setFont(mainLabelFont)
@@ -67,9 +75,8 @@ class MainUi(QtWidgets.QMainWindow):
         self.csLabel = QtWidgets.QLabel()
         self.csLabel.setText(localization["mainUiElements"]["comingSoonPanelText"])
         self.csLabel.setStyleSheet("color: white;")
-        self.csLabelFont = QtGui.QFont()
-        self.csLabelFont.setItalic(True)
-        self.csLabelFont.setPointSize(14)
+        self.csLabelFont = QtGui.QFont("Selawik")
+        self.csLabelFont.setPointSize(16)
         self.csLabel.setFont(self.csLabelFont)
 
         bthBox.addWidget(csIcon)
