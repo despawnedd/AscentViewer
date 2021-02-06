@@ -20,7 +20,7 @@ class MainUi(QtWidgets.QMainWindow):
         super().__init__()
 
         # non-gui related stuff
-        ##ascvLogger.info("Initializing GUI.")
+        #ascvLogger.info("Initializing GUI.")
         self.dirPath = ""
         self.imgFilePath = ""
         self.saveConfigOnExit = True
@@ -141,6 +141,11 @@ class MainUi(QtWidgets.QMainWindow):
         helpButton.setStatusTip("Open the help window.")
         helpButton.triggered.connect(self.openHelpWin)
 
+        aboutButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon3.png"), "Help", self)
+        aboutButton.setShortcut("Shift+F1")
+        aboutButton.setStatusTip("Open the about window.")
+        aboutButton.triggered.connect(self.openAboutWin)
+
         fileMenu.addAction(openImgButton)
         fileMenu.addAction(openDirButton)
         fileMenu.addSeparator()
@@ -155,6 +160,8 @@ class MainUi(QtWidgets.QMainWindow):
         toolsMenu.addAction(resetCfg)
 
         helpMenu.addAction(helpButton)
+        fileMenu.addSeparator()
+        helpMenu.addAction(aboutButton)
 
         self.mainWidget.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
         self.mainWidget.addAction(openImgButton)
@@ -302,6 +309,10 @@ class MainUi(QtWidgets.QMainWindow):
         self.hw = HelpWindow(parent=self)
         self.hw.show()
 
+    def openAboutWin(self):
+        self.aw = AboutWindow(parent=self)
+        self.aw.show()
+
     def onCloseActions(self):
         config["windowProperties"]["width"] = self.width()
         config["windowProperties"]["height"] = self.height()
@@ -348,10 +359,6 @@ class MainUi(QtWidgets.QMainWindow):
             self.onCloseActions()
             event.accept()
 
-    def passArgs(self, i):
-        self.args = i
-        print(self.args)
-
 class LogViewer(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         self.parent = parent
@@ -387,6 +394,30 @@ class HelpWindow(QtWidgets.QMainWindow):
         self.label = QtWidgets.QLabel(self)
         self.setCentralWidget(self.label)
         self.label.setText("<b>Coming soon.</b><br /><i>In the meantime, check out the repository's Wiki.</i>")
+
+        mainLabelFont = QtGui.QFont()
+        mainLabelFont.setPointSize(16)
+        self.label.setFont(mainLabelFont)
+
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+
+class AboutWindow(QtWidgets.QMainWindow):
+    def __init__(self, parent=None):
+        self.parent = parent
+        super().__init__()
+
+        self.resize(725, 460)
+
+        geo = self.geometry()
+        geo.moveCenter(self.parent.geometry().center())
+        self.setGeometry(geo)
+
+        self.setWindowTitle("About")
+        self.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
+
+        self.label = QtWidgets.QLabel(self)
+        self.setCentralWidget(self.label)
+        self.label.setText("<b>Coming soon.</b>")
 
         mainLabelFont = QtGui.QFont()
         mainLabelFont.setPointSize(16)

@@ -1,9 +1,9 @@
-# =================================
+# =====================================================
 # Thank you for using and/or checking out AscentViewer!
-# =================================
+# =====================================================
 
 from PyQt5 import QtGui, QtCore, QtWidgets
-from ascv_ui import MainUi
+from ascv_main import MainUi
 import sys
 import json
 import logging
@@ -14,6 +14,8 @@ import datetime
 import signal
 
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT, signal.SIG_DFL) # apparently makes CTRL + C work properly in console ("https://stackoverflow.com/questions/5160577/ctrl-c-doesnt-work-with-pyqt")
+
     try:
         newchdir = __file__.replace(os.path.basename(__file__), "")
         os.chdir(newchdir) # thanks to Anthony for this
@@ -45,22 +47,21 @@ if __name__ == '__main__':
             f.write(f"{m}\n")
             print(m)
 
-    ascvLogger.info(f"The OS is {platform.system()}.")
-
     if platform.system() == "Windows":
-        # makes the AscentViewer icon appear in the taskbar, more info here: "https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105" (newer comamnd gotten from 15-minute-apps ("https://github.com/learnpyqt/15-minute-apps"))
+        # makes the AscentViewer icon appear in the taskbar, more info here: "https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105"
+        # (newer comamnd gotten from 15-minute-apps: "https://github.com/learnpyqt/15-minute-apps")
         from PyQt5 import QtWinExtras
         QtWinExtras.QtWin.setCurrentProcessExplicitAppUserModelID(f"DespawnedDiamond.AscentViewer.ascv.{ver}")
 
-    signal.signal(signal.SIGINT, signal.SIG_DFL) # apparently makes CTRL + C work properly in console ("https://stackoverflow.com/questions/5160577/ctrl-c-doesnt-work-with-pyqt")
+    if platform.system() == "Linux":
+        # just a fun little piece of code that prints out your distro name and version
+        import distro
+        distroName = " ".join(distro.linux_distribution()).title()
+        ascvLogger.info(f"The OS is {platform.system()} ({distroName}).")
+    else:
+        ascvLogger.info(f"The OS is {platform.system()}.")
 
     app = QtWidgets.QApplication(sys.argv)
-    #for arg in sys.argv:
-    #    print(arg)
-    #print(sys.argv)
-
-    window = MainUi()
-    window.show()
 
     # based on https://gist.github.com/QuantumCD/6245215 and https://www.nordtheme.com/docs/colors-and-palettes
     app.setStyle("Fusion")
@@ -81,5 +82,8 @@ if __name__ == '__main__':
     app.setPalette(dark_palette)
 
     app.setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }")
+
+    window = MainUi()
+    window.show()
 
     sys.exit(app.exec_())
