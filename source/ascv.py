@@ -3,7 +3,7 @@
 # =================================
 
 from PyQt5 import QtGui, QtCore, QtWidgets
-from data.lib.ascv_ui import MainUi
+from ascv_ui import MainUi
 import sys
 import json
 import logging

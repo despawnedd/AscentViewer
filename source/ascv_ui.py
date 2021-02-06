@@ -10,10 +10,10 @@ except:
     pass
 
 ver = "0.0.1_dev-2.0-PyQt5"
-config = json.load(open("../user/config.json", encoding="utf-8"))
+config = json.load(open("data/user/config.json", encoding="utf-8"))
 
 lang = config["localization"]["lang"]
-localization = json.load(open(f"../assets/localization/lang/{lang}.json", encoding="utf-8"))
+localization = json.load(open(f"data/assets/localization/lang/{lang}.json", encoding="utf-8"))
 
 class MainUi(QtWidgets.QMainWindow):
     def __init__(self):
