@@ -634,10 +634,10 @@ class AboutWindow(QtWidgets.QWidget):
         self.majorReleaseName.setText(_translate("Form", "Cobalt"))
         self.versionLabel.setText(_translate("Form", "Version label"))
         self.label.setText(_translate("Form", "Python version"))
-        self.label_9.setText(_translate("Form", "0.0.0"))
+        self.label_9.setText(_translate("Form", platform.python_version()))
         self.label_2.setText(_translate("Form", "PyQt5 version"))
-        self.label_10.setText(_translate("Form", "0.0.0"))
-        self.label_11.setText(_translate("Form", "**AscentViewer** is an image viewer written in [**Python**](https://www.python.org/) based on [**PyQt**](https://riverbankcomputing.com/software/pyqt/) and [**several other libraries.**](other/markdown/CREDITS.md)"))
+        self.label_10.setText(_translate("Form", pkg_resources.get_distribution("PyQt5").version))
+        self.label_11.setText(_translate("Form", "**AscentViewer** is an image viewer written in [**Python**](https://www.python.org/) based on [**PyQt**](https://riverbankcomputing.com/software/pyqt/) and several other libraries."))
         self.label_4.setText(_translate("Form", "<a href=\"https://github.com/despawnedd/AscentViewer/\">GitHub repository</a>"))
         self.label_6.setText(_translate("Form", "<a href=\"https://dd.acrazytown.com/AscentViewer/\">Website</a>"))
 
