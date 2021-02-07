@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="icon">
+    <file alias="icon">data/assets/img/icon3.png</file>
+    <file alias="github">data/assets/img/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png</file>
+  </qresource>
+</RCC>

@@ -22,7 +22,7 @@ if __name__ == "__main__":
     except:
         pass
 
-    ver = "0.0.1_dev-2.0-PyQt5"
+    ver = "0.0.1_dev-2.1-PyQt5"
     date_format_file = "%d%m%Y_%H%M%S"
     date_format = "%d/%m/%Y %H:%M:%S"
 
@@ -76,7 +76,7 @@ if __name__ == "__main__":
     dark_palette.setColor(QtGui.QPalette.Button, QtGui.QColor(34, 38, 47))
     dark_palette.setColor(QtGui.QPalette.ButtonText, QtCore.Qt.white)
     dark_palette.setColor(QtGui.QPalette.BrightText, QtGui.QColor(191, 97, 106))
-    dark_palette.setColor(QtGui.QPalette.Link, QtGui.QColor(119, 124, 193))
+    dark_palette.setColor(QtGui.QPalette.Link, QtGui.QColor(129, 161, 193))
     dark_palette.setColor(QtGui.QPalette.Highlight, QtGui.QColor(119, 124, 193))
     dark_palette.setColor(QtGui.QPalette.HighlightedText, QtCore.Qt.white)
     app.setPalette(dark_palette)

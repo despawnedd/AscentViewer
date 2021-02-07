@@ -2,7 +2,7 @@
     "windowProperties": {
         "width": 800,
         "height": 700,
-        "x": 100,
+        "x": 200,
         "y": 100,
         "bottomSplitterPanelH": 80
     },
@@ -22,5 +22,6 @@
         "logs": {
             "deleteLogsOnStartup": false
         }
-    }
+    },
+    "hellMode": false
 }
