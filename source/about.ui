@@ -30,7 +30,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0">
+    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
      <property name="spacing">
       <number>9</number>
      </property>
@@ -52,8 +52,8 @@
         <widget class="QLabel" name="image">
          <property name="minimumSize">
           <size>
-           <width>128</width>
-           <height>128</height>
+           <width>300</width>
+           <height>300</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -137,8 +137,11 @@
               <pointsize>36</pointsize>
              </font>
             </property>
+            <property name="styleSheet">
+             <string notr="true">color: #8FBCBB;</string>
+            </property>
             <property name="text">
-             <string>Example</string>
+             <string>Cobalt</string>
             </property>
             <property name="textFormat">
              <enum>Qt::PlainText</enum>
@@ -312,7 +315,7 @@
            </font>
           </property>
           <property name="text">
-           <string>**AscentViewer** is an **image viewer** written in **Python** using [**PyQt**](https://riverbankcomputing.com/software/pyqt/), and several other libraries.</string>
+           <string>**AscentViewer** is an image viewer written in [**Python**](https://www.python.org/) based on [**PyQt**](https://riverbankcomputing.com/software/pyqt/) and [**several other libraries.**](other/markdown/CREDITS.md)</string>
           </property>
           <property name="textFormat">
            <enum>Qt::MarkdownText</enum>
@@ -385,6 +388,9 @@
              <property name="text">
               <string/>
              </property>
+             <property name="textFormat">
+              <enum>Qt::PlainText</enum>
+             </property>
              <property name="pixmap">
               <pixmap resource="resources.qrc">:/icon/github</pixmap>
              </property>
@@ -417,15 +423,45 @@
           <layout class="QHBoxLayout" name="horizontalLayout_6">
            <item>
             <widget class="QLabel" name="label_3">
+             <property name="minimumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
              <property name="text">
-              <string>Globe icon</string>
+              <string/>
+             </property>
+             <property name="textFormat">
+              <enum>Qt::PlainText</enum>
+             </property>
+             <property name="pixmap">
+              <pixmap resource="resources.qrc">:/icon/globe</pixmap>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QLabel" name="label_6">
              <property name="text">
-              <string>Website</string>
+              <string>&lt;a href=&quot;https://dd.acrazytown.com/AscentViewer/&quot;&gt;Website&lt;/a&gt;</string>
+             </property>
+             <property name="textFormat">
+              <enum>Qt::RichText</enum>
+             </property>
+             <property name="scaledContents">
+              <bool>false</bool>
+             </property>
+             <property name="openExternalLinks">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -440,7 +476,6 @@
   </layout>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
   <include location="resources.qrc"/>
  </resources>
  <connections/>
