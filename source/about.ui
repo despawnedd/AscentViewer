@@ -151,20 +151,58 @@
          </layout>
         </item>
         <item>
-         <widget class="QLabel" name="versionLabel">
-          <property name="font">
-           <font>
-            <family>Selawik Semilight</family>
-            <pointsize>18</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Version label</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::PlainText</enum>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,0,1">
+          <item>
+           <widget class="QLabel" name="versionLabel">
+            <property name="font">
+             <font>
+              <family>Selawik Semilight</family>
+              <pointsize>20</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>version</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>2</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="version">
+            <property name="font">
+             <font>
+              <family>Selawik Light</family>
+              <pointsize>20</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: #8FBCBB</string>
+            </property>
+            <property name="text">
+             <string>0.0.0</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::RichText</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="Line" name="line">
@@ -173,6 +211,9 @@
             <width>0</width>
             <height>22</height>
            </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #4C566A;</string>
           </property>
           <property name="frameShadow">
            <enum>QFrame::Plain</enum>
@@ -297,6 +338,9 @@
             <width>0</width>
             <height>22</height>
            </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #4C566A;</string>
           </property>
           <property name="frameShadow">
            <enum>QFrame::Plain</enum>
@@ -442,7 +486,7 @@
               <enum>Qt::PlainText</enum>
              </property>
              <property name="pixmap">
-              <pixmap resource="resources.qrc">:/icon/globe</pixmap>
+              <pixmap>:/icon/globe</pixmap>
              </property>
              <property name="scaledContents">
               <bool>true</bool>
