@@ -34,9 +34,13 @@ Looking for old, pre-rename/Old Pre-release Beta code? Check out the [**"pre-ren
 
 ## Screenshots
 
-![AscV Banner](other/examples/ascv_0.0.1_pre-release.png)
+![Main window screenshot](other/examples/ascv_0.0.1_pre-release.png)
 
-*AscentViewer 0.0.1_dev-2.0-PyQt5*
+> *AscentViewer 0.0.1_dev-2.0-PyQt5's main window*
+
+![About window screenshot](other/examples/ascv_0.0.1_pre-release_about.png)
+
+> *AscentViewer 0.0.1_dev-2.2-PyQt5's about window*
 
 ## How to install
 
