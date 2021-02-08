@@ -309,13 +309,21 @@ class MainUi(QtWidgets.QMainWindow):
     # I should clean up these two too
     def prevImage(self):
         #ascvLogger.debug(f"Showing previous image, imageNumber = {self.imageNumber}")
-        self.imageNumber -= 1
+        if self.imageNumber != 0:
+            self.imageNumber -= 1
+        else:
+            self.imageNumber = len(self.dirImageList) - 1
+
         self.imgFilePath = self.dirImageList[self.imageNumber]
         self.updateImage()
 
     def nextImage(self):
         #ascvLogger.debug(f"Showing next image, imageNumber = {self.imageNumber}")
-        self.imageNumber += 1
+        if self.imageNumber != len(self.dirImageList) - 1:
+            self.imageNumber += 1
+        else:
+            self.imageNumber = 0
+
         self.imgFilePath = self.dirImageList[self.imageNumber]
         self.updateImage()
 
