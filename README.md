@@ -8,7 +8,7 @@
 
 **AscentViewer** is an image viewer written in [**Python**](https://www.python.org/) based on [**PyQt**](https://riverbankcomputing.com/software/pyqt/) and [**several other libraries.**](other/markdown/CREDITS.md)
 
-Here is [**its website**](https://dd.acrazytown.com/AscentViewer/).
+Here is [**it's website**](https://dd.acrazytown.com/AscentViewer/).
 
 ---
 
