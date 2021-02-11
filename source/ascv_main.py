@@ -11,7 +11,7 @@ try:
 except:
     pass
 
-ver = "0.0.1_dev-2.2-PyQt5"
+ver = "0.0.1_dev-2.1-PyQt5"
 config = json.load(open("data/user/config.json", encoding="utf-8"))
 
 lang = config["localization"]["lang"]
@@ -330,7 +330,11 @@ class MainUi(QtWidgets.QMainWindow):
     def openLogWin(self):
         # not using a modal QDialog (like the About window) here because I want this window to be non-modal
         logViewer = QtWidgets.QMainWindow(self, QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowCloseButtonHint)
+
         logViewer.resize(600, 400)
+        geo = logViewer.geometry()
+        geo.moveCenter(self.geometry().center())
+        logViewer.setGeometry(geo)
 
         logViewer.setWindowTitle("Log Viewer")
         logViewer.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
@@ -344,6 +348,7 @@ class MainUi(QtWidgets.QMainWindow):
 
     def openHelpWin(self):
         helpWin = QtWidgets.QDialog(self, QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowCloseButtonHint)
+
         helpWin.resize(725, 460)
 
         helpWin.setAttribute(QtCore.Qt.WA_QuitOnClose, True)
