@@ -334,34 +334,17 @@ class MainUi(QtWidgets.QMainWindow):
 
         logViewer.setWindowTitle("Log Viewer")
         logViewer.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
+        logViewer.setAttribute(QtCore.Qt.WA_QuitOnClose, True) # https://stackoverflow.com/questions/16468584/qwidget-doesnt-close-when-main-window-is-closed
 
         logTextEdit = QtWidgets.QPlainTextEdit(logViewer)
         logViewer.setCentralWidget(logTextEdit)
         logTextEdit.appendPlainText("Coming soon.")
 
-        logViewer.setAttribute(QtCore.Qt.WA_QuitOnClose, True) # https://stackoverflow.com/questions/16468584/qwidget-doesnt-close-when-main-window-is-closed
         logViewer.show()
 
     def openHelpWin(self):
-        # not using a modal QDialog here for the same reason
-        help = QtWidgets.QMainWindow(self, QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowCloseButtonHint)
-
-        help.resize(725, 460)
-        help.setWindowTitle("Help and Documentation")
-        help.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
-
-        help.label = QtWidgets.QLabel(help)
-        help.label.setText("<b>Coming soon.</b><br /><i>In the meantime, check out the repository's Wiki.</i>")
-        help.setCentralWidget(help.label)
-
-        mainLabelFont = QtGui.QFont()
-        mainLabelFont.setPointSize(16)
-        help.label.setFont(mainLabelFont)
-
-        help.label.setAlignment(QtCore.Qt.AlignCenter)
-
-        help.setAttribute(QtCore.Qt.WA_QuitOnClose, True)
-        help.show()
+        self.help = HelpWindow(parent=self)
+        self.help.show()
 
     def openAboutWin(self):
         about = QtWidgets.QDialog(self, QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowCloseButtonHint)
@@ -640,3 +623,27 @@ class MainUi(QtWidgets.QMainWindow):
             #ascvLogger.info("Exit prompt is disabled, exiting...")
             self.onCloseActions()
             event.accept()
+
+class HelpWindow(QtWidgets.QMainWindow):
+    def __init__(self, parent=None):
+        self.parent = parent
+        super().__init__()
+
+        self.resize(725, 460)
+        geo = self.geometry()
+        geo.moveCenter(self.parent.geometry().center())
+        self.setGeometry(geo)
+
+        self.setAttribute(QtCore.Qt.WA_QuitOnClose, True)
+        self.setWindowTitle("Help")
+        self.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
+
+        self.label = QtWidgets.QLabel(self)
+        self.setCentralWidget(self.label)
+        self.label.setText("<b>Coming soon.</b><br /><i>In the meantime, check out the repository's Wiki.</i>")
+
+        mainLabelFont = QtGui.QFont()
+        mainLabelFont.setPointSize(16)
+        self.label.setFont(mainLabelFont)
+
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
