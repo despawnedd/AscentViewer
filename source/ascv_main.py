@@ -343,8 +343,27 @@ class MainUi(QtWidgets.QMainWindow):
         logViewer.show()
 
     def openHelpWin(self):
-        self.help = HelpWindow(parent=self)
-        self.help.show()
+        helpWin = QtWidgets.QDialog(self, QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowCloseButtonHint)
+        helpWin.resize(725, 460)
+
+        helpWin.setAttribute(QtCore.Qt.WA_QuitOnClose, True)
+        helpWin.setModal(True)
+        helpWin.setWindowTitle("Help")
+        helpWin.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
+
+        helpWin.label = QtWidgets.QLabel()
+        helpWin.label.setText("<b>Coming soon.</b><br /><i>In the meantime, check out the repository's Wiki.</i>")
+        
+        helpWin.gridLayout = QtWidgets.QGridLayout(helpWin)
+        helpWin.gridLayout.addWidget(helpWin.label)
+
+        mainLabelFont = QtGui.QFont()
+        mainLabelFont.setPointSize(16)
+        helpWin.label.setFont(mainLabelFont)
+
+        helpWin.label.setAlignment(QtCore.Qt.AlignCenter)
+
+        helpWin.show()
 
     def openAboutWin(self):
         about = QtWidgets.QDialog(self, QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowCloseButtonHint)
@@ -623,27 +642,3 @@ class MainUi(QtWidgets.QMainWindow):
             #ascvLogger.info("Exit prompt is disabled, exiting...")
             self.onCloseActions()
             event.accept()
-
-class HelpWindow(QtWidgets.QMainWindow):
-    def __init__(self, parent=None):
-        self.parent = parent
-        super().__init__()
-
-        self.resize(725, 460)
-        geo = self.geometry()
-        geo.moveCenter(self.parent.geometry().center())
-        self.setGeometry(geo)
-
-        self.setAttribute(QtCore.Qt.WA_QuitOnClose, True)
-        self.setWindowTitle("Help")
-        self.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
-
-        self.label = QtWidgets.QLabel(self)
-        self.setCentralWidget(self.label)
-        self.label.setText("<b>Coming soon.</b><br /><i>In the meantime, check out the repository's Wiki.</i>")
-
-        mainLabelFont = QtGui.QFont()
-        mainLabelFont.setPointSize(16)
-        self.label.setFont(mainLabelFont)
-
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
