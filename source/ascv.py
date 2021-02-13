@@ -2,16 +2,17 @@
 # Thank you for using and/or checking out AscentViewer!
 # =====================================================
 
-from PyQt5 import QtGui, QtCore, QtWidgets
-from ascv_main import MainUi
 import sys
 import json
-import logging
 import os
 import platform
 import glob
-import datetime
 import signal
+
+from PyQt5 import QtGui, QtCore, QtWidgets
+
+from ascv_main import MainUi
+from data.lib.ascv_logging import *
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal.SIG_DFL) # apparently makes CTRL + C work properly in console ("https://stackoverflow.com/questions/5160577/ctrl-c-doesnt-work-with-pyqt")
@@ -29,23 +30,14 @@ if __name__ == "__main__":
     config = json.load(open("data/user/config.json", encoding="utf-8")) # using json instead of QSettings, for now
 
     if config["temporary_files"]["logs"]["deleteLogsOnStartup"]:
-        logs = glob.glob("data/user/temp/logs/*.txt")
+        logs = glob.glob("data/user/temp/logs/*.log")
         for f in logs:
             os.remove(f)
         print("Erased all logs.")
     else:
         print("Not deleting logs.")
 
-    logfile = f"data/user/temp/logs/log_{datetime.datetime.now().strftime(date_format_file)}.txt"
-    ascvLogger = logging.getLogger("AscV Logger")
-    loggingLevel = getattr(logging, config["debug"]["logging"]["loggingLevel"])
-
-    logging.basicConfig(level=loggingLevel, handlers=[logging.StreamHandler(), logging.FileHandler(logfile, "w", "utf-8")], format="[%(asctime)s | %(name)s | %(funcName)s | %(levelname)s] %(message)s", datefmt=date_format) # thanks to Jan and several other sources for this
-    if os.path.exists(logfile):
-        with open(logfile, "w") as f: # this code is a bit messy but all this does is just write the same thing both to the console and the logfile
-            m = "="*15 + "[ BEGIN LOG ]" + "="*15
-            f.write(f"{m}\n")
-            print(m)
+    ascvLogger.info(f"Arguments: {sys.argv}")
 
     if platform.system() == "Windows":
         # makes the AscentViewer icon appear in the taskbar, more info here: "https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105"
@@ -80,7 +72,6 @@ if __name__ == "__main__":
     dark_palette.setColor(QtGui.QPalette.Highlight, QtGui.QColor(119, 124, 193))
     dark_palette.setColor(QtGui.QPalette.HighlightedText, QtCore.Qt.white)
     app.setPalette(dark_palette)
-
     app.setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }")
 
     window = MainUi()

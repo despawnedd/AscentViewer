@@ -3,8 +3,9 @@
 .pytest_cache
 source/.vs
 source/.vscode
-source/data/user/temp/logs/*.txt
+source/data/user/temp/logs/*.log
 source/__pycache__
 tests_and_stuff
 tests/__pycache__
 source/data/lib/__pycache__
+output.*

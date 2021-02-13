@@ -6,6 +6,8 @@ import shutil
 import platform
 import pkg_resources
 
+from data.lib.ascv_logging import *
+
 try:
     os.chdir(__file__.replace(os.path.basename(__file__), "")) # thanks to Anthony for this
 except:
@@ -24,7 +26,6 @@ class MainUi(QtWidgets.QMainWindow):
         # =====================================================
         # non-gui related stuff:
 
-        #ascvLogger.info("Initializing GUI.")
         self.dirPath = ""
         self.imgFilePath = ""
         self.saveConfigOnExit = True
@@ -32,6 +33,7 @@ class MainUi(QtWidgets.QMainWindow):
         # =====================================================
         # gui related stuff:
 
+        ascvLogger.info("Initializing GUI.")
         # from https://stackoverflow.com/questions/27955654/how-to-use-non-standard-custom-font-with-stylesheets
         selawikFonts = glob.glob("data/assets/fonts/selawik/*.ttf")
         for f in selawikFonts:
@@ -50,7 +52,7 @@ class MainUi(QtWidgets.QMainWindow):
         self.move(config["windowProperties"]["x"], config["windowProperties"]["y"])
         self.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
 
-        self.statusBar().setStyleSheet("background: #777CC1; color: white;")
+        self.statusBar().setStyleSheet("background: #777CC1;")
 
         self.mainWidget = QtWidgets.QWidget(self)
         self.setCentralWidget(self.mainWidget)
@@ -76,7 +78,6 @@ class MainUi(QtWidgets.QMainWindow):
         mainLabelFont.setBold(True)
         mainLabelFont.setPointSize(32)
         self.label.setFont(mainLabelFont)
-        #self.label.setWhatsThis("Main image label")
 
         csIcon = QtWidgets.QLabel()
         icon_ = QtGui.QPixmap("data/assets/img/icon3.png")
@@ -106,14 +107,10 @@ class MainUi(QtWidgets.QMainWindow):
         mainMenu = self.menuBar()
 
         fileMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["file"]["title"])
-
         navMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["navigation"]["title"])
-
         if config["debug"]["enableDebugMenu"]:
             debugMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["debug"]["title"])
-
         toolsMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["tools"]["title"])
-
         helpMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["help"]["title"])
 
         openImgButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/file.png"), localization["mainUiElements"]["menuBar"]["file"]["openImgText"], self)
@@ -185,10 +182,10 @@ class MainUi(QtWidgets.QMainWindow):
         self.mainWidget.addAction(openImgButton)
 
         self.statusBar().showMessage(localization["mainUiElements"]["statusBar"]["greetMessageBeginning"] + ver)
-        #ascvLogger.info("GUI has been initialized.")
+        ascvLogger.info("GUI has been initialized.")
 
     def dumpJson(self):
-        with open("data/user/config.json", "w", encoding="utf-8") as cf:
+        with open("data/user/config.json", "w", encoding="utf-8", newline="\n") as cf:
             json.dump(config, cf, ensure_ascii=False, indent=4)
 
     def resetConfigFunc(self):
@@ -220,23 +217,23 @@ class MainUi(QtWidgets.QMainWindow):
     def openImage(self):
         self.imgFilePath, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open Image File", "/", "Image files (*.jpg *.jpeg *.gif *.png *.bmp)")
         if self.imgFilePath != "":
-            #ascvLogger.info(f"Opened image. Image path: \"{self.imgFilePath}\"")
+            ascvLogger.info(f"Opened image. Image path: \"{self.imgFilePath}\"")
             self.dirPath_ = self.imgFilePath.replace(os.path.basename(self.imgFilePath), "")
-            #ascvLogger.info(f"Image's directory path: \"{self.dirPath_}\"")
+            ascvLogger.info(f"Image's directory path: \"{self.dirPath_}\"")
 
-            #ascvLogger.debug(f"dirPath: \"{self.dirPath}\", dirPath_: \"{self.dirPath_}\"")
+            ascvLogger.debug(f"dirPath: \"{self.dirPath}\", dirPath_: \"{self.dirPath_}\"")
 
             if self.dirPath != "":
-                #ascvLogger.debug("dirPath isn't blank")
+                ascvLogger.debug("dirPath isn't blank")
                 if self.dirPath != self.dirPath_:
-                    #ascvLogger.debug("dirPath and dirPath_ aren't the same, creating new dirImageList, and setting dirPath to dirPath_")
+                    ascvLogger.debug("dirPath and dirPath_ aren't the same, creating new dirImageList, and setting dirPath to dirPath_")
                     self.dirPath = self.dirPath_
                     self.dirMakeImageList(1)
                 else:
-                    #ascvLogger.debug("dirPath and dirPath_ are the same, not creating new dirImageList")
+                    ascvLogger.debug("dirPath and dirPath_ are the same, not creating new dirImageList")
                     self.imageNumber = self.dirImageList.index(self.imgFilePath) # note to self: clean this up
             else:
-                #ascvLogger.debug("dirPath is blank, creating dirImageList")
+                ascvLogger.debug("dirPath is blank, creating dirImageList")
                 self.dirPath = self.dirPath_
                 self.dirMakeImageList(1)
 
@@ -244,34 +241,34 @@ class MainUi(QtWidgets.QMainWindow):
 
             self.navButtonBack.setEnabled(True)
             self.navButtonForw.setEnabled(True)
-        #else:
-        #    #ascvLogger.info("imgFilePath is empty!")
+        else:
+            ascvLogger.info("imgFilePath is empty!")
 
     def openDir(self):
         self.dirPath_ = QtWidgets.QFileDialog.getExistingDirectory(self, "Open a Directory", "/")
         if self.dirPath_ != "":
-            #ascvLogger.info(f"Successfully opened directory, directory path is: \"{self.dirPath_}\"")
+            ascvLogger.info(f"Successfully opened directory, directory path is: \"{self.dirPath_}\"")
 
-            #ascvLogger.debug(f"dirPath: \"{self.dirPath}\", dirPath_: \"{self.dirPath_}\"")
+            ascvLogger.debug(f"dirPath: \"{self.dirPath}\", dirPath_: \"{self.dirPath_}\"")
 
             if self.dirPath != "":
-                #ascvLogger.debug("dirPath isn't blank")
+                ascvLogger.debug("dirPath isn't blank")
                 if self.dirPath != self.dirPath_:
-                    #ascvLogger.debug("dirPath and dirPath_ aren't the same, creating new dirImageList, and setting dirPath to dirPath_")
+                    ascvLogger.debug("dirPath and dirPath_ aren't the same, creating new dirImageList, and setting dirPath to dirPath_")
                     self.dirPath = self.dirPath_
                     self.dirMakeImageList(0)
-                #else:
-                #    #ascvLogger.debug("dirPath and dirPath_ are the same, not creating new dirImageList")
+                else:
+                    ascvLogger.debug("dirPath and dirPath_ are the same, not creating new dirImageList")
             else:
-                #ascvLogger.debug("dirPath is blank, creating dirImageList")
+                ascvLogger.debug("dirPath is blank, creating dirImageList")
                 self.dirPath = self.dirPath_
                 self.dirMakeImageList(0)
 
             self.updateImage()
             self.navButtonBack.setEnabled(True)
             self.navButtonForw.setEnabled(True)
-        #else:
-        #    #ascvLogger.info("dirPath_ is blank!")
+        else:
+            ascvLogger.info("dirPath_ is blank!")
 
     def dirMakeImageList(self, hasOpenedImage):
         fileTypes = ("*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif")
@@ -283,8 +280,8 @@ class MainUi(QtWidgets.QMainWindow):
         self.dirImageList = [files.replace("\\", "/") for files in self.dirImageList]
         self.dirImageList.sort(key=str.lower)
 
-        #ascvLogger.info(f"Succesfully created dirImageList, dirImageList length: {len(self.dirImageList)}")
-        #ascvLogger.debug(f"dirImageList: {self.dirImageList}")
+        ascvLogger.info(f"Succesfully created dirImageList, dirImageList length: {len(self.dirImageList)}")
+        ascvLogger.debug(f"dirImageList: {self.dirImageList}")
 
         if hasOpenedImage == 1:
             self.imageNumber = self.dirImageList.index(self.imgFilePath)
@@ -308,7 +305,7 @@ class MainUi(QtWidgets.QMainWindow):
 
     # I should clean up these two too
     def prevImage(self):
-        #ascvLogger.debug(f"Showing previous image, imageNumber = {self.imageNumber}")
+        ascvLogger.debug(f"Showing previous image, imageNumber = {self.imageNumber}")
         if self.imageNumber != 0:
             self.imageNumber -= 1
         else:
@@ -318,7 +315,7 @@ class MainUi(QtWidgets.QMainWindow):
         self.updateImage()
 
     def nextImage(self):
-        #ascvLogger.debug(f"Showing next image, imageNumber = {self.imageNumber}")
+        ascvLogger.debug(f"Showing next image, imageNumber = {self.imageNumber}")
         if self.imageNumber != len(self.dirImageList) - 1:
             self.imageNumber += 1
         else:
@@ -358,7 +355,7 @@ class MainUi(QtWidgets.QMainWindow):
 
         helpWin.label = QtWidgets.QLabel()
         helpWin.label.setText("<b>Coming soon.</b><br /><i>In the meantime, check out the repository's Wiki.</i>")
-        
+
         helpWin.gridLayout = QtWidgets.QGridLayout(helpWin)
         helpWin.gridLayout.addWidget(helpWin.label)
 
@@ -593,9 +590,15 @@ class MainUi(QtWidgets.QMainWindow):
         about.versionLabel.setText(_translate("Form", "version"))
         about.version.setText(_translate("Form", ver))
         about.label.setText(_translate("Form", "Python version"))
-        about.label_9.setText(_translate("Form", platform.python_version()))
+        try:
+            about.label_9.setText(_translate("Form", platform.python_version()))
+        except:
+            about.label_9.setText(_translate("Form", "unknown"))
         about.label_2.setText(_translate("Form", "PyQt5 version"))
-        about.label_10.setText(_translate("Form", pkg_resources.get_distribution("PyQt5").version))
+        try:
+            about.label_10.setText(_translate("Form", pkg_resources.get_distribution("PyQt5").version))
+        except:
+            about.label_10.setText(_translate("Form", "unknown"))
         about.label_11.setText(_translate("Form", "**AscentViewer** is an image viewer written in [**Python**](https://www.python.org/) based on [**PyQt**](https://riverbankcomputing.com/software/pyqt/) and several other libraries."))
         about.label_4.setText(_translate("Form", "<a href=\"https://github.com/despawnedd/AscentViewer/\">GitHub repository</a>"))
         about.label_6.setText(_translate("Form", "<a href=\"https://dd.acrazytown.com/AscentViewer/\">Website</a>"))
@@ -630,20 +633,20 @@ class MainUi(QtWidgets.QMainWindow):
             x = reply.exec_()
 
             if checkbox.isChecked():
-                #ascvLogger.info("Disabling prompt...")
+                ascvLogger.info("Disabling prompt...")
                 config["prompts"]["enableExitPrompt"] = False
-            #else:
-            #    ascvLogger.info("Not disabling prompt.")
+            else:
+                ascvLogger.info("Not disabling prompt.")
 
             if x == QtWidgets.QMessageBox.Yes:
-                #ascvLogger.info("Exiting...")
+                ascvLogger.info("Exiting...")
                 self.onCloseActions()
                 event.accept()
             else:
-                #ascvLogger.info("Not exiting.")
+                ascvLogger.info("Not exiting.")
                 event.ignore()
 
         else:
-            #ascvLogger.info("Exit prompt is disabled, exiting...")
+            ascvLogger.info("Exit prompt is disabled, exiting...")
             self.onCloseActions()
             event.accept()
