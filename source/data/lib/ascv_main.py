@@ -21,13 +21,13 @@ localization = json.load(open(f"data/assets/localization/lang/{lang}.json", enco
 
 # from http://pantburk.info/?blog=77 and https://dzone.com/articles/python-custom-logging-handler-example
 class CustomHandler(logging.StreamHandler):
-        def __init__(self, statusBar):
-                logging.Handler.__init__(self)
-                self.statusBar = statusBar
-        def emit(self, record):
-                self.statusBar.showMessage(self.format(record)) 
-        def flush(self):
-            pass
+    def __init__(self, statusBar):
+            logging.Handler.__init__(self)
+            self.statusBar = statusBar
+    def emit(self, record):
+            self.statusBar.showMessage(self.format(record)) 
+    def flush(self):
+        pass
 
 class MainUi(QtWidgets.QMainWindow):
     def __init__(self):
