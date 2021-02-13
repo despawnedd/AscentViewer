@@ -4,7 +4,7 @@ import datetime
 import json
 import os
 
-# from https://stackoverflow.com/a/31688396/14558305, https://stackoverflow.com/a/39215961/14558305
+# from https://stackoverflow.com/a/31688396/14558305 and https://stackoverflow.com/a/39215961/14558305
 class StreamToLogger:
     def __init__(self, logger, level):
         self.logger = logger
@@ -43,7 +43,3 @@ sys.stdout = StreamToLogger(stdouterrLogger, logging.INFO)
 sys.stderr = StreamToLogger(stdouterrLogger, logging.ERROR)
 
 print("="*20 + "[ BEGIN LOG ]" + "="*20)
-#if os.path.exists(logfile):
-#    with open(logfile, "w") as f:
-#        f.write(f"{m}\n")
-#        print(m)

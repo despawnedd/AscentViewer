@@ -19,6 +19,16 @@ config = json.load(open("data/user/config.json", encoding="utf-8"))
 lang = config["localization"]["lang"]
 localization = json.load(open(f"data/assets/localization/lang/{lang}.json", encoding="utf-8"))
 
+# from http://pantburk.info/?blog=77 and https://dzone.com/articles/python-custom-logging-handler-example
+class CustomHandler(logging.StreamHandler):
+        def __init__(self, statusBar):
+                logging.Handler.__init__(self)
+                self.statusBar = statusBar
+        def emit(self, record):
+                self.statusBar.showMessage(record.message)    
+        def flush(self):
+            pass
+
 class MainUi(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
@@ -29,6 +39,14 @@ class MainUi(QtWidgets.QMainWindow):
         self.dirPath = ""
         self.imgFilePath = ""
         self.saveConfigOnExit = True
+
+        # from http://pantburk.info/?blog=77. This code allows the status bar to show warning messages from loggers
+        customHandler = CustomHandler(self.statusBar())
+        customHandler.setLevel(logging.WARN)
+
+        # "ascvLogger.addHandler(customHandler)" does NOT work for some reason, however, to my understanding, this does add the handler to ascvLogger. Python's logging is weird
+        logger = logging.getLogger()
+        logger.addHandler(customHandler)
 
         # =====================================================
         # gui related stuff:

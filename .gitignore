@@ -9,3 +9,4 @@ tests_and_stuff
 tests/__pycache__
 source/data/lib/__pycache__
 output.*
+source/test*.py
