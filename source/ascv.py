@@ -11,7 +11,7 @@ import signal
 
 from PyQt5 import QtGui, QtCore, QtWidgets
 
-from ascv_main import MainUi
+from data.lib.ascv_main import MainUi
 from data.lib.ascv_logging import *
 
 if __name__ == "__main__":

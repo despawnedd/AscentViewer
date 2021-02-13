@@ -6,10 +6,10 @@ import shutil
 import platform
 import pkg_resources
 
-from data.lib.ascv_logging import *
+from data.lib.ascv_logging import * # how does this work but the "config =" line doesn't without line 13 on Linux
 
 try:
-    os.chdir(__file__.replace(os.path.basename(__file__), "")) # thanks to Anthony for this
+    os.chdir(os.path.abspath(__file__.replace(os.path.basename(__file__), "../..")))
 except:
     pass
 
@@ -187,6 +187,7 @@ class MainUi(QtWidgets.QMainWindow):
     def dumpJson(self):
         with open("data/user/config.json", "w", encoding="utf-8", newline="\n") as cf:
             json.dump(config, cf, ensure_ascii=False, indent=4)
+            cf.write("\n") # https://codeyarns.com/tech/2017-02-22-python-json-dump-misses-last-newline.html
 
     def resetConfigFunc(self):
         reply = QtWidgets.QMessageBox(self)
@@ -236,11 +237,6 @@ class MainUi(QtWidgets.QMainWindow):
                 ascvLogger.debug("dirPath is blank, creating dirImageList")
                 self.dirPath = self.dirPath_
                 self.dirMakeImageList(1)
-
-            self.updateImage()
-
-            self.navButtonBack.setEnabled(True)
-            self.navButtonForw.setEnabled(True)
         else:
             ascvLogger.info("imgFilePath is empty!")
 
@@ -263,32 +259,38 @@ class MainUi(QtWidgets.QMainWindow):
                 ascvLogger.debug("dirPath is blank, creating dirImageList")
                 self.dirPath = self.dirPath_
                 self.dirMakeImageList(0)
-
-            self.updateImage()
-            self.navButtonBack.setEnabled(True)
-            self.navButtonForw.setEnabled(True)
         else:
             ascvLogger.info("dirPath_ is blank!")
 
     def dirMakeImageList(self, hasOpenedImage):
         fileTypes = ("*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif")
-        self.dirImageList = []
+        self.dirImageList_ = []
 
         for files in fileTypes:
-            self.dirImageList.extend(glob.glob(f"{self.dirPath}/{files}"))
+            self.dirImageList_.extend(glob.glob(f"{self.dirPath}/{files}"))
 
-        self.dirImageList = [files.replace("\\", "/") for files in self.dirImageList]
-        self.dirImageList.sort(key=str.lower)
+        self.dirImageList_ = [files.replace("\\", "/") for files in self.dirImageList_]
+        self.dirImageList_.sort(key=str.lower)
 
-        ascvLogger.info(f"Succesfully created dirImageList, dirImageList length: {len(self.dirImageList)}")
-        ascvLogger.debug(f"dirImageList: {self.dirImageList}")
+        if len(self.dirImageList_) != 0:
+            ascvLogger.info(f"Succesfully created dirImageList_. It's not empty.")
+            ascvLogger.debug(f"dirImageList_: {self.dirImageList_}")
+            ascvLogger.info(f"dirImageList_ length: {len(self.dirImageList_)}")
+            ascvLogger.info(f"Setting dirImageList to dirImageList_")
+            self.dirImageList = self.dirImageList_
 
-        if hasOpenedImage == 1:
-            self.imageNumber = self.dirImageList.index(self.imgFilePath)
+            if hasOpenedImage == 1:
+                self.imageNumber = self.dirImageList.index(self.imgFilePath)
+            else:
+                self.imageNumber = 0
+
+            self.imgFilePath = self.dirImageList_[self.imageNumber]
+
+            self.updateImage()
+            self.navButtonBack.setEnabled(True)
+            self.navButtonForw.setEnabled(True)
         else:
-            self.imageNumber = 0
-
-        self.imgFilePath = self.dirImageList[self.imageNumber]
+            ascvLogger.info(f"Succesfully created dirImageList_, but it's empty! Not setting dirImageList to dirImageList_")
 
     def updateImage(self):
         mwWidth = self.label.frameGeometry().width()

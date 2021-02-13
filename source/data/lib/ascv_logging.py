@@ -2,6 +2,7 @@ import sys
 import logging
 import datetime
 import json
+import os
 
 # from https://stackoverflow.com/a/31688396/14558305, https://stackoverflow.com/a/39215961/14558305
 class StreamToLogger:
@@ -16,6 +17,11 @@ class StreamToLogger:
 
     def flush(self):
         pass
+
+try:
+    os.chdir(os.path.abspath(__file__.replace(os.path.basename(__file__), "../..")))
+except:
+    pass
 
 config = json.load(open("data/user/config.json", encoding="utf-8"))
 
