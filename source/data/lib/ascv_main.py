@@ -25,7 +25,7 @@ class CustomHandler(logging.StreamHandler):
                 logging.Handler.__init__(self)
                 self.statusBar = statusBar
         def emit(self, record):
-                self.statusBar.showMessage(record.message)    
+                self.statusBar.showMessage(f"WARNING: {record.msg}") # https://opendev.org/openstack/swift/commit/387ce13aa15ada80a40b93a0d9e12d2be0ff927e  
         def flush(self):
             pass
 
@@ -44,9 +44,7 @@ class MainUi(QtWidgets.QMainWindow):
         customHandler = CustomHandler(self.statusBar())
         customHandler.setLevel(logging.WARN)
 
-        # "ascvLogger.addHandler(customHandler)" does NOT work for some reason, however, to my understanding, this does add the handler to ascvLogger. Python's logging is weird
-        logger = logging.getLogger()
-        logger.addHandler(customHandler)
+        ascvLogger.addHandler(customHandler)
 
         # =====================================================
         # gui related stuff:
@@ -201,6 +199,8 @@ class MainUi(QtWidgets.QMainWindow):
 
         self.statusBar().showMessage(localization["mainUiElements"]["statusBar"]["greetMessageBeginning"] + ver)
         ascvLogger.info("GUI has been initialized.")
+
+        ascvLogger.warn("Test warning.")
 
     def dumpJson(self):
         with open("data/user/config.json", "w", encoding="utf-8", newline="\n") as cf:
