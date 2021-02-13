@@ -1,4 +1,5 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
+import sys
 import json
 import glob
 import os
@@ -13,19 +14,32 @@ try:
 except:
     pass
 
-ver = "0.0.1_dev-2.1-PyQt5"
+ver = "0.0.1_dev-3.0-PyQt5"
 config = json.load(open("data/user/config.json", encoding="utf-8"))
 
 lang = config["localization"]["lang"]
 localization = json.load(open(f"data/assets/localization/lang/{lang}.json", encoding="utf-8"))
 
+def dummy():
+    pass
+
 # from http://pantburk.info/?blog=77 and https://dzone.com/articles/python-custom-logging-handler-example
 class CustomHandler(logging.StreamHandler):
     def __init__(self, statusBar):
-            logging.Handler.__init__(self)
-            self.statusBar = statusBar
+        logging.Handler.__init__(self)
+        self.statusBar = statusBar
     def emit(self, record):
-            self.statusBar.showMessage(self.format(record)) 
+        print(record.levelname)
+        if record.levelname == "WARNING":
+            self.statusBar.showMessage(f"WARNING: {self.format(record)}") 
+            self.statusBar.setStyleSheet("background: #EBCB8B; color: black;")
+        elif record.levelname == "ERROR":
+            self.statusBar.showMessage(f"ERROR: {self.format(record)}") 
+            self.statusBar.setStyleSheet("background: #D08770; color: black;")
+        else:
+            self.statusBar.showMessage(f"CRITICAL ERROR: {self.format(record)}") 
+            self.statusBar.setStyleSheet("background: #BF616A;")
+            
     def flush(self):
         pass
 
@@ -39,12 +53,13 @@ class MainUi(QtWidgets.QMainWindow):
         self.dirPath = ""
         self.imgFilePath = ""
         self.saveConfigOnExit = True
+        sys.excepthook = self.except_hook # https://stackoverflow.com/a/33741755/14558305
 
         # from http://pantburk.info/?blog=77. This code allows the status bar to show warning messages from loggers
         customHandler = CustomHandler(self.statusBar())
         customHandler.setLevel(logging.WARN)
 
-        formatter = logging.Formatter("[%(asctime)s | %(name)s | %(funcName)s | %(levelname)s] %(message)s", date_format) # https://stackoverflow.com/questions/3220284/how-to-customize-the-time-format-for-python-logging
+        formatter = logging.Formatter("[%(name)s | %(funcName)s] %(message)s", date_format) # https://stackoverflow.com/questions/3220284/how-to-customize-the-time-format-for-python-logging
         customHandler.setFormatter(formatter)
 
         ascvLogger.addHandler(customHandler)
@@ -97,6 +112,7 @@ class MainUi(QtWidgets.QMainWindow):
         mainLabelFont.setBold(True)
         mainLabelFont.setPointSize(32)
         self.label.setFont(mainLabelFont)
+        self.label.resizeEvent = (lambda old_method: (lambda event: (self.updateImage(), old_method(event))[-1]))(self.label.resizeEvent) # https://stackoverflow.com/a/34802367/14558305
 
         csIcon = QtWidgets.QLabel()
         icon_ = QtGui.QPixmap("data/assets/img/icon3.png")
@@ -170,6 +186,11 @@ class MainUi(QtWidgets.QMainWindow):
         resetCfg.setStatusTip("Reset the configuration file.")
         resetCfg.triggered.connect(self.resetConfigFunc)
 
+        dummyException = QtWidgets.QAction(QtGui.QIcon(), "Raise dummy exception", self)
+        dummyException.setShortcut("CTRL+Shift+F10")
+        dummyException.setStatusTip("Raise a dummy exception")
+        dummyException.triggered.connect(self.dummyExceptionFunc)
+
         helpButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon3.png"), "Help", self)
         helpButton.setShortcut("F1")
         helpButton.setStatusTip("Open the help window.")
@@ -192,6 +213,7 @@ class MainUi(QtWidgets.QMainWindow):
             debugMenu.addAction(logWindowButton)
 
         toolsMenu.addAction(resetCfg)
+        toolsMenu.addAction(dummyException)
 
         helpMenu.addAction(helpButton)
         helpMenu.addSeparator()
@@ -204,11 +226,6 @@ class MainUi(QtWidgets.QMainWindow):
         ascvLogger.info("GUI has been initialized.")
 
         ascvLogger.warn("Test warning.")
-
-    def dumpJson(self):
-        with open("data/user/config.json", "w", encoding="utf-8", newline="\n") as cf:
-            json.dump(config, cf, ensure_ascii=False, indent=4)
-            cf.write("\n") # https://codeyarns.com/tech/2017-02-22-python-json-dump-misses-last-newline.html
 
     def resetConfigFunc(self):
         reply = QtWidgets.QMessageBox(self)
@@ -247,13 +264,14 @@ class MainUi(QtWidgets.QMainWindow):
 
             if self.dirPath != "":
                 ascvLogger.debug("dirPath isn't blank")
+                
                 if self.dirPath != self.dirPath_:
                     ascvLogger.debug("dirPath and dirPath_ aren't the same, creating new dirImageList, and setting dirPath to dirPath_")
                     self.dirPath = self.dirPath_
                     self.dirMakeImageList(1)
                 else:
                     ascvLogger.debug("dirPath and dirPath_ are the same, not creating new dirImageList")
-                    self.imageNumber = self.dirImageList.index(self.imgFilePath) # note to self: clean this up
+                    self.imageNumber = self.dirImageList.index(self.imgFilePath)
             else:
                 ascvLogger.debug("dirPath is blank, creating dirImageList")
                 self.dirPath = self.dirPath_
@@ -298,6 +316,7 @@ class MainUi(QtWidgets.QMainWindow):
             ascvLogger.debug(f"dirImageList_: {self.dirImageList_}")
             ascvLogger.info(f"dirImageList_ length: {len(self.dirImageList_)}")
             ascvLogger.info(f"Setting dirImageList to dirImageList_")
+
             self.dirImageList = self.dirImageList_
 
             if hasOpenedImage == 1:
@@ -305,7 +324,7 @@ class MainUi(QtWidgets.QMainWindow):
             else:
                 self.imageNumber = 0
 
-            self.imgFilePath = self.dirImageList_[self.imageNumber]
+            self.imgFilePath = self.dirImageList[self.imageNumber]
 
             self.updateImage()
             self.navButtonBack.setEnabled(True)
@@ -313,6 +332,8 @@ class MainUi(QtWidgets.QMainWindow):
         else:
             ascvLogger.info(f"Succesfully created dirImageList_, but it's empty! Not setting dirImageList to dirImageList_")
 
+    # ISSUE: for some images, this REALLY makes the program lag
+    # code comes from https://stackoverflow.com/a/43570124/14558305
     def updateImage(self):
         mwWidth = self.label.frameGeometry().width()
         mwHeight = self.label.frameGeometry().height()
@@ -322,9 +343,6 @@ class MainUi(QtWidgets.QMainWindow):
             pixmap = pixmap_.scaled(mwWidth, mwHeight, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
             self.label.setPixmap(pixmap)
         self.label.resize(mwWidth, mwHeight)
-
-    def resizeEvent(self, event):
-        self.updateImage()
 
     # I should clean up these two too
     def prevImage(self):
@@ -346,6 +364,68 @@ class MainUi(QtWidgets.QMainWindow):
 
         self.imgFilePath = self.dirImageList[self.imageNumber]
         self.updateImage()
+
+    def dumpJson(self):
+        with open("data/user/config.json", "w", encoding="utf-8", newline="\n") as cf:
+            json.dump(config, cf, ensure_ascii=False, indent=4)
+            cf.write("\n") # https://codeyarns.com/tech/2017-02-22-python-json-dump-misses-last-newline.html
+
+    def onCloseActions(self):
+        config["windowProperties"]["width"] = self.width()
+        config["windowProperties"]["height"] = self.height()
+        config["windowProperties"]["x"] = self.x()
+        config["windowProperties"]["y"] = self.y()
+        config["windowProperties"]["bottomSplitterPanelH"] = self.bottom.height()
+
+        if self.saveConfigOnExit == True:
+            self.dumpJson()
+
+    def closeEvent(self, event):
+        if config["prompts"]["enableExitPrompt"]:
+            reply = QtWidgets.QMessageBox(self)
+            reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
+            reply.setWindowTitle("Exiting AscentViewer")
+            reply.setText("<b>Are you sure you want to exit AscentViewer?</b>")
+            reply.setInformativeText("<i>By the way, thank you for using this program!</i>")
+            reply.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            checkbox = QtWidgets.QCheckBox("Do not show this again.")
+            icon_ = QtGui.QPixmap("data/assets/img/door.png")
+            icon = icon_.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            reply.setIconPixmap(QtGui.QPixmap(icon))
+            reply.setCheckBox(checkbox)
+            reply.setModal(True)
+
+            x = reply.exec_()
+
+            if checkbox.isChecked():
+                ascvLogger.info("Disabling prompt...")
+                config["prompts"]["enableExitPrompt"] = False
+            else:
+                ascvLogger.info("Not disabling prompt.")
+
+            if x == QtWidgets.QMessageBox.Yes:
+                ascvLogger.info("Exiting...")
+                self.onCloseActions()
+                event.accept()
+            else:
+                ascvLogger.info("Not exiting.")
+                event.ignore()
+
+        else:
+            ascvLogger.info("Exit prompt is disabled, exiting...")
+            self.onCloseActions()
+            event.accept()
+
+    # from https://stackoverflow.com/a/33741755/14558305
+    # bookmark: https://stackoverflow.com/questions/6598053/python-global-exception-handling
+    def except_hook(self, cls, exception, traceback):
+        # custom except hook
+        ascvLogger.critical(f"An exception occured: \"{exception}\" | Saving everything in case of a fatal issue...")
+        sys.__excepthook__(cls, exception, traceback)
+        self.onCloseActions()
+
+    def dummyExceptionFunc(self):
+        raise Exception("Dummy exception!")
 
     def openLogWin(self):
         # not using a modal QDialog (like the About window) here because I want this window to be non-modal
@@ -627,49 +707,3 @@ class MainUi(QtWidgets.QMainWindow):
         about.label_6.setText(_translate("Form", "<a href=\"https://dd.acrazytown.com/AscentViewer/\">Website</a>"))
 
         about.exec_()
-
-    def onCloseActions(self):
-        config["windowProperties"]["width"] = self.width()
-        config["windowProperties"]["height"] = self.height()
-        config["windowProperties"]["x"] = self.x()
-        config["windowProperties"]["y"] = self.y()
-        config["windowProperties"]["bottomSplitterPanelH"] = self.bottom.height()
-
-        if self.saveConfigOnExit == True:
-            self.dumpJson()
-
-    def closeEvent(self, event):
-        if config["prompts"]["enableExitPrompt"]:
-            reply = QtWidgets.QMessageBox(self)
-            reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
-            reply.setWindowTitle("Exiting AscentViewer")
-            reply.setText("<b>Are you sure you want to exit AscentViewer?</b>")
-            reply.setInformativeText("<i>By the way, thank you for using this program!</i>")
-            reply.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            checkbox = QtWidgets.QCheckBox("Do not show this again.")
-            icon_ = QtGui.QPixmap("data/assets/img/door.png")
-            icon = icon_.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-            reply.setIconPixmap(QtGui.QPixmap(icon))
-            reply.setCheckBox(checkbox)
-            reply.setModal(True)
-
-            x = reply.exec_()
-
-            if checkbox.isChecked():
-                ascvLogger.info("Disabling prompt...")
-                config["prompts"]["enableExitPrompt"] = False
-            else:
-                ascvLogger.info("Not disabling prompt.")
-
-            if x == QtWidgets.QMessageBox.Yes:
-                ascvLogger.info("Exiting...")
-                self.onCloseActions()
-                event.accept()
-            else:
-                ascvLogger.info("Not exiting.")
-                event.ignore()
-
-        else:
-            ascvLogger.info("Exit prompt is disabled, exiting...")
-            self.onCloseActions()
-            event.accept()
