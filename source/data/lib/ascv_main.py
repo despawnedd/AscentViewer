@@ -25,7 +25,7 @@ class CustomHandler(logging.StreamHandler):
                 logging.Handler.__init__(self)
                 self.statusBar = statusBar
         def emit(self, record):
-                self.statusBar.showMessage(f"WARNING: {record.msg}") # https://opendev.org/openstack/swift/commit/387ce13aa15ada80a40b93a0d9e12d2be0ff927e  
+                self.statusBar.showMessage(self.format(record)) 
         def flush(self):
             pass
 
@@ -43,6 +43,9 @@ class MainUi(QtWidgets.QMainWindow):
         # from http://pantburk.info/?blog=77. This code allows the status bar to show warning messages from loggers
         customHandler = CustomHandler(self.statusBar())
         customHandler.setLevel(logging.WARN)
+
+        formatter = logging.Formatter("[%(asctime)s | %(name)s | %(funcName)s | %(levelname)s] %(message)s", date_format) # https://stackoverflow.com/questions/3220284/how-to-customize-the-time-format-for-python-logging
+        customHandler.setFormatter(formatter)
 
         ascvLogger.addHandler(customHandler)
 

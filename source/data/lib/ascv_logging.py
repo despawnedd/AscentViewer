@@ -26,11 +26,12 @@ except:
 config = json.load(open("data/user/config.json", encoding="utf-8"))
 
 date_format_file = "%d%m%Y_%H%M%S"
-date_format = "%d/%m/%Y %H:%M:%S"
+date_format = "%d-%m-%Y %H:%M:%S"
 
 logfile = f"data/user/temp/logs/log_{datetime.datetime.now().strftime(date_format_file)}.log"
 loggingLevel = getattr(logging, config["debug"]["logging"]["loggingLevel"])
 
+# should probably clean this up:
 # thanks to Jan and several other sources for this
 logging.basicConfig(level=loggingLevel,
                     handlers=[logging.StreamHandler(), logging.FileHandler(logfile, "w", "utf-8")],
