@@ -29,15 +29,12 @@ class CustomHandler(logging.StreamHandler):
         logging.Handler.__init__(self)
         self.statusBar = statusBar
     def emit(self, record):
-        print(record.levelname)
+        self.statusBar.showMessage(self.format(record)) 
         if record.levelname == "WARNING":
-            self.statusBar.showMessage(f"WARNING: {self.format(record)}") 
             self.statusBar.setStyleSheet("background: #EBCB8B; color: black;")
         elif record.levelname == "ERROR":
-            self.statusBar.showMessage(f"ERROR: {self.format(record)}") 
             self.statusBar.setStyleSheet("background: #D08770; color: black;")
         else:
-            self.statusBar.showMessage(f"CRITICAL ERROR: {self.format(record)}") 
             self.statusBar.setStyleSheet("background: #BF616A;")
             
     def flush(self):
@@ -59,7 +56,7 @@ class MainUi(QtWidgets.QMainWindow):
         customHandler = CustomHandler(self.statusBar())
         customHandler.setLevel(logging.WARN)
 
-        formatter = logging.Formatter("[%(name)s | %(funcName)s] %(message)s", date_format) # https://stackoverflow.com/questions/3220284/how-to-customize-the-time-format-for-python-logging
+        formatter = logging.Formatter("%(levelname)s: %(message)s")
         customHandler.setFormatter(formatter)
 
         ascvLogger.addHandler(customHandler)
@@ -418,9 +415,9 @@ class MainUi(QtWidgets.QMainWindow):
 
     # from https://stackoverflow.com/a/33741755/14558305
     # bookmark: https://stackoverflow.com/questions/6598053/python-global-exception-handling
-    def except_hook(self, cls, exception, traceback):
+    def except_hook(self, cls, exception, traceback): # note: implement this in ascv.py somehow
         # custom except hook
-        ascvLogger.critical(f"An exception occured: \"{exception}\" | Saving everything in case of a fatal issue...")
+        ascvLogger.critical(f"An exception occured: \"{exception}\" | Saving settings in case of a fatal issue...")
         sys.__excepthook__(cls, exception, traceback)
         self.onCloseActions()
 
