@@ -10,7 +10,10 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 
 from data.lib.ascv_logging import * # how does this work but the "config =" line doesn't without line 13 on Linux
 
-os.chdir(os.path.abspath(__file__.replace(os.path.basename(__file__), "../..")))
+try:
+    os.chdir(os.path.abspath(__file__.replace(os.path.basename(__file__), "../..")))
+except:
+    pass
 
 ver = "0.0.1_dev-3.0-PyQt5"
 config = json.load(open("data/user/config.json", encoding="utf-8"))

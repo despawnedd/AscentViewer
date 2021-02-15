@@ -16,7 +16,10 @@ from data.lib.ascv_logging import *
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal.SIG_DFL) # apparently makes CTRL + C work properly in console ("https://stackoverflow.com/questions/5160577/ctrl-c-doesnt-work-with-pyqt")
 
-    os.chdir(__file__.replace(os.path.basename(__file__), "")) # thanks to Anthony for this
+    try:
+        os.chdir(__file__.replace(os.path.basename(__file__), "")) # thanks to Anthony for this
+    except:
+        pass
 
     ver = "0.0.1_dev-3.0-PyQt5"
     date_format_file = "%d%m%Y_%H%M%S"

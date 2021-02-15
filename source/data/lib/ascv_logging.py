@@ -22,7 +22,10 @@ class StreamToLogger:
 date_format_file = "%d%m%Y_%H%M%S"
 date_format = "%d-%m-%Y %H:%M:%S"
 
-os.chdir(os.path.abspath(__file__.replace(os.path.basename(__file__), "../..")))
+try:
+    os.chdir(os.path.abspath(__file__.replace(os.path.basename(__file__), "../..")))
+except:
+    pass
 
 config = json.load(open("data/user/config.json", encoding="utf-8"))
 
