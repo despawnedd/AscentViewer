@@ -111,3 +111,4 @@ https://stackoverflow.com/a/33741755/14558305
 https://stackoverflow.com/a/6598286/14558305
 https://www.w3schools.com/python/python_lambda.asp
 !!! https://docs.python.org/3/howto/logging.html
+https://stackoverflow.com/a/493399/14558305

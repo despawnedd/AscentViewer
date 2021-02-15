@@ -6,7 +6,6 @@ import sys
 import json
 import os
 import platform
-import glob
 import signal
 
 from PyQt5 import QtGui, QtCore, QtWidgets
@@ -17,25 +16,13 @@ from data.lib.ascv_logging import *
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal.SIG_DFL) # apparently makes CTRL + C work properly in console ("https://stackoverflow.com/questions/5160577/ctrl-c-doesnt-work-with-pyqt")
 
-    try:
-        newchdir = __file__.replace(os.path.basename(__file__), "")
-        os.chdir(newchdir) # thanks to Anthony for this
-    except:
-        pass
+    os.chdir(__file__.replace(os.path.basename(__file__), "")) # thanks to Anthony for this
 
     ver = "0.0.1_dev-3.0-PyQt5"
     date_format_file = "%d%m%Y_%H%M%S"
     date_format = "%d/%m/%Y %H:%M:%S"
 
     config = json.load(open("data/user/config.json", encoding="utf-8")) # using json instead of QSettings, for now
-
-    if config["temporary_files"]["logs"]["deleteLogsOnStartup"]:
-        logs = glob.glob("data/user/temp/logs/*.log")
-        for f in logs:
-            os.remove(f)
-        print("Erased all logs.")
-    else:
-        print("Not deleting logs.")
 
     ascvLogger.info(f"Arguments: {sys.argv}")
 

@@ -1,4 +1,3 @@
-from PyQt5 import QtGui, QtCore, QtWidgets
 import sys
 import json
 import glob
@@ -7,12 +6,11 @@ import shutil
 import platform
 import pkg_resources
 
+from PyQt5 import QtGui, QtCore, QtWidgets
+
 from data.lib.ascv_logging import * # how does this work but the "config =" line doesn't without line 13 on Linux
 
-try:
-    os.chdir(os.path.abspath(__file__.replace(os.path.basename(__file__), "../..")))
-except:
-    pass
+os.chdir(os.path.abspath(__file__.replace(os.path.basename(__file__), "../..")))
 
 ver = "0.0.1_dev-3.0-PyQt5"
 config = json.load(open("data/user/config.json", encoding="utf-8"))
@@ -20,23 +18,22 @@ config = json.load(open("data/user/config.json", encoding="utf-8"))
 lang = config["localization"]["lang"]
 localization = json.load(open(f"data/assets/localization/lang/{lang}.json", encoding="utf-8"))
 
-def dummy():
-    pass
-
 # from http://pantburk.info/?blog=77 and https://dzone.com/articles/python-custom-logging-handler-example
 class CustomHandler(logging.StreamHandler):
     def __init__(self, statusBar):
         logging.Handler.__init__(self)
         self.statusBar = statusBar
+
     def emit(self, record):
-        self.statusBar.showMessage(self.format(record)) 
+        self.statusBar.showMessage(self.format(record))
+
         if record.levelname == "WARNING":
             self.statusBar.setStyleSheet("background: #EBCB8B; color: black;")
         elif record.levelname == "ERROR":
             self.statusBar.setStyleSheet("background: #D08770; color: black;")
-        else:
+        elif record.levelname == "CRITICAL":
             self.statusBar.setStyleSheet("background: #BF616A;")
-            
+
     def flush(self):
         pass
 
@@ -140,9 +137,9 @@ class MainUi(QtWidgets.QMainWindow):
 
         fileMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["file"]["title"])
         navMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["navigation"]["title"])
+        toolsMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["tools"]["title"])
         if config["debug"]["enableDebugMenu"]:
             debugMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["debug"]["title"])
-        toolsMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["tools"]["title"])
         helpMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["help"]["title"])
 
         openImgButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/file.png"), localization["mainUiElements"]["menuBar"]["file"]["openImgText"], self)
@@ -178,15 +175,15 @@ class MainUi(QtWidgets.QMainWindow):
             logWindowButton.setStatusTip("Open the log viewer window.")
             logWindowButton.triggered.connect(self.openLogWin)
 
+            dummyException = QtWidgets.QAction(QtGui.QIcon(), "Raise dummy exception", self)
+            dummyException.setShortcut("CTRL+Shift+F10")
+            dummyException.setStatusTip("Raise a dummy exception")
+            dummyException.triggered.connect(self.dummyExceptionFunc)
+
         resetCfg = QtWidgets.QAction(QtGui.QIcon(), "Reset config", self)
         resetCfg.setShortcut("CTRL+Shift+F9")
         resetCfg.setStatusTip("Reset the configuration file.")
         resetCfg.triggered.connect(self.resetConfigFunc)
-
-        dummyException = QtWidgets.QAction(QtGui.QIcon(), "Raise dummy exception", self)
-        dummyException.setShortcut("CTRL+Shift+F10")
-        dummyException.setStatusTip("Raise a dummy exception")
-        dummyException.triggered.connect(self.dummyExceptionFunc)
 
         helpButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon3.png"), "Help", self)
         helpButton.setShortcut("F1")
@@ -208,21 +205,19 @@ class MainUi(QtWidgets.QMainWindow):
 
         if config["debug"]["enableDebugMenu"]:
             debugMenu.addAction(logWindowButton)
+            debugMenu.addAction(dummyException)
 
         toolsMenu.addAction(resetCfg)
-        toolsMenu.addAction(dummyException)
 
         helpMenu.addAction(helpButton)
         helpMenu.addSeparator()
         helpMenu.addAction(aboutButton)
 
-        self.mainWidget.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
-        self.mainWidget.addAction(openImgButton)
+        self.label.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
+        self.label.addAction(openImgButton)
 
         self.statusBar().showMessage(localization["mainUiElements"]["statusBar"]["greetMessageBeginning"] + ver)
         ascvLogger.info("GUI has been initialized.")
-
-        ascvLogger.warn("Test warning.")
 
     def resetConfigFunc(self):
         reply = QtWidgets.QMessageBox(self)
@@ -261,7 +256,7 @@ class MainUi(QtWidgets.QMainWindow):
 
             if self.dirPath != "":
                 ascvLogger.debug("dirPath isn't blank")
-                
+
                 if self.dirPath != self.dirPath_:
                     ascvLogger.debug("dirPath and dirPath_ aren't the same, creating new dirImageList, and setting dirPath to dirPath_")
                     self.dirPath = self.dirPath_
