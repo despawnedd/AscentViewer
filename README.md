@@ -43,7 +43,7 @@ Here are the instructions for running the raw Python version:
 ### Windows
 
 * Install Python 3.7 or higher from [here](https://www.python.org/downloads/).
-* Run `py -m pip install -r requirements.txt` (or `pip install -r requirements.txt` if you installed Python on PATH)
+* Run `py -m pip install -r requirements.txt` (or `pip install -r requirements.txt` if you [added Python to PATH](other/markdown/img/add_to_path_win.png))
 * Run [ascv.py](source/ascv.py).
 
 ### macOS
@@ -58,7 +58,7 @@ The procedure is the same as on Windows:
 
 ### Linux
 
-* Install Python 3.7 or higher. The recommeneded way to do so is by installing it using a package manager, such as apt (`apt install python3`). Note: using a package manager might require administrator access.
+* Install Python 3.7 or higher. The recommended way to do so is by installing it using a package manager, such as apt (`apt install python3`). Note: using a package manager might require administrator access.
 * You might also have to install qt5-default (for apt, the command is `apt install qt5-default`).
 * Run `python3 -m pip install -r requirements.txt`.
 * Run [ascv.py](source/ascv.py).
