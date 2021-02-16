@@ -1,7 +1,7 @@
 {
     "mainUiElements": {
         "openImgFileText": "Open an image file.",
-        "comingSoonPanelText": "This panel is coming soon.",
+        "panelText": "Open an image file to see info...",
         "menuBar": {
             "file": {
                 "title": "&File",

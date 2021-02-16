@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="icon">
-    <file alias="globe">data/assets/img/public-white-18dp/1x/baseline_public_white_18dp.png</file>
+    <file alias="file">data/assets/img/file.png</file>
+    <file>data/assets/img/public-white-18dp/1x/baseline_public_white_18dp.png</file>
     <file alias="icon">data/assets/img/icon3.png</file>
     <file alias="github">data/assets/img/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png</file>
   </qresource>

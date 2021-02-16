@@ -5,6 +5,8 @@ import json
 import os
 import glob
 
+from data.lib.headerlike import *
+
 # from https://stackoverflow.com/a/31688396/14558305 and https://stackoverflow.com/a/39215961/14558305
 class StreamToLogger:
     def __init__(self, logger, level):
@@ -18,9 +20,6 @@ class StreamToLogger:
 
     def flush(self):
         pass
-
-date_format_file = "%d%m%Y_%H%M%S"
-date_format = "%d-%m-%Y %H:%M:%S"
 
 try:
     os.chdir(os.path.abspath(__file__.replace(os.path.basename(__file__), "../..")))

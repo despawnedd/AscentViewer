@@ -1,3 +1,7 @@
+# =====================================================
+# Thank you for using and/or checking out AscentViewer!
+# =====================================================
+
 import sys
 import json
 import glob
@@ -5,17 +9,18 @@ import os
 import shutil
 import platform
 import pkg_resources
+import datetime
 
 from PyQt5 import QtGui, QtCore, QtWidgets
 
-from data.lib.ascv_logging import * # how does this work but the "config =" line doesn't without line 13 on Linux
+from data.lib.ascv_logging import logging, ascvLogger
+from data.lib.headerlike import *
 
 try:
     os.chdir(os.path.abspath(__file__.replace(os.path.basename(__file__), "../..")))
 except:
     pass
 
-ver = "0.0.1_dev-3.0-PyQt5"
 config = json.load(open("data/user/config.json", encoding="utf-8"))
 
 lang = config["localization"]["lang"]
@@ -91,40 +96,64 @@ class MainUi(QtWidgets.QMainWindow):
         vBox = QtWidgets.QVBoxLayout(self.mainWidget)
         vBox.setContentsMargins(0, 0, 0, 0)
 
+        self.label = QtWidgets.QLabel()
+        self.label.setText(localization["mainUiElements"]["openImgFileText"])
+        self.label.setStyleSheet("color: white; background: #2E3440;")
+        self.label.setMinimumSize(16, 16)
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        mainLabelFont = QtGui.QFont("Selawik", 32)
+        mainLabelFont.setBold(True)
+        self.label.setFont(mainLabelFont)
+        self.label.resizeEvent = (lambda old_method: (lambda event: (self.updateFunction(), old_method(event))[-1]))(self.label.resizeEvent) # https://stackoverflow.com/a/34802367/14558305
+
         self.bottom = QtWidgets.QFrame()
         self.bottom.setMinimumHeight(80)
         self.bottom.setMaximumHeight(150)
         self.bottom.setContentsMargins(0, 0, 0, 0)
         self.bottom.setStyleSheet("background: #525685;")
 
-        bthBox = QtWidgets.QHBoxLayout(self.bottom)
-        bthBox.setAlignment(QtCore.Qt.AlignCenter)
+        btHBox = QtWidgets.QHBoxLayout(self.bottom)
+        #btHBox.setAlignment(QtCore.Qt.AlignCenter)
 
-        self.label = QtWidgets.QLabel()
-        self.label.setText(localization["mainUiElements"]["openImgFileText"])
-        self.label.setStyleSheet("color: white; background: #2E3440;")
-        self.label.setMinimumSize(16, 16)
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
-        mainLabelFont = QtGui.QFont("Selawik")
-        mainLabelFont.setBold(True)
-        mainLabelFont.setPointSize(32)
-        self.label.setFont(mainLabelFont)
-        self.label.resizeEvent = (lambda old_method: (lambda event: (self.updateImage(), old_method(event))[-1]))(self.label.resizeEvent) # https://stackoverflow.com/a/34802367/14558305
-
-        csIcon = QtWidgets.QLabel()
-        icon_ = QtGui.QPixmap("data/assets/img/icon3.png")
+        fileIcon = QtWidgets.QLabel()
+        icon_ = QtGui.QPixmap("data/assets/img/file.png")
         icon = icon_.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-        csIcon.setPixmap(QtGui.QPixmap(icon))
+        fileIcon.setPixmap(QtGui.QPixmap(icon))
 
-        self.csLabel = QtWidgets.QLabel()
-        self.csLabel.setText(localization["mainUiElements"]["comingSoonPanelText"])
-        self.csLabel.setStyleSheet("color: white;")
-        self.csLabelFont = QtGui.QFont("Selawik")
-        self.csLabelFont.setPointSize(16)
-        self.csLabel.setFont(self.csLabelFont)
+        self.fileLabel = QtWidgets.QLabel()
+        self.fileLabel.setStyleSheet("color: white;")
+        fileLabelFont = QtGui.QFont("Selawik", 14)
+        fileLabelFont.setBold(True)
+        self.fileLabel.setFont(fileLabelFont)
+        self.fileLabel.setText(localization["mainUiElements"]["panelText"])
 
-        bthBox.addWidget(csIcon)
-        bthBox.addWidget(self.csLabel)
+        self.dateModifiedLabel = QtWidgets.QLabel()
+        self.dateModifiedLabel.setStyleSheet("color: white;")
+        self.dateModifiedLabelFont = QtGui.QFont("Selawik", 10)
+        self.dateModifiedLabel.setFont(self.dateModifiedLabelFont)
+
+        self.dateModifiedLabel2 = QtWidgets.QLabel()
+        self.dateModifiedLabel2.setStyleSheet("color: white;")
+        self.dateModifiedLabel2.setFont(self.dateModifiedLabelFont)
+
+        btFileInfoContainerHBoxFrame = QtWidgets.QFrame() # really long name
+        btFileInfoContainerHBox = QtWidgets.QHBoxLayout(btFileInfoContainerHBoxFrame)
+        btFileInfoContainerHBox.setContentsMargins(0, 0, 0, 0)
+        btFileInfoContainerHBox.setAlignment(QtCore.Qt.AlignLeft)
+        btFileInfoContainerHBox.addWidget(self.dateModifiedLabel)
+        btFileInfoContainerHBox.addWidget(self.dateModifiedLabel2)
+        
+        btMainVBoxFrame = QtWidgets.QFrame()
+        btMainVBox = QtWidgets.QVBoxLayout(btMainVBoxFrame)
+        btMainVBox.setAlignment(QtCore.Qt.AlignTop)
+        btMainVBox.setContentsMargins(0, 0, 0, 0)
+        btMainVBox.addWidget(self.fileLabel)
+        btMainVBox.addWidget(btFileInfoContainerHBoxFrame)
+
+        btHBox.setAlignment(QtCore.Qt.AlignLeft) # This probably won't work in PyQt6
+        #btHBox.setSpacing(0)
+        btHBox.addWidget(fileIcon)
+        btHBox.addWidget(btMainVBoxFrame)
 
         splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
         splitter.addWidget(self.label)
@@ -321,7 +350,7 @@ class MainUi(QtWidgets.QMainWindow):
 
             self.imgFilePath = self.dirImageList[self.imageNumber]
 
-            self.updateImage()
+            self.updateFunction()
             self.navButtonBack.setEnabled(True)
             self.navButtonForw.setEnabled(True)
         else:
@@ -329,7 +358,11 @@ class MainUi(QtWidgets.QMainWindow):
 
     # ISSUE: for some images, this REALLY makes the program lag
     # code comes from https://stackoverflow.com/a/43570124/14558305
-    def updateImage(self):
+    def updateFunction(self):
+        '''
+        A function that, well, updates. Updates widgets, to be more exact.
+        '''
+
         mwWidth = self.label.frameGeometry().width()
         mwHeight = self.label.frameGeometry().height()
 
@@ -338,6 +371,12 @@ class MainUi(QtWidgets.QMainWindow):
             pixmap = pixmap_.scaled(mwWidth, mwHeight, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
             self.label.setPixmap(pixmap)
         self.label.resize(mwWidth, mwHeight)
+
+        if self.imgFilePath != "":
+            self.fileLabel.setText(os.path.basename(self.imgFilePath))
+            self.dateModifiedLabel.setText(f"<b>Date modified:</b> {datetime.datetime.fromtimestamp(os.path.getmtime(self.imgFilePath)).strftime(date_format)}")
+            self.dateModifiedLabel2.setText(f"<b>Another boring label.</b>")
+            #self.fileLabel.setText(datetime.datetime.fromtimestamp(os.path.getmtime(self.imgFilePath)).strftime(date_format)) # note: date_format is a variable imported from ascv_logging.py, might want to change that
 
     # I should clean up these two too
     def prevImage(self):
@@ -348,7 +387,7 @@ class MainUi(QtWidgets.QMainWindow):
             self.imageNumber = len(self.dirImageList) - 1
 
         self.imgFilePath = self.dirImageList[self.imageNumber]
-        self.updateImage()
+        self.updateFunction()
 
     def nextImage(self):
         ascvLogger.debug(f"Showing next image, imageNumber = {self.imageNumber}")
@@ -358,7 +397,7 @@ class MainUi(QtWidgets.QMainWindow):
             self.imageNumber = 0
 
         self.imgFilePath = self.dirImageList[self.imageNumber]
-        self.updateImage()
+        self.updateFunction()
 
     def dumpJson(self):
         with open("data/user/config.json", "w", encoding="utf-8", newline="\n") as cf:
