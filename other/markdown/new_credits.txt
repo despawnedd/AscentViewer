@@ -113,3 +113,9 @@ https://www.w3schools.com/python/python_lambda.asp
 !!! https://docs.python.org/3/howto/logging.html
 https://stackoverflow.com/a/493399/14558305
 https://www.geeksforgeeks.org/python-sys-stdout-flush/
+https://pyinstaller.readthedocs.io/
+https://medium.com/@philipp.h/reduce-clutter-when-using-pyinstaller-in-one-directory-mode-b631b9f7f89b
+https://stackoverflow.com/questions/89228/how-to-execute-a-program-or-call-a-system-command-from-python
+https://stackoverflow.com/a/24595376/14558305
+https://stackoverflow.com/a/1051266/14558305
+https://askubuntu.com/questions/706186/difference-between-and-in-linux-environment

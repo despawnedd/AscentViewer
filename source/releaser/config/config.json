@@ -1,0 +1,12 @@
+{
+    "debug": {
+        "logging": {
+            "loggingLevel": "INFO"
+        }
+    },
+    "temporary_files": {
+        "logs": {
+            "deleteLogsOnStartup": true
+        }
+    }
+}

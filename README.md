@@ -6,29 +6,21 @@
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/despawnedd/AscentViewer?logo=github)
 ![GitHub repo size](https://img.shields.io/github/repo-size/despawnedd/AscentViewer?logo=github)
 
-**AscentViewer** is an image viewer written in [**Python**](https://www.python.org/) based on [**PyQt**](https://riverbankcomputing.com/software/pyqt/) and [**several other libraries.**](other/markdown/CREDITS.md)
+**AscentViewer** is an image viewer written in [Python](https://www.python.org/) based on [PyQt](https://riverbankcomputing.com/software/pyqt/) and [several other libraries.](other/markdown/CREDITS.md)
 
-Here is [**its website**](https://dd.acrazytown.com/AscentViewer/).
+Here is [its website](https://dd.acrazytown.com/AscentViewer/).
 
 ---
 
-## Possible switch to C++ Qt
-
-There is a high possibility that we will switch from PyQt to native C++ Qt, due to various reasons, such as:
-
-* More documentation
-* Speed and control
-* etc.
-
-If we do decide to switch to native C++ Qt, we'll make a stable Python version, and then archive it (put it in a different branch, like old DDIV).
+<!-- NOTE: Add notice about downloads. -->
 
 ## What happened to DDIV?
 
-DDIV got renamed to "**AscentViewer**".
+DDIV got renamed to **AscentViewer**.
 
-The main reason for that is that [**DespawnedDiamond**](https://github.com/despawnedd) (the owner) is not the only one working on it anymore, and the second reason is that "AscentViewer" just sounds cooler!
+The main reason for that is that the owner of the program, [DespawnedDiamond](https://github.com/despawnedd), is not the only one working on it anymore (DDIV was short for <u>*DespawnedDiamond's*</u> *Image Viewer*"), and the second reason is that "AscentViewer" just sounds better.
 
-Looking for old, pre-rename/Old Pre-release Beta code? Check out the [**"pre-rename" branch.**](https://github.com/despawnedd/AscentViewer/tree/pre-rename)
+Looking for old, pre-rename/Old Pre-release Beta code? Check out the ["pre-rename" branch.](https://github.com/despawnedd/AscentViewer/tree/pre-rename)
 
 ---
 
@@ -36,51 +28,83 @@ Looking for old, pre-rename/Old Pre-release Beta code? Check out the [**"pre-ren
 
 ![Main window screenshot](other/examples/ascv_0.0.1_pre-release.png)
 
-> *AscentViewer 0.0.1_dev-2.0-PyQt5's main window*
+> *AscentViewer's main window*
 
 ![About window screenshot](other/examples/ascv_0.0.1_pre-release_about.png)
 
-> *AscentViewer 0.0.1_dev-2.2-PyQt5's about window*
+> *AscentViewer's about window*
 
-## How to install
+## How to run/install
 
-* Install Python 3.7+ (make sure you install ``pip``)
+You can either use one of the prebuilt binaries in one of the [Releases](https://github.com/despawnedd/AscentViewer/releases), or you could run the raw Python version.
+
+Here are the instructions for running the raw Python version:
+
+### Windows
+
+* Install Python 3.7 or higher from [here](https://www.python.org/downloads/).
+* Run `py -m pip install -r requirements.txt` (or `pip install -r requirements.txt` if you installed Python on PATH)
+* Run [ascv.py](source/ascv.py).
+
+### macOS
+
+macOS usually comes with a copy of Python but that's an old version which isn't supported.
+
+The procedure is the same as on Windows:
+
+* Download and install Python 3.7 or higher from [here](https://www.python.org/downloads/).
+* Run `python3 -m pip install -r requirements.txt`.
+* Run [ascv.py](source/ascv.py).
+
+### Linux
+
+* Install Python 3.7 or higher. The recommeneded way to do so is by installing it using a package manager, such as apt (`apt install python3`). Note: using a package manager might require administrator access.
+* You might also have to install qt5-default (for apt, the command is `apt install qt5-default`).
+* Run `python3 -m pip install -r requirements.txt`.
+* Run [ascv.py](source/ascv.py).
+
+<!-- ### Windows
+
+* Install Python 3.7 or higher somehow. The recommended way to do so is by downloading it from Python's official website:
+  * Download Python 3.7 or higher from [Python's website](https://www.python.org/downloads/).
+  * Install the downloaded Python version (make sure you select the [Add to PATH  checkbox](other/markdown/img/add_to_path_win.png))
+* Run [ascv.py](source/ascv.py), either by opening it in File Explorer (if you installed the [Python launcher()]), or by running it from the command line.
+
+### macOS
+
+Detailed instructions for macOS are coming soon
+
+### Linux
+
+> Please correct me if something is wrong here by creating an issue or a pull request.
+
+* Install Python 3.7 or higher, either by building it from source, or by installing it using your favourite package manager, such as apt (``sudo apt install python3``).
+* You might have to install ``qt5-default``. Again, install it by using your favourite package manager, such as apt (``sudo apt install qt5-default``).
+* Run [ascv.py](source/ascv.py) using the Python version you installed. If you installed it using a package manager (of if you have added it to PATH yourself), this can be done by running ``python3 [path to ascv.py]`` (eg. ``python3 ascv.py``) -->
+
+**tl;dr:** Install Python, and then run [ascv.py](source/ascv.py).
+
+<!-- * Install Python 3.7+ (make sure you install ``pip``)
 * Run ``pip install -r requirements.txt`` while in the root directory, or just manually install the required packages
-* If you're on Linux, you might have to install ``qt5-default`` (on Ubuntu, the command is ``sudo apt install qt5-default``)
+* If you're on Linux, you might have to install ``qt5-default`` (on Ubuntu, the command is ``sudo apt install qt5-default``) 
 
-And that's it.
+And that's it. -->
 
 ## Credits
 
-Credits are coming soon.
+You can read the credits [here](other/markdown/CREDITS.md).
 
 ## Documentation
 
-It's coming soon, just like the credits.
+You can read the documentation [here](https://github.com/despawnedd/AscentViewer/wiki).
 
 ## Release version naming info
 
 Each version name consists of four elements:
 
-- major version number
-- minor version number
-- revision number
-- additional info (such as the branch)
+* major version number
+* minor version number
+* revision number
+* additional info (such as the branch, the pre-release version number, etc.)
 
 e.g. **1.0.3_dev-1.3**
-
-*Will add more info about this later.*
-
-<!-- ### Version Structure (a.b.c-bld-rev_rl)
-
-"**a**" is the **major version** number (e.g. "**1.0.0**").
-
-"**b**" is the **minor version** number (e.g. "**1.3.0**").
-
-"**c**" is the **match version** number (e.g. "**1.3.8**").
-
-"**bld**" is the **build version** number (e.g. "**1.3.8-201204**") (*The build number's pretty much the date the "build" was made in, formatted like this: last two digits of the  year + month + day*).
-
-"**rev**" is the **revision number** of that build. This will only be used in cases that there are several builds in one day. (e.g. "**1.3.8-201204-4**").
-
-"**rl**" is the **release branch** indicator (eg. "**1.3.8-201204-4_master**") -->

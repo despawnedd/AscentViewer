@@ -1,3 +1,5 @@
+# A modified version of AscentViewer's logger.
+
 import sys
 import logging
 import datetime
@@ -23,22 +25,22 @@ date_format_file = "%d%m%Y_%H%M%S"
 date_format = "%d-%m-%Y %H:%M:%S"
 
 try:
-    os.chdir(os.path.abspath(__file__.replace(os.path.basename(__file__), "../..")))
+    os.chdir(os.path.abspath(__file__.replace(os.path.basename(__file__), "..")))
 except:
     pass
 
-config = json.load(open("data/user/config.json", encoding="utf-8"))
+config = json.load(open("config/config.json", encoding="utf-8"))
 
 print("Deleting logs on statup is ", end="")
 if config["temporary_files"]["logs"]["deleteLogsOnStartup"]:
     print("enabled, erasing all logs...")
-    logs = glob.glob("data/user/temp/logs/log*.log")
+    logs = glob.glob("logs/log*.log")
     for f in logs:
         os.remove(f)
 else:
     print("disabled, not deleting logs.")
 
-logfile = f"data/user/temp/logs/log_{datetime.datetime.now().strftime(date_format_file)}.log"
+logfile = f"logs/log_{datetime.datetime.now().strftime(date_format_file)}.log"
 with open(logfile, "a") as f: # this code is a bit messy but all this does is just write the same thing both to the console and the logfile
     m = "="*20 + "[ BEGIN LOG ]" + "="*20
     f.write(f"{m}\n")
@@ -51,7 +53,7 @@ logging.basicConfig(level=loggingLevel,
                     format="[%(asctime)s | %(name)s | %(funcName)s | %(levelname)s] %(message)s",
                     datefmt=date_format)
 
-ascvLogger = logging.getLogger("Main logger")
+expLogger = logging.getLogger("Main logger")
 stdouterrLogger = logging.getLogger("stdout/stderr")
-sys.stdout = StreamToLogger(stdouterrLogger, logging.INFO)
-sys.stderr = StreamToLogger(stdouterrLogger, logging.ERROR)
+#sys.stdout = StreamToLogger(stdouterrLogger, logging.INFO)
+#sys.stderr = StreamToLogger(stdouterrLogger, logging.ERROR)

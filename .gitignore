@@ -3,7 +3,7 @@
 .pytest_cache
 source/.vs
 source/.vscode
-source/data/user/temp/logs/*.log
+source/data/user/temp/logs/log*.log
 source/__pycache__
 tests_and_stuff
 tests/__pycache__
@@ -11,3 +11,9 @@ source/data/lib/__pycache__
 output.*
 source/test*.py
 source/icon3_UaA_icon.ico
+source/releaser/lib/__pycache__
+source/releaser/logs/log*.log
+source/releaser/exports
+source/releaser/config/config3.1 - Copy.json
+source/releaser/exporter.zip
+source/releaser/test.txt
