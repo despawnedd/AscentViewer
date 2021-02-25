@@ -55,34 +55,31 @@ if __name__ == "__main__":
         ascvLogger.info(f"The OS is {platform.system()}.")
 
     # start the actual program
-    try:
-        from PyQt5 import QtGui, QtCore, QtWidgets
-        from data.lib.ascv_main import MainUi
+    from PyQt5 import QtGui, QtCore, QtWidgets
+    from data.lib.ascv_main import MainUi
 
-        app = QtWidgets.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
-        # based on https://gist.github.com/QuantumCD/6245215 and https://www.nordtheme.com/docs/colors-and-palettes
-        app.setStyle("Fusion")
-        dark_palette = QtGui.QPalette()
-        dark_palette.setColor(QtGui.QPalette.Window, QtGui.QColor(46, 52, 64))
-        dark_palette.setColor(QtGui.QPalette.WindowText, QtCore.Qt.white)
-        dark_palette.setColor(QtGui.QPalette.Base, QtGui.QColor(38, 43, 53)) #59, 66, 82; 34, 38, 47
-        dark_palette.setColor(QtGui.QPalette.AlternateBase, QtGui.QColor(46, 52, 64))
-        dark_palette.setColor(QtGui.QPalette.ToolTipBase, QtCore.Qt.white)
-        dark_palette.setColor(QtGui.QPalette.ToolTipText, QtCore.Qt.white)
-        dark_palette.setColor(QtGui.QPalette.Text, QtCore.Qt.white)
-        dark_palette.setColor(QtGui.QPalette.Button, QtGui.QColor(34, 38, 47))
-        dark_palette.setColor(QtGui.QPalette.ButtonText, QtCore.Qt.white)
-        dark_palette.setColor(QtGui.QPalette.BrightText, QtGui.QColor(191, 97, 106))
-        dark_palette.setColor(QtGui.QPalette.Link, QtGui.QColor(129, 161, 193))
-        dark_palette.setColor(QtGui.QPalette.Highlight, QtGui.QColor(119, 124, 193))
-        dark_palette.setColor(QtGui.QPalette.HighlightedText, QtCore.Qt.white)
-        app.setPalette(dark_palette)
-        app.setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }")
+    # based on https://gist.github.com/QuantumCD/6245215 and https://www.nordtheme.com/docs/colors-and-palettes
+    app.setStyle("Fusion")
+    dark_palette = QtGui.QPalette()
+    dark_palette.setColor(QtGui.QPalette.Window, QtGui.QColor(46, 52, 64))
+    dark_palette.setColor(QtGui.QPalette.WindowText, QtCore.Qt.white)
+    dark_palette.setColor(QtGui.QPalette.Base, QtGui.QColor(38, 43, 53)) #59, 66, 82; 34, 38, 47
+    dark_palette.setColor(QtGui.QPalette.AlternateBase, QtGui.QColor(46, 52, 64))
+    dark_palette.setColor(QtGui.QPalette.ToolTipBase, QtCore.Qt.white)
+    dark_palette.setColor(QtGui.QPalette.ToolTipText, QtCore.Qt.white)
+    dark_palette.setColor(QtGui.QPalette.Text, QtCore.Qt.white)
+    dark_palette.setColor(QtGui.QPalette.Button, QtGui.QColor(34, 38, 47))
+    dark_palette.setColor(QtGui.QPalette.ButtonText, QtCore.Qt.white)
+    dark_palette.setColor(QtGui.QPalette.BrightText, QtGui.QColor(191, 97, 106))
+    dark_palette.setColor(QtGui.QPalette.Link, QtGui.QColor(129, 161, 193))
+    dark_palette.setColor(QtGui.QPalette.Highlight, QtGui.QColor(119, 124, 193))
+    dark_palette.setColor(QtGui.QPalette.HighlightedText, QtCore.Qt.white)
+    app.setPalette(dark_palette)
+    app.setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }")
 
-        window = MainUi()
-        window.show()
+    window = MainUi()
+    window.show()
 
-        sys.exit(app.exec_())
-    except:
-        ascvLogger.critical("Cannot start AscentViewer! Double-check that PyQt5 is installed and that ascv_main.py is in the lib folder.")
+    sys.exit(app.exec_())
