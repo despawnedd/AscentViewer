@@ -75,6 +75,7 @@ class MainUi(QtWidgets.QMainWindow):
         for f in selawikFonts:
             f = f.replace("\\", "/")
             QtGui.QFontDatabase.addApplicationFont(f)
+        _ = QtGui.QFont("Selawik Bold") # this PROBABLY fixes an issue with KDE's Plasma where the font wouldn't display correctly
 
         if config["hellMode"]: # just a funny easter egg
             mainFont = QtGui.QFont("Selawik")

@@ -3,7 +3,6 @@ import logging
 import datetime
 import json
 import os
-import glob
 
 from data.lib.headerlike import *
 
@@ -28,20 +27,7 @@ except:
 
 config = json.load(open("data/user/config.json", encoding="utf-8"))
 
-print("Deleting logs on statup is ", end="")
-if config["temporary_files"]["logs"]["deleteLogsOnStartup"]:
-    print("enabled, erasing all logs...")
-    logs = glob.glob("data/user/temp/logs/log*.log")
-    for f in logs:
-        os.remove(f)
-else:
-    print("disabled, not deleting logs.")
-
 logfile = f"data/user/temp/logs/log_{datetime.datetime.now().strftime(date_format_file)}.log"
-with open(logfile, "a") as f: # this code is a bit messy but all this does is just write the same thing both to the console and the logfile
-    m = "="*20 + "[ BEGIN LOG ]" + "="*20
-    f.write(f"{m}\n")
-    print(m)
 
 # thanks to Jan and several other sources for this
 loggingLevel = getattr(logging, config["debug"]["logging"]["loggingLevel"])
@@ -51,6 +37,9 @@ logging.basicConfig(level=loggingLevel,
                     datefmt=date_format)
 
 ascvLogger = logging.getLogger("Main logger")
-stdouterrLogger = logging.getLogger("stdout/stderr")
-sys.stdout = StreamToLogger(stdouterrLogger, logging.INFO)
-sys.stderr = StreamToLogger(stdouterrLogger, logging.ERROR)
+stderrLogger = logging.getLogger("stderr logger")
+sys.stderr = StreamToLogger(stderrLogger, logging.ERROR)
+
+with open(logfile, "a") as f: # this code is a bit messy but all this does is just write the same thing both to the console and the logfile
+    logIntroLine = "="*20 + "[ BEGIN LOG ]" + "="*20
+    f.write(f"{logIntroLine}\n")
