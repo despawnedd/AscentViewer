@@ -1,12 +1,12 @@
 # AscentViewer
 
-![AscV Banner](other/banner.png)
+![AscV Banner](misc/banner.png)
 
 ![All downloads shields.io badge](https://img.shields.io/github/downloads/despawnedd/AscentViewer/total?logo=github)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/despawnedd/AscentViewer?logo=github)
 ![GitHub repo size](https://img.shields.io/github/repo-size/despawnedd/AscentViewer?logo=github)
 
-**AscentViewer** is an image viewer written in [Python](https://www.python.org/) based on [PyQt](https://riverbankcomputing.com/software/pyqt/) and [several other libraries.](other/markdown/CREDITS.md)
+**AscentViewer** is an image viewer written in [Python](https://www.python.org/) based on [PyQt](https://riverbankcomputing.com/software/pyqt/) and [several other libraries.](CREDITS.md)
 
 Here is [its website](https://dd.acrazytown.com/AscentViewer/).
 
@@ -26,11 +26,11 @@ Looking for old, pre-rename/Old Pre-release Beta code? Check out the ["pre-renam
 
 ## Screenshots
 
-![Main window screenshot](other/examples/ascv_0.0.1_pre-release.png)
+![Main window screenshot](misc/examples/ascv_0.0.1_pre-release.png)
 
 > *AscentViewer's main window*
 
-![About window screenshot](other/examples/ascv_0.0.1_pre-release_about.png)
+![About window screenshot](misc/examples/ascv_0.0.1_pre-release_about.png)
 
 > *AscentViewer's about window*
 
@@ -43,8 +43,8 @@ Here are the instructions for running the raw Python version:
 ### Windows
 
 * Install Python 3.7 or higher from [here](https://www.python.org/downloads/).
-* Run `py -m pip install -r requirements.txt` (or `pip install -r requirements.txt` if you [added Python to PATH](other/markdown/img/add_to_path_win.png))
-* Run [ascv.py](source/ascv.py).
+* Run `py -m pip install -r requirements.txt` (or `pip install -r requirements.txt` if you [added Python to PATH](misc/markdown/img/add_to_path_win.png))
+* Run [AscentViewer.py](source/AscentViewer.py).
 
 ### macOS
 
@@ -54,20 +54,20 @@ The procedure is the same as on Windows:
 
 * Download and install Python 3.7 or higher from [here](https://www.python.org/downloads/).
 * Run `python3 -m pip install -r requirements.txt`.
-* Run [ascv.py](source/ascv.py).
+* Run [AscentViewer.py](source/AscentViewer.py).
 
 ### Linux
 
 * Install Python 3.7 or higher. The recommended way to do so is by installing it using a package manager, such as apt (`apt install python3`). Note: using a package manager might require administrator access.
 * You might also have to install qt5-default (for apt, the command is `apt install qt5-default`).
 * Run `python3 -m pip install -r requirements.txt`.
-* Run [ascv.py](source/ascv.py).
+* Run [AscentViewer.py](source/AscentViewer.py).
 
 <!-- ### Windows
 
 * Install Python 3.7 or higher somehow. The recommended way to do so is by downloading it from Python's official website:
   * Download Python 3.7 or higher from [Python's website](https://www.python.org/downloads/).
-  * Install the downloaded Python version (make sure you select the [Add to PATH  checkbox](other/markdown/img/add_to_path_win.png))
+  * Install the downloaded Python version (make sure you select the [Add to PATH  checkbox](misc/markdown/img/add_to_path_win.png))
 * Run [ascv.py](source/ascv.py), either by opening it in File Explorer (if you installed the [Python launcher()]), or by running it from the command line.
 
 ### macOS
@@ -82,7 +82,7 @@ Detailed instructions for macOS are coming soon
 * You might have to install ``qt5-default``. Again, install it by using your favourite package manager, such as apt (``sudo apt install qt5-default``).
 * Run [ascv.py](source/ascv.py) using the Python version you installed. If you installed it using a package manager (of if you have added it to PATH yourself), this can be done by running ``python3 [path to ascv.py]`` (eg. ``python3 ascv.py``) -->
 
-**tl;dr:** Install Python, and then run [ascv.py](source/ascv.py).
+**tl;dr:** Install Python, and then run [AscentViewer.py](source/AscentViewer.py).
 
 <!-- * Install Python 3.7+ (make sure you install ``pip``)
 * Run ``pip install -r requirements.txt`` while in the root directory, or just manually install the required packages
@@ -92,7 +92,7 @@ And that's it. -->
 
 ## Credits
 
-You can read the credits [here](other/markdown/CREDITS.md).
+You can read the credits [here](CREDITS.md).
 
 ## Documentation
 
