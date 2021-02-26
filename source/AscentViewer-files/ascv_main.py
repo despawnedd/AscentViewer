@@ -1,35 +1,47 @@
+# AscentViewer, a Python image viewer.
+# Copyright (C) 2020-2021 DespawnedDiamond, A Crazy Town and other contributors
+#
+# This file is part of AscentViewer.
+#
+# AscentViewer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# AscentViewer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with AscentViewer.  If not, see <https://www.gnu.org/licenses/>.
+
 # =====================================================
 # Thank you for using and/or checking out AscentViewer!
 # =====================================================
 
 import sys
 import json
-import glob
 import os
-import shutil
 import platform
+import signal
+import glob
+import shutil
 import pkg_resources
 import datetime
+import logging
 
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PIL import Image, ImageFont
 
-from data.lib.ascv_logging import logging, ascvLogger
-from data.lib.headerlike import *
-
-try:
-    os.chdir(os.path.abspath(__file__.replace(os.path.basename(__file__), "../..")))
-except:
-    pass
-
-config = json.load(open("data/user/config.json", encoding="utf-8"))
-
-lang = config["localization"]["lang"]
-localization = json.load(open(f"data/assets/localization/lang/{lang}.json", encoding="utf-8"))
+from lib.headerlike import *
 
 # from http://pantburk.info/?blog=77 and https://dzone.com/articles/python-custom-logging-handler-example
 class CustomHandler(logging.StreamHandler):
     def __init__(self, statusBar):
+        '''
+        The custom logging handler for the QStatusBar.
+        '''
         logging.Handler.__init__(self)
         self.statusBar = statusBar
 
@@ -48,6 +60,9 @@ class CustomHandler(logging.StreamHandler):
 
 class MainUi(QtWidgets.QMainWindow):
     def __init__(self):
+        '''
+        The core AscentViewer function. It sets up the UI, as well as some other things.
+        '''
         super().__init__()
 
         # =====================================================
@@ -225,7 +240,7 @@ class MainUi(QtWidgets.QMainWindow):
         resetCfg = QtWidgets.QAction(QtGui.QIcon(), "Reset config", self)
         resetCfg.setShortcut("CTRL+Shift+F9")
         resetCfg.setStatusTip("Reset the configuration file.")
-        resetCfg.triggered.connect(self.resetConfigFunc)
+        resetCfg.triggered.connect(self.resetConfigDialog)
 
         helpButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon3.png"), "Help", self)
         helpButton.setShortcut("F1")
@@ -261,12 +276,50 @@ class MainUi(QtWidgets.QMainWindow):
         self.statusBar().showMessage(localization["mainUiElements"]["statusBar"]["greetMessageBeginning"] + ver)
         ascvLogger.info("GUI has been initialized.")
 
-    def resetConfigFunc(self):
+    # ISSUE: for some images, this REALLY makes the program lag
+    # the foundation of the code comes from https://stackoverflow.com/a/43570124/14558305
+    def updateFunction(self):
+        '''
+        A function that, well, updates. Updates widgets, to be more exact.
+        '''
+
+        mwWidth = self.label.frameGeometry().width()
+        mwHeight = self.label.frameGeometry().height()
+
+        if self.imgFilePath != "":
+            # should probably not use Pillow for this, might change this later
+            # from https://stackoverflow.com/questions/6444548/how-do-i-get-the-picture-size-with-pil
+            im = Image.open(self.imgFilePath)
+
+            pixmap_ = QtGui.QPixmap(self.imgFilePath)
+            pixmap = pixmap_.scaled(mwWidth, mwHeight, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            self.label.setPixmap(pixmap)
+
+            dateModified = datetime.datetime.fromtimestamp(os.path.getmtime(self.imgFilePath)).strftime(date_format)
+            imWidth, imHeight = im.size
+            dimensions = f"{imWidth}x{imHeight}"
+
+            self.fileLabel.setText(os.path.basename(self.imgFilePath))
+            self.dateModifiedLabel.setText(f"<b>Date modified:</b> {dateModified}")
+            self.dimensionsLabel.setText(f"<b>Dimensions:</b> {dimensions}")
+
+            icon_ = QtGui.QPixmap("data/assets/img/file.png")
+            icon = icon_.scaled(60, 60, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            self.detailsFileIcon.setPixmap(QtGui.QPixmap(icon))
+
+            self.label.resize(mwWidth, mwHeight)
+
+    def resetConfigDialog(self):
+        '''
+        A function that shows a dialog that asks the user if they want to reset the configuration file
+        (copy config.json from default_config to the user folder). If they respond with "Yes", the function
+        resets the configuration to its defaults.
+        '''
         reply = QtWidgets.QMessageBox(self)
         reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
-        reply.setWindowTitle("Reset config")
+        reply.setWindowTitle("Reset configuration")
         reply.setText("<b>Are you sure you want to reset the configuration file?</b>")
-        reply.setInformativeText("<i>This will also prevent the program from dumping the config file on exit for this session.</i>")
+        reply.setInformativeText("<i>This will also prevent the program saving the config file on exit for this session.</i>")
         reply.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         checkbox = QtWidgets.QCheckBox("After resetting, exit the program.")
         icon_ = QtGui.QPixmap("data/assets/img/icon3.png")
@@ -365,39 +418,6 @@ class MainUi(QtWidgets.QMainWindow):
             self.navButtonForw.setEnabled(True)
         else:
             ascvLogger.info(f"Succesfully created dirImageList_, but it's empty! Not setting dirImageList to dirImageList_")
-
-    # ISSUE: for some images, this REALLY makes the program lag
-    # code comes from https://stackoverflow.com/a/43570124/14558305
-    def updateFunction(self):
-        '''
-        A function that, well, updates. Updates widgets, to be more exact.
-        '''
-
-        mwWidth = self.label.frameGeometry().width()
-        mwHeight = self.label.frameGeometry().height()
-
-        if self.imgFilePath != "":
-            # should probably not use Pillow for this, might change this later
-            # from https://stackoverflow.com/questions/6444548/how-do-i-get-the-picture-size-with-pil
-            im = Image.open(self.imgFilePath)
-
-            pixmap_ = QtGui.QPixmap(self.imgFilePath)
-            pixmap = pixmap_.scaled(mwWidth, mwHeight, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-            self.label.setPixmap(pixmap)
-
-            dateModified = datetime.datetime.fromtimestamp(os.path.getmtime(self.imgFilePath)).strftime(date_format)
-            imWidth, imHeight = im.size
-            dimensions = f"{imWidth}x{imHeight}"
-
-            self.fileLabel.setText(os.path.basename(self.imgFilePath))
-            self.dateModifiedLabel.setText(f"<b>Date modified:</b> {dateModified}")
-            self.dimensionsLabel.setText(f"<b>Dimensions:</b> {dimensions}")
-
-            icon_ = QtGui.QPixmap("data/assets/img/file.png")
-            icon = icon_.scaled(60, 60, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-            self.detailsFileIcon.setPixmap(QtGui.QPixmap(icon))
-
-            self.label.resize(mwWidth, mwHeight)
 
     # I should clean up these two too
     def prevImage(self):
@@ -529,7 +549,8 @@ class MainUi(QtWidgets.QMainWindow):
         about = QtWidgets.QDialog(self, QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowCloseButtonHint)
 
         # =====================================================
-        # This code below is a modified version of about.py, a script that was generated by pyuic5.
+        # This code below is a modified version of about.py (located in the misc folder, 
+        # that's located in the source folder of the repository), a script that was generated by pyuic5.
         # That is why the entire thing is big and clunky.
 
         about.resize(900, 502)
@@ -764,3 +785,103 @@ class MainUi(QtWidgets.QMainWindow):
         about.label_6.setText(_translate("Form", "<a href=\"https://dd.acrazytown.com/AscentViewer/\">Website</a>"))
 
         about.exec_()
+
+# from https://stackoverflow.com/a/31688396/14558305 and https://stackoverflow.com/a/39215961/14558305
+class StreamToLogger:
+    def __init__(self, logger, level):
+        self.logger = logger
+        self.level = level
+        self.linebuf = ''
+
+    def write(self, buf):
+        for line in buf.rstrip().splitlines():
+            self.logger.log(self.level, line.rstrip())
+
+    def flush(self):
+        pass
+
+if __name__ == "__main__":
+    # apparently makes CTRL + C work properly in console ("https://stackoverflow.com/questions/5160577/ctrl-c-doesnt-work-with-pyqt")
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+    try:
+        os.chdir(__file__.replace(os.path.basename(__file__), "")) # thanks to Anthony for this
+    except:
+        pass
+
+    ver = "0.0.1_dev-3.0-PyQt5"
+    date_format_file = "%d%m%Y_%H%M%S"
+    date_format = "%d/%m/%Y %H:%M:%S"
+
+    config = json.load(open("data/user/config.json", encoding="utf-8")) # using json instead of QSettings, for now
+    lang = config["localization"]["lang"]
+    localization = json.load(open(f"data/assets/localization/lang/{lang}.json", encoding="utf-8"))
+    logfile = f"data/user/temp/logs/log_{datetime.datetime.now().strftime(date_format_file)}.log"
+
+    print("Deleting logs on statup is ", end="")
+    if config["temporary_files"]["logs"]["deleteLogsOnStartup"]:
+        print("enabled, erasing all logs...")
+        logs = glob.glob("data/user/temp/logs/log*.log")
+        for f in logs:
+            os.remove(f)
+    else:
+        print("disabled, not deleting logs.")
+
+    # thanks to Jan and several other sources for this
+    loggingLevel = getattr(logging, config["debug"]["logging"]["loggingLevel"])
+    logging.basicConfig(level=loggingLevel,
+                        handlers=[logging.StreamHandler(), logging.FileHandler(logfile, "a", "utf-8")],
+                        format="[%(asctime)s | %(name)s | %(funcName)s | %(levelname)s] %(message)s",
+                        datefmt=date_format)
+
+    ascvLogger = logging.getLogger("Main logger")
+    stderrLogger = logging.getLogger("stderr logger")
+    sys.stderr = StreamToLogger(stderrLogger, logging.ERROR)
+
+    with open(logfile, "a") as f: # this code is a bit messy but all this does is just write the same thing both to the console and the logfile
+        logIntroLine = "="*20 + "[ BEGIN LOG ]" + "="*20
+        f.write(f"{logIntroLine}\n")
+    print(logIntroLine)
+
+    ascvLogger.info(f"Arguments: {sys.argv}")
+
+    if platform.system() == "Windows":
+        # makes the AscentViewer icon appear in the taskbar, more info here: "https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105"
+        # (newer comamnd gotten from 15-minute-apps: "https://github.com/learnpyqt/15-minute-apps")
+        from PyQt5 import QtWinExtras
+        QtWinExtras.QtWin.setCurrentProcessExplicitAppUserModelID(f"DespawnedDiamond.AscentViewer.ascv.{ver}")
+
+    if platform.system() == "Linux":
+        # just a fun little piece of code that prints out your distro name and version
+        import distro
+        distroName = " ".join(distro.linux_distribution()).title()
+        ascvLogger.info(f"The OS is {platform.system()} ({distroName}).")
+    else:
+        ascvLogger.info(f"The OS is {platform.system()}.")
+
+    # start the actual program
+    app = QtWidgets.QApplication(sys.argv)
+
+    # based on https://gist.github.com/QuantumCD/6245215 and https://www.nordtheme.com/docs/colors-and-palettes
+    app.setStyle("Fusion")
+    dark_palette = QtGui.QPalette()
+    dark_palette.setColor(QtGui.QPalette.Window, QtGui.QColor(46, 52, 64))
+    dark_palette.setColor(QtGui.QPalette.WindowText, QtCore.Qt.white)
+    dark_palette.setColor(QtGui.QPalette.Base, QtGui.QColor(38, 43, 53)) #59, 66, 82; 34, 38, 47
+    dark_palette.setColor(QtGui.QPalette.AlternateBase, QtGui.QColor(46, 52, 64))
+    dark_palette.setColor(QtGui.QPalette.ToolTipBase, QtCore.Qt.white)
+    dark_palette.setColor(QtGui.QPalette.ToolTipText, QtCore.Qt.white)
+    dark_palette.setColor(QtGui.QPalette.Text, QtCore.Qt.white)
+    dark_palette.setColor(QtGui.QPalette.Button, QtGui.QColor(34, 38, 47))
+    dark_palette.setColor(QtGui.QPalette.ButtonText, QtCore.Qt.white)
+    dark_palette.setColor(QtGui.QPalette.BrightText, QtGui.QColor(191, 97, 106))
+    dark_palette.setColor(QtGui.QPalette.Link, QtGui.QColor(129, 161, 193))
+    dark_palette.setColor(QtGui.QPalette.Highlight, QtGui.QColor(119, 124, 193))
+    dark_palette.setColor(QtGui.QPalette.HighlightedText, QtCore.Qt.white)
+    app.setPalette(dark_palette)
+    app.setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }")
+
+    window = MainUi()
+    window.show()
+
+    sys.exit(app.exec_())

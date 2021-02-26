@@ -1,1 +1,1 @@
-Launch "ascv.py" to launch AscentViewer.
+Launch "AscentViewer.py" to launch AscentViewer.

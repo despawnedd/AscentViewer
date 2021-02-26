@@ -122,3 +122,16 @@ https://askubuntu.com/questions/706186/difference-between-and-in-linux-environme
 https://stackoverflow.com/questions/10307860/what-is-the-difference-between-qimage-and-qpixmap
 https://stackoverflow.com/questions/6444548/how-do-i-get-the-picture-size-with-pil
 https://stackoverflow.com/a/16377244/14558305 (https://stackoverflow.com/questions/16373425/add-text-on-image-using-pil?answertab=votes#tab-top)
+https://stackoverflow.com/questions/13807748/when-to-use-utf8-as-a-header-in-py-files/13807795
+
+---------
+These things are related to GPL licensing and copyright:
+https://opensource.stackexchange.com/questions/7131/can-i-use-my-username-in-copyright
+https://opensource.stackexchange.com/questions/4023/must-authors-name-be-included-in-gnu-gpl-v3
+https://www.quora.com/What-are-the-copyright-laws-and-do-I-need-to-actually-pay-for-copyrights-for-my-work-to-be-protected
+https://github.com/qutebrowser/qutebrowser/blob/master/qutebrowser/app.py -- referred to the top of the file
+https://www.gnu.org/licenses/gpl-howto.html
+https://www.wikihow.com/Copyright-Your-Writing-for-Free -- general copyright info
+---------
+
+https://stackoverflow.com/a/5607315/14558305

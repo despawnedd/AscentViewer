@@ -1,3 +1,7 @@
-{"DDIV": {
-    "latestver": "1.0a-b1"
-}}
+// This file will contain information about the versions, branches, etc. I will update it later.
+
+{
+    "AscentViewer": {
+        "latestVer": "1.0.0_dev-3.1-PyQt5"
+    }
+}
