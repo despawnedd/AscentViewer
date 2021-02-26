@@ -84,6 +84,11 @@ class MainUi(QtWidgets.QMainWindow):
             mainFont.setItalic(True)
             mainFont.setPointSize(32)
             QtWidgets.QApplication.setFont(mainFont)
+        elif platform.system() == "Windows":
+            # Segoe UI is better than the default font, and is included with the latest versions of Windows (starting from Vista(?))
+            mainFont = QtGui.QFont("Segoe UI")
+            mainFont.setPointSize(9)
+            QtWidgets.QApplication.setFont(mainFont)
 
         self.setWindowTitle(f"AscentViewer")
         self.resize(config["windowProperties"]["width"], config["windowProperties"]["height"])
@@ -130,19 +135,11 @@ class MainUi(QtWidgets.QMainWindow):
         self.fileLabel.setFont(fileLabelFont)
         self.fileLabel.setText(localization["mainUiElements"]["panelText"])
 
-        detailsFont = QtGui.QFont()
-        detailsFont.setPointSize(9)
-        if platform.system() == "Windows":
-            # Segoe UI is better than the default font, and is included with the latest versions of Windows (starting from Vista(?))
-            detailsFont.setFamily("Segoe UI")
-
         self.dateModifiedLabel = QtWidgets.QLabel()
         self.dateModifiedLabel.setStyleSheet("color: white;")
-        self.dateModifiedLabel.setFont(detailsFont)
 
         self.dimensionsLabel = QtWidgets.QLabel()
         self.dimensionsLabel.setStyleSheet("color: white;")
-        self.dimensionsLabel.setFont(detailsFont)
 
         btFileInfoVBox1Frame = QtWidgets.QFrame()
         btFileInfoVBox1 = QtWidgets.QVBoxLayout(btFileInfoVBox1Frame)
@@ -380,7 +377,7 @@ class MainUi(QtWidgets.QMainWindow):
         mwHeight = self.label.frameGeometry().height()
 
         if self.imgFilePath != "":
-            # should probably not use Pillow for this, but whatever
+            # should probably not use Pillow for this, might change this later
             # from https://stackoverflow.com/questions/6444548/how-do-i-get-the-picture-size-with-pil
             im = Image.open(self.imgFilePath)
 
@@ -715,6 +712,7 @@ class MainUi(QtWidgets.QMainWindow):
         about.label_5.setObjectName("label_5")
         about.horizontalLayout_7.addWidget(about.label_5)
         about.label_4 = QtWidgets.QLabel(about.widget1)
+        about.label_4.setMinimumSize(QtCore.QSize(16, 16))
         about.label_4.setTextFormat(QtCore.Qt.RichText)
         about.label_4.setScaledContents(False)
         about.label_4.setOpenExternalLinks(True)
@@ -735,6 +733,7 @@ class MainUi(QtWidgets.QMainWindow):
         about.label_3.setObjectName("label_3")
         about.horizontalLayout_6.addWidget(about.label_3)
         about.label_6 = QtWidgets.QLabel(about.widget2)
+        about.label_6.setMinimumSize(QtCore.QSize(16, 16))
         about.label_6.setTextFormat(QtCore.Qt.RichText)
         about.label_6.setScaledContents(False)
         about.label_6.setOpenExternalLinks(True)
