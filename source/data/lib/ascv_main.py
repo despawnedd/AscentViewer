@@ -12,6 +12,7 @@ import pkg_resources
 import datetime
 
 from PyQt5 import QtGui, QtCore, QtWidgets
+from PIL import Image, ImageFont
 
 from data.lib.ascv_logging import logging, ascvLogger
 from data.lib.headerlike import *
@@ -105,21 +106,22 @@ class MainUi(QtWidgets.QMainWindow):
         mainLabelFont = QtGui.QFont("Selawik", 32)
         mainLabelFont.setBold(True)
         self.label.setFont(mainLabelFont)
-        self.label.resizeEvent = (lambda old_method: (lambda event: (self.updateFunction(), old_method(event))[-1]))(self.label.resizeEvent) # https://stackoverflow.com/a/34802367/14558305
+
+        # https://stackoverflow.com/a/34802367/14558305
+        self.label.resizeEvent = (lambda old_method: (lambda event: (self.updateFunction(), old_method(event))[-1]))(self.label.resizeEvent)
 
         self.bottom = QtWidgets.QFrame()
-        self.bottom.setMinimumHeight(80)
-        self.bottom.setMaximumHeight(150)
+        self.bottom.setMinimumHeight(90)
+        self.bottom.setMaximumHeight(200)
         self.bottom.setContentsMargins(0, 0, 0, 0)
         self.bottom.setStyleSheet("background: #525685;")
 
         btHBox = QtWidgets.QHBoxLayout(self.bottom)
-        #btHBox.setAlignment(QtCore.Qt.AlignCenter)
 
-        fileIcon = QtWidgets.QLabel()
-        icon_ = QtGui.QPixmap("data/assets/img/file.png")
-        icon = icon_.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-        fileIcon.setPixmap(QtGui.QPixmap(icon))
+        self.detailsFileIcon = QtWidgets.QLabel()
+        icon_ = QtGui.QPixmap("data/assets/img/icon3.png")
+        icon = icon_.scaled(60, 60, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+        self.detailsFileIcon.setPixmap(QtGui.QPixmap(icon))
 
         self.fileLabel = QtWidgets.QLabel()
         self.fileLabel.setStyleSheet("color: white;")
@@ -128,22 +130,33 @@ class MainUi(QtWidgets.QMainWindow):
         self.fileLabel.setFont(fileLabelFont)
         self.fileLabel.setText(localization["mainUiElements"]["panelText"])
 
+        detailsFont = QtGui.QFont()
+        detailsFont.setPointSize(9)
+        if platform.system() == "Windows":
+            # Segoe UI is better than the default font, and is included with the latest versions of Windows (starting from Vista(?))
+            detailsFont.setFamily("Segoe UI")
+
         self.dateModifiedLabel = QtWidgets.QLabel()
         self.dateModifiedLabel.setStyleSheet("color: white;")
-        self.dateModifiedLabelFont = QtGui.QFont("Selawik", 10)
-        self.dateModifiedLabel.setFont(self.dateModifiedLabelFont)
+        self.dateModifiedLabel.setFont(detailsFont)
 
-        self.dateModifiedLabel2 = QtWidgets.QLabel()
-        self.dateModifiedLabel2.setStyleSheet("color: white;")
-        self.dateModifiedLabel2.setFont(self.dateModifiedLabelFont)
+        self.dimensionsLabel = QtWidgets.QLabel()
+        self.dimensionsLabel.setStyleSheet("color: white;")
+        self.dimensionsLabel.setFont(detailsFont)
 
-        btFileInfoContainerHBoxFrame = QtWidgets.QFrame() # really long name
+        btFileInfoVBox1Frame = QtWidgets.QFrame()
+        btFileInfoVBox1 = QtWidgets.QVBoxLayout(btFileInfoVBox1Frame)
+        btFileInfoVBox1.setContentsMargins(0, 0, 0, 0)
+        btFileInfoVBox1.setAlignment(QtCore.Qt.AlignLeft)
+        btFileInfoVBox1.addWidget(self.dateModifiedLabel)
+        btFileInfoVBox1.addWidget(self.dimensionsLabel)
+
+        btFileInfoContainerHBoxFrame = QtWidgets.QFrame() # A really long name, I know
         btFileInfoContainerHBox = QtWidgets.QHBoxLayout(btFileInfoContainerHBoxFrame)
         btFileInfoContainerHBox.setContentsMargins(0, 0, 0, 0)
         btFileInfoContainerHBox.setAlignment(QtCore.Qt.AlignLeft)
-        btFileInfoContainerHBox.addWidget(self.dateModifiedLabel)
-        btFileInfoContainerHBox.addWidget(self.dateModifiedLabel2)
-        
+        btFileInfoContainerHBox.addWidget(btFileInfoVBox1Frame)
+
         btMainVBoxFrame = QtWidgets.QFrame()
         btMainVBox = QtWidgets.QVBoxLayout(btMainVBoxFrame)
         btMainVBox.setAlignment(QtCore.Qt.AlignTop)
@@ -152,8 +165,7 @@ class MainUi(QtWidgets.QMainWindow):
         btMainVBox.addWidget(btFileInfoContainerHBoxFrame)
 
         btHBox.setAlignment(QtCore.Qt.AlignLeft) # This probably won't work in PyQt6
-        #btHBox.setSpacing(0)
-        btHBox.addWidget(fileIcon)
+        btHBox.addWidget(self.detailsFileIcon)
         btHBox.addWidget(btMainVBoxFrame)
 
         splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
@@ -368,16 +380,27 @@ class MainUi(QtWidgets.QMainWindow):
         mwHeight = self.label.frameGeometry().height()
 
         if self.imgFilePath != "":
+            # should probably not use Pillow for this, but whatever
+            # from https://stackoverflow.com/questions/6444548/how-do-i-get-the-picture-size-with-pil
+            im = Image.open(self.imgFilePath)
+
             pixmap_ = QtGui.QPixmap(self.imgFilePath)
             pixmap = pixmap_.scaled(mwWidth, mwHeight, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
             self.label.setPixmap(pixmap)
-        self.label.resize(mwWidth, mwHeight)
 
-        if self.imgFilePath != "":
+            dateModified = datetime.datetime.fromtimestamp(os.path.getmtime(self.imgFilePath)).strftime(date_format)
+            imWidth, imHeight = im.size
+            dimensions = f"{imWidth}x{imHeight}"
+
             self.fileLabel.setText(os.path.basename(self.imgFilePath))
-            self.dateModifiedLabel.setText(f"<b>Date modified:</b> {datetime.datetime.fromtimestamp(os.path.getmtime(self.imgFilePath)).strftime(date_format)}")
-            self.dateModifiedLabel2.setText(f"<b>Another boring label.</b>")
-            #self.fileLabel.setText(datetime.datetime.fromtimestamp(os.path.getmtime(self.imgFilePath)).strftime(date_format)) # note: date_format is a variable imported from ascv_logging.py, might want to change that
+            self.dateModifiedLabel.setText(f"<b>Date modified:</b> {dateModified}")
+            self.dimensionsLabel.setText(f"<b>Dimensions:</b> {dimensions}")
+
+            icon_ = QtGui.QPixmap("data/assets/img/file.png")
+            icon = icon_.scaled(60, 60, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            self.detailsFileIcon.setPixmap(QtGui.QPixmap(icon))
+
+            self.label.resize(mwWidth, mwHeight)
 
     # I should clean up these two too
     def prevImage(self):

@@ -119,3 +119,6 @@ https://stackoverflow.com/questions/89228/how-to-execute-a-program-or-call-a-sys
 https://stackoverflow.com/a/24595376/14558305
 https://stackoverflow.com/a/1051266/14558305
 https://askubuntu.com/questions/706186/difference-between-and-in-linux-environment
+https://stackoverflow.com/questions/10307860/what-is-the-difference-between-qimage-and-qpixmap
+https://stackoverflow.com/questions/6444548/how-do-i-get-the-picture-size-with-pil
+https://stackoverflow.com/a/16377244/14558305 (https://stackoverflow.com/questions/16373425/add-text-on-image-using-pil?answertab=votes#tab-top)
