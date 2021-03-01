@@ -20,7 +20,7 @@
     },
     "temporary_files": {
         "logs": {
-            "deleteLogsOnStartup": true
+            "deleteLogsOnStartup": false
         }
     },
     "hellMode": false
