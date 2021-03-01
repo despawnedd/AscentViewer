@@ -135,3 +135,10 @@ https://www.wikihow.com/Copyright-Your-Writing-for-Free -- general copyright inf
 ---------
 
 https://stackoverflow.com/a/5607315/14558305
+https://stackoverflow.com/questions/12943819/how-to-prettyprint-a-json-file
+https://stackoverflow.com/questions/6598053/python-global-exception-handling
+https://stackoverflow.com/a/35901847/14558305
+https://stackoverflow.com/a/38255847/14558305
+https://www.w3schools.com/cssref/css3_pr_opacity.asp
+https://stackoverflow.com/a/35861477/14558305
+https://stackoverflow.com/a/8369345/14558305

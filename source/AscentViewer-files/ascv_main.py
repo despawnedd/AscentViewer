@@ -119,7 +119,7 @@ class MainUi(QtWidgets.QMainWindow):
         vBox.setContentsMargins(0, 0, 0, 0)
 
         self.label = QtWidgets.QLabel()
-        self.label.setText(localization["mainUiElements"]["openImgFileText"])
+        self.label.setText(localization["mainUIElements"]["openImgFileText"])
         self.label.setStyleSheet("color: white; background: #2E3440;")
         self.label.setMinimumSize(16, 16)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
@@ -148,7 +148,7 @@ class MainUi(QtWidgets.QMainWindow):
         fileLabelFont = QtGui.QFont("Selawik", 14)
         fileLabelFont.setBold(True)
         self.fileLabel.setFont(fileLabelFont)
-        self.fileLabel.setText(localization["mainUiElements"]["panelText"])
+        self.fileLabel.setText(localization["mainUIElements"]["panelText"])
 
         self.dateModifiedLabel = QtWidgets.QLabel()
         self.dateModifiedLabel.setStyleSheet("color: white;")
@@ -192,35 +192,35 @@ class MainUi(QtWidgets.QMainWindow):
 
         mainMenu = self.menuBar()
 
-        fileMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["file"]["title"])
-        navMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["navigation"]["title"])
-        toolsMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["tools"]["title"])
+        fileMenu = mainMenu.addMenu(localization["mainUIElements"]["menuBar"]["file"]["title"])
+        navMenu = mainMenu.addMenu(localization["mainUIElements"]["menuBar"]["navigation"]["title"])
+        toolsMenu = mainMenu.addMenu(localization["mainUIElements"]["menuBar"]["tools"]["title"])
         if config["debug"]["enableDebugMenu"]:
-            debugMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["debug"]["title"])
-        helpMenu = mainMenu.addMenu(localization["mainUiElements"]["menuBar"]["help"]["title"])
+            debugMenu = mainMenu.addMenu(localization["mainUIElements"]["menuBar"]["debug"]["title"])
+        helpMenu = mainMenu.addMenu(localization["mainUIElements"]["menuBar"]["help"]["title"])
 
-        openImgButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/file.png"), localization["mainUiElements"]["menuBar"]["file"]["openImgText"], self)
+        openImgButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/file.png"), localization["mainUIElements"]["menuBar"]["file"]["openImgText"], self)
         openImgButton.setShortcut("CTRL+O")
         openImgButton.setStatusTip("Open an image file")
         openImgButton.triggered.connect(self.openImage)
 
-        openDirButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/file.png"), localization["mainUiElements"]["menuBar"]["file"]["openDirText"], self)
+        openDirButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/file.png"), localization["mainUIElements"]["menuBar"]["file"]["openDirText"], self)
         openDirButton.setShortcut("CTRL+Shift+O")
         openDirButton.setStatusTip("Open a directory file")
         openDirButton.triggered.connect(self.openDir)
 
-        exitButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/door.png"), localization["mainUiElements"]["menuBar"]["file"]["exitText"], self)
+        exitButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/door.png"), localization["mainUIElements"]["menuBar"]["file"]["exitText"], self)
         exitButton.setShortcut("CTRL+Q")
         exitButton.setStatusTip("Exit application")
         exitButton.triggered.connect(self.close)
 
-        self.navButtonBack = QtWidgets.QAction(QtGui.QIcon(), localization["mainUiElements"]["menuBar"]["navigation"]["back"], self)
+        self.navButtonBack = QtWidgets.QAction(QtGui.QIcon(), localization["mainUIElements"]["menuBar"]["navigation"]["back"], self)
         self.navButtonBack.setShortcut("Left")
         self.navButtonBack.setStatusTip("Go to previous image in directory")
         self.navButtonBack.triggered.connect(self.prevImage)
         self.navButtonBack.setEnabled(False)
 
-        self.navButtonForw = QtWidgets.QAction(QtGui.QIcon(), localization["mainUiElements"]["menuBar"]["navigation"]["forw"], self)
+        self.navButtonForw = QtWidgets.QAction(QtGui.QIcon(), localization["mainUIElements"]["menuBar"]["navigation"]["forw"], self)
         self.navButtonForw.setShortcut("Right")
         self.navButtonForw.setStatusTip("Go to next image in directory")
         self.navButtonForw.triggered.connect(self.nextImage)
@@ -237,17 +237,17 @@ class MainUi(QtWidgets.QMainWindow):
             dummyException.setStatusTip("Raise a dummy exception")
             dummyException.triggered.connect(self.dummyExceptionFunc)
 
-        resetCfg = QtWidgets.QAction(QtGui.QIcon(), "Reset config", self)
+        resetCfg = QtWidgets.QAction(QtGui.QIcon(), localization["mainUIElements"]["menuBar"]["tools"]["resetConfig"], self)
         resetCfg.setShortcut("CTRL+Shift+F9")
         resetCfg.setStatusTip("Reset the configuration file.")
         resetCfg.triggered.connect(self.resetConfigDialog)
 
-        helpButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon3.png"), "Help", self)
+        helpButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon3.png"), localization["mainUIElements"]["menuBar"]["help"]["help"], self)
         helpButton.setShortcut("F1")
         helpButton.setStatusTip("Open the help window.")
         helpButton.triggered.connect(self.openHelpWin)
 
-        aboutButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon3.png"), "About", self)
+        aboutButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon3.png"), localization["mainUIElements"]["menuBar"]["help"]["about"], self)
         aboutButton.setShortcut("Shift+F1")
         aboutButton.setStatusTip("Open the about window.")
         aboutButton.triggered.connect(self.openAboutWin)
@@ -273,7 +273,7 @@ class MainUi(QtWidgets.QMainWindow):
         self.label.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
         self.label.addAction(openImgButton)
 
-        self.statusBar().showMessage(localization["mainUiElements"]["statusBar"]["greetMessageBeginning"] + ver)
+        self.statusBar().showMessage("{} {}".format(localization["mainUIElements"]["statusBar"]["greetMessageBeginning"], ver))
         ascvLogger.info("GUI has been initialized.")
 
     # ISSUE: for some images, this REALLY makes the program lag
@@ -309,39 +309,15 @@ class MainUi(QtWidgets.QMainWindow):
 
             self.label.resize(mwWidth, mwHeight)
 
-    def resetConfigDialog(self):
-        '''
-        A function that shows a dialog that asks the user if they want to reset the configuration file
-        (copy config.json from default_config to the user folder). If they respond with "Yes", the function
-        resets the configuration to its defaults.
-        '''
-        reply = QtWidgets.QMessageBox(self)
-        reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
-        reply.setWindowTitle("Reset configuration")
-        reply.setText("<b>Are you sure you want to reset the configuration file?</b>")
-        reply.setInformativeText("<i>This will also prevent the program saving the config file on exit for this session.</i>")
-        reply.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        checkbox = QtWidgets.QCheckBox("After resetting, exit the program.")
-        icon_ = QtGui.QPixmap("data/assets/img/icon3.png")
-        icon = icon_.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-        reply.setIconPixmap(QtGui.QPixmap(icon))
-        reply.setCheckBox(checkbox)
-        reply.setModal(True)
-
-        x = reply.exec_()
-
-        if checkbox.isChecked():
-            config["prompts"]["enableExitPrompt"] = False
-            self.onCloseActions()
-            self.close()
-
-        if x == QtWidgets.QMessageBox.Yes:
-            shutil.copyfile("data/assets/default_config/config.json", "data/user/config.json")
-            self.saveConfigOnExit = False
-
     # I should clean up these two functions below soon
     def openImage(self):
-        self.imgFilePath, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open Image File", "/", "Image files (*.jpg *.jpeg *.gif *.png *.bmp)")
+        openImageDialog = QtWidgets.QFileDialog()
+        self.imgFilePath, _ = openImageDialog.getOpenFileName(self,
+                                                              localization["mainUIElements"]["fileDialogs"]["openImage"]["title"],
+                                                              "/",
+                                                              "{} (*.jpg *.jpeg *.gif *.png *.bmp)".format(localization["mainUIElements"]["fileDialogs"]["openImage"]["fileTypes"]),
+                                                              options=QtWidgets.QFileDialog.DontUseNativeDialog)
+
         if self.imgFilePath != "":
             ascvLogger.info(f"Opened image. Image path: \"{self.imgFilePath}\"")
             self.dirPath_ = self.imgFilePath.replace(os.path.basename(self.imgFilePath), "")
@@ -367,7 +343,9 @@ class MainUi(QtWidgets.QMainWindow):
             ascvLogger.info("imgFilePath is empty!")
 
     def openDir(self):
-        self.dirPath_ = QtWidgets.QFileDialog.getExistingDirectory(self, "Open a Directory", "/")
+        self.dirPath_ = QtWidgets.QFileDialog.getExistingDirectory(self,
+                                                                   localization["mainUIElements"]["fileDialogs"]["openDir"]["title"],
+                                                                   "/")
         if self.dirPath_ != "":
             ascvLogger.info(f"Successfully opened directory, directory path is: \"{self.dirPath_}\"")
 
@@ -459,11 +437,18 @@ class MainUi(QtWidgets.QMainWindow):
         if config["prompts"]["enableExitPrompt"]:
             reply = QtWidgets.QMessageBox(self)
             reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
-            reply.setWindowTitle("Exiting AscentViewer")
-            reply.setText("<b>Are you sure you want to exit AscentViewer?</b>")
-            reply.setInformativeText("<i>By the way, thank you for using this program!</i>")
+            reply.setWindowTitle(localization["mainUIElements"]["exitDialog"]["title"])
+            reply.setText("<b>{}</b>".format(localization["mainUIElements"]["exitDialog"]["mainText"]))
+            reply.setInformativeText("<i>{}</i>".format(localization["mainUIElements"]["exitDialog"]["informativeText"]))
+
+            # from https://stackoverflow.com/a/35889474/14558305
             reply.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            checkbox = QtWidgets.QCheckBox("Do not show this again.")
+            buttonY = reply.button(QtWidgets.QMessageBox.Yes)
+            buttonY.setText(localization["mainUIElements"]["commonQMessageBoxStrings"]["yes"])
+            buttonN = reply.button(QtWidgets.QMessageBox.No)
+            buttonN.setText(localization["mainUIElements"]["commonQMessageBoxStrings"]["no"])
+
+            checkbox = QtWidgets.QCheckBox(localization["mainUIElements"]["commonQMessageBoxStrings"]["dontShowAgain"])
             icon_ = QtGui.QPixmap("data/assets/img/door.png")
             icon = icon_.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
             reply.setIconPixmap(QtGui.QPixmap(icon))
@@ -491,9 +476,45 @@ class MainUi(QtWidgets.QMainWindow):
             self.onCloseActions()
             event.accept()
 
+    def resetConfigDialog(self):
+        '''
+        A function that shows a dialog that asks the user if they want to reset the configuration file
+        (copy config.json from default_config to the user folder). If they respond with "Yes", the function
+        resets the configuration to its defaults.
+        '''
+        reply = QtWidgets.QMessageBox(self)
+        reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
+        reply.setWindowTitle(localization["mainUIElements"]["resetConfigDialog"]["title"])
+        reply.setText("<b>{}</b>".format(localization["mainUIElements"]["resetConfigDialog"]["mainText"]))
+        reply.setInformativeText("<i>{}</i>".format(localization["mainUIElements"]["resetConfigDialog"]["informativeText"]))
+
+        # from https://stackoverflow.com/a/35889474/14558305
+        reply.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        buttonY = reply.button(QtWidgets.QMessageBox.Yes)
+        buttonY.setText(localization["mainUIElements"]["commonQMessageBoxStrings"]["yes"])
+        buttonN = reply.button(QtWidgets.QMessageBox.No)
+        buttonN.setText(localization["mainUIElements"]["commonQMessageBoxStrings"]["no"])
+
+        checkbox = QtWidgets.QCheckBox(localization["mainUIElements"]["resetConfigDialog"]["checkboxText"])
+        icon_ = QtGui.QPixmap("data/assets/img/icon3.png")
+        icon = icon_.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+        reply.setIconPixmap(QtGui.QPixmap(icon))
+        reply.setCheckBox(checkbox)
+        reply.setModal(True)
+
+        x = reply.exec_()
+
+        if checkbox.isChecked():
+            config["prompts"]["enableExitPrompt"] = False
+            self.onCloseActions()
+            self.close()
+
+        if x == QtWidgets.QMessageBox.Yes:
+            shutil.copyfile("data/assets/default_config/config.json", "data/user/config.json")
+            self.saveConfigOnExit = False
+
     # from https://stackoverflow.com/a/33741755/14558305
-    # bookmark: https://stackoverflow.com/questions/6598053/python-global-exception-handling
-    def except_hook(self, cls, exception, traceback): # note: implement this in ascv.py somehow
+    def except_hook(self, cls, exception, traceback):
         # custom except hook
         ascvLogger.critical(f"An exception occured: \"{exception}\" | Saving settings in case of a fatal issue...")
         sys.__excepthook__(cls, exception, traceback)
@@ -524,24 +545,59 @@ class MainUi(QtWidgets.QMainWindow):
     def openHelpWin(self):
         helpWin = QtWidgets.QDialog(self, QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowCloseButtonHint)
 
-        helpWin.resize(725, 460)
+        helpWin.resize(400, 600)
 
         helpWin.setAttribute(QtCore.Qt.WA_QuitOnClose, True)
         helpWin.setModal(True)
         helpWin.setWindowTitle("Help")
         helpWin.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
 
-        helpWin.label = QtWidgets.QLabel()
-        helpWin.label.setText("<b>Coming soon.</b><br /><i>In the meantime, check out the repository's Wiki.</i>")
+        icon = QtWidgets.QLabel()
+        icon.setPixmap(QtGui.QPixmap("data/assets/img/icon3.png"))
+        icon.setMinimumSize(64, 64)
+        icon.setMaximumSize(64, 64)
+        icon.setScaledContents(True)
 
-        helpWin.gridLayout = QtWidgets.QGridLayout(helpWin)
-        helpWin.gridLayout.addWidget(helpWin.label)
+        # from the about window
+        programName = QtWidgets.QLabel("AscentViewer")
+        font = QtGui.QFont()
+        font.setFamily("Selawik")
+        font.setPointSize(26)
+        font.setBold(True)
+        programName.setFont(font)
 
-        mainLabelFont = QtGui.QFont()
-        mainLabelFont.setPointSize(16)
-        helpWin.label.setFont(mainLabelFont)
+        helpTitle = QtWidgets.QLabel("Help")
+        font = QtGui.QFont()
+        font.setFamily("Selawik Semilight")
+        font.setPointSize(26)
+        helpTitle.setFont(font)
+        helpTitle.setStyleSheet("color: rgba(255, 255, 255, 0.5);") # from https://www.w3schools.com/cssref/css3_pr_opacity.asp
 
-        helpWin.label.setAlignment(QtCore.Qt.AlignCenter)
+        spacer = QtWidgets.QSpacerItem(2, 0, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+
+        # thanks to https://stackoverflow.com/a/35861477/14558305
+        textView = QtWidgets.QTextBrowser()
+
+        # from https://stackoverflow.com/a/8369345/14558305
+        with open("data/assets/markdown/help.md", "r") as file:
+            data = file.read()
+
+        textView.setOpenExternalLinks(True)
+        textView.setMarkdown(data)
+
+        headerHBoxFrame = QtWidgets.QFrame()
+        headerHBox = QtWidgets.QHBoxLayout(headerHBoxFrame)
+        headerHBox.setContentsMargins(0, 0, 0, 0)
+        headerHBox.setAlignment(QtCore.Qt.AlignLeft)
+        headerHBox.addWidget(icon)
+        headerHBox.addWidget(programName)
+        headerHBox.addItem(spacer)
+        headerHBox.addWidget(helpTitle)
+
+        mainVBoxLayout = QtWidgets.QVBoxLayout(helpWin)
+        mainVBoxLayout.addWidget(headerHBoxFrame)
+        mainVBoxLayout.addWidget(textView)
+        mainVBoxLayout.setAlignment(QtCore.Qt.AlignTop)
 
         helpWin.show()
 
@@ -549,7 +605,7 @@ class MainUi(QtWidgets.QMainWindow):
         about = QtWidgets.QDialog(self, QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowCloseButtonHint)
 
         # =====================================================
-        # This code below is a modified version of about.py (located in the misc folder, 
+        # This code below is a modified version of about.py (located in the misc folder,
         # that's located in the source folder of the repository), a script that was generated by pyuic5.
         # That is why the entire thing is big and clunky.
 
@@ -765,24 +821,24 @@ class MainUi(QtWidgets.QMainWindow):
         about.gridLayout.addWidget(about.verticalWidget, 1, 0, 1, 1)
 
         _translate = QtCore.QCoreApplication.translate
-        about.setWindowTitle(_translate("Form", "About"))
+        about.setWindowTitle(_translate("Form", localization["mainUIElements"]["aboutWindow"]["title"]))
         about.programName.setText(_translate("Form", "AscentViewer"))
         about.majorReleaseName.setText(_translate("Form", "Cobalt"))
-        about.versionLabel.setText(_translate("Form", "version"))
+        about.versionLabel.setText(_translate("Form", localization["mainUIElements"]["aboutWindow"]["mainVersion"]))
         about.version.setText(_translate("Form", ver))
-        about.label.setText(_translate("Form", "Python version"))
+        about.label.setText(_translate("Form", localization["mainUIElements"]["aboutWindow"]["PyVersion"]))
         try:
             about.label_9.setText(_translate("Form", platform.python_version()))
         except:
             about.label_9.setText(_translate("Form", "unknown"))
-        about.label_2.setText(_translate("Form", "PyQt5 version"))
+        about.label_2.setText(_translate("Form", localization["mainUIElements"]["aboutWindow"]["PyQtVersion"]))
         try:
             about.label_10.setText(_translate("Form", pkg_resources.get_distribution("PyQt5").version))
         except:
             about.label_10.setText(_translate("Form", "unknown"))
-        about.label_11.setText(_translate("Form", "**AscentViewer** is an image viewer written in [**Python**](https://www.python.org/) based on [**PyQt**](https://riverbankcomputing.com/software/pyqt/) and several other libraries."))
-        about.label_4.setText(_translate("Form", "<a href=\"https://github.com/despawnedd/AscentViewer/\">GitHub repository</a>"))
-        about.label_6.setText(_translate("Form", "<a href=\"https://dd.acrazytown.com/AscentViewer/\">Website</a>"))
+        about.label_11.setText(_translate("Form", localization["mainUIElements"]["aboutWindow"]["description"]))
+        about.label_4.setText(_translate("Form", "<a href=\"https://github.com/despawnedd/AscentViewer/\">{}</a>").format(localization["mainUIElements"]["aboutWindow"]["GitHubLink"])) # thanks to Anthony for .format
+        about.label_6.setText(_translate("Form", "<a href=\"https://dd.acrazytown.com/AscentViewer/\">{}</a>").format(localization["mainUIElements"]["aboutWindow"]["website"]))
 
         about.exec_()
 

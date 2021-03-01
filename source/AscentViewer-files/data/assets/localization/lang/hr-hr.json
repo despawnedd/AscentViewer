@@ -1,31 +1,83 @@
 {
-    "mainUiElements": {
+    "mainUIElements":
+    {
         "openImgFileText": "Otvorite sliku.",
-        "comingSoonPanelText": "Ova ploča dolazi uskoro.",
-        "menuBar": {
-            "file": {
+        "panelText": "Otvorite sliku kako biste pogledali podatke...",
+        "menuBar":
+        {
+            "file":
+            {
                 "title": "&Datoteka",
                 "openImgText": "&Otvori sliku...",
                 "openDirText": "Otvori &mapu...",
                 "exitText": "&Izađi"
             },
-            "navigation": {
+            "navigation":
+            {
                 "title": "&Navigacija",
                 "back": "&Prethodna slika",
                 "forw": "&Sljedeća slika"
             },
-            "debug": {
+            "debug":
+            {
                 "title": "D&ebug"
             },
-            "tools": {
-                "title": "&Alati"
+            "tools":
+            {
+                "title": "&Alati",
+                "resetConfig": "&Resetiraj konfiguraciju..."
             },
-            "help": {
-                "title": "&Pomoć"
+            "help":
+            {
+                "title": "&Pomoć",
+                "help": "&Pomoć",
+                "about": "&O programu"
             }
         },
-        "statusBar": {
-            "greetMessageBeginning": "Uspješno učitano. Verzija: "
+        "commonQMessageBoxStrings":
+        {
+            "yes": "Da",
+            "no": "Ne",
+            "dontShowAgain": "Više ne prikazujte ovo."
+        },
+        "fileDialogs":
+        {
+            "openImage":
+            {
+                "title": "Odaberite sliku koju želite otvoriti...",
+                "fileTypes": "Slikovne datoteke"
+            },
+            "openDir":
+            {
+                "title": "Odaberite mapu koju želite otvoriti..."
+            }
+        },
+        "statusBar":
+        {
+            "greetMessageBeginning": "Uspješno učitano. Verzija:"
+        },
+        "aboutWindow":
+        {
+            "title": "O programu",
+            "mainVersion": "verzija",
+            "PyVersion": "Python verzija",
+            "PyQtVersion": "PyQt5 verzija",
+            "description": "**AscentViewer** je preglednik slika napisan u [**Python-u**](https://www.python.org/), baziran na [**PyQt-u**](https://riverbankcomputing.com/software/pyqt/) i nekoliko ostalih Python biblioteka.",
+            "GitHubLink": "GitHub repository",
+            "website": "Web stranica"
+        },
+        "resetConfigDialog":
+        {
+            "title": "Resetiranje konfiguracije",
+            "mainText": "Jeste li sigurni da želite resetirati konfiguraciju?",
+            "informativeText": "Ovo će također spriječiti spremanje konfiguracije na izlazu za ovu sesiju.",
+            "checkboxText": "Nakon resetiranja, izađite iz programa."
+        },
+        "exitDialog":
+        {
+            "title": "Izlazak iz AscentViewer-a",
+            "mainText": "Jeste li sigurni da želite izaći iz AscentViewer-a?",
+            "informativeText": "Usput, hvala nam na korištenju ovog programa!"
         }
     }
 }

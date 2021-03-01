@@ -21,9 +21,10 @@
 # =====================================================
 
 '''
-A simple launcher for AscentViewer.
+A simple launcher for AscentViewer. Sort of based on "https://github.com/qutebrowser/qutebrowser/blob/master/qutebrowser/__main__.py"
 '''
 
+import sys
 import os
 import subprocess
 import platform
@@ -33,6 +34,14 @@ try:
     os.chdir(__file__.replace(os.path.basename(__file__), ""))
 except:
     pass
+
+# from https://stackoverflow.com/a/6598286/14558305
+def my_except_hook(exctype, value, traceback):
+    if exctype == KeyboardInterrupt:
+        print("KeyboardInterrupt occurred.")
+    else:
+        sys.__excepthook__(exctype, value, traceback)
+sys.excepthook = my_except_hook
 
 pyLocation = "AscentViewer-files/ascv_main.py"
 pycLocation = "AscentViewer-files/ascv_main.pyc"

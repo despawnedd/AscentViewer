@@ -1,31 +1,83 @@
 {
-    "mainUiElements": {
+    "mainUIElements":
+    {
         "openImgFileText": "Open an image file.",
         "panelText": "Open an image file to see info...",
-        "menuBar": {
-            "file": {
+        "menuBar":
+        {
+            "file":
+            {
                 "title": "&File",
                 "openImgText": "&Open image...",
                 "openDirText": "Open &folder...",
                 "exitText": "&Exit"
             },
-            "navigation": {
+            "navigation":
+            {
                 "title": "&Navigation",
                 "back": "&Previous image",
                 "forw": "&Next image"
             },
-            "debug": {
+            "debug":
+            {
                 "title": "&Debug"
             },
-            "tools": {
-                "title": "&Tools"
+            "tools":
+            {
+                "title": "&Tools",
+                "resetConfig": "&Reset configuration..."
             },
-            "help": {
-                "title": "&Help"
+            "help":
+            {
+                "title": "&Help",
+                "help": "&Help",
+                "about": "&About"
             }
         },
-        "statusBar": {
-            "greetMessageBeginning": "Succesfully loaded: "
+        "commonQMessageBoxStrings":
+        {
+            "yes": "Yes",
+            "no": "No",
+            "dontShowAgain": "Do not show this again."
+        },
+        "fileDialogs":
+        {
+            "openImage":
+            {
+                "title": "Select an image that you want to open...",
+                "fileTypes": "Image files"
+            },
+            "openDir":
+            {
+                "title": "Select a folder that you want to open..."
+            }
+        },
+        "statusBar":
+        {
+            "greetMessageBeginning": "Succesfully loaded, version:"
+        },
+        "aboutWindow":
+        {
+            "title": "About",
+            "mainVersion": "version",
+            "PyVersion": "Python version",
+            "PyQtVersion": "PyQt5 version",
+            "description": "**AscentViewer** is an image viewer written in [**Python**](https://www.python.org/), based on [**PyQt**](https://riverbankcomputing.com/software/pyqt/) and several other libraries.",
+            "GitHubLink": "GitHub repository",
+            "website": "Website"
+        },
+        "resetConfigDialog":
+        {
+            "title": "Resetting configuration",
+            "mainText": "Are you sure that you want to reset the configuration?",
+            "informativeText": "This will also prevent the configuration from being saved for this session.",
+            "checkboxText": "After resetting, exit the program."
+        },
+        "exitDialog":
+        {
+            "title": "Exiting AscentViewer",
+            "mainText": "Are you sure you want to exit AscentViewer?",
+            "informativeText": "By the way, thank you for using this program!"
         }
     }
 }
