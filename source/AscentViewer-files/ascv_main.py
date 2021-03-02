@@ -315,8 +315,7 @@ class MainUi(QtWidgets.QMainWindow):
         self.imgFilePath, _ = openImageDialog.getOpenFileName(self,
                                                               localization["mainUIElements"]["fileDialogs"]["openImage"]["title"],
                                                               "/",
-                                                              "{} (*.jpg *.jpeg *.gif *.png *.bmp)".format(localization["mainUIElements"]["fileDialogs"]["openImage"]["fileTypes"]),
-                                                              options=QtWidgets.QFileDialog.DontUseNativeDialog)
+                                                              "{} (*.jpg *.jpeg *.gif *.png *.bmp)".format(localization["mainUIElements"]["fileDialogs"]["openImage"]["fileTypes"]))
 
         if self.imgFilePath != "":
             ascvLogger.info(f"Opened image. Image path: \"{self.imgFilePath}\"")

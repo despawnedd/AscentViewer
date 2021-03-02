@@ -47,18 +47,8 @@ pyLocation = "AscentViewer-files/ascv_main.py"
 pycLocation = "AscentViewer-files/ascv_main.pyc"
 
 print("Compiling AscentViewer...")
-# from https://stackoverflow.com/a/5607315/14558305
-py_compile.compile(pyLocation, pycLocation)
+py_compile.compile(pyLocation, pycLocation) # from https://stackoverflow.com/a/5607315/14558305
 
+print(f"Python is located at {sys.executable}")
 print("Starting AscentViewer...\n")
-# =====================================================
-# Note: The code below is kinda messy. Expect a change soon.
-if platform.system() == "Windows":
-    # Note: You need to have Python launcher installed for this to work.
-    subprocess.run(["py", pycLocation])
-else:
-    # For Unix-based systems. Make sure that Python is either in your PATH, or that it's installed to /usr/bin/python3.
-    try:
-        subprocess.run(["python3", pycLocation])
-    except:
-        subprocess.run(["/usr/bin/python3", pycLocation])
+subprocess.run([sys.executable, pyLocation])
