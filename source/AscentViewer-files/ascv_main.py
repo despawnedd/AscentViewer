@@ -108,9 +108,17 @@ class MainUi(QtWidgets.QMainWindow):
         self.setWindowTitle(f"AscentViewer")
         self.resize(config["windowProperties"]["width"], config["windowProperties"]["height"])
         self.move(config["windowProperties"]["x"], config["windowProperties"]["y"])
-        self.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
+        self.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
 
         self.statusBar().setStyleSheet("background: #777CC1;")
+
+        # from https://www.geeksforgeeks.org/pyqt5-qlabel-setting-blur-radius-to-the-blur-effect/
+        self.blur_effect = QtWidgets.QGraphicsBlurEffect()
+        self.blur_effect.setBlurRadius(25)
+        # from https://doc.qt.io/qt-5/qgraphicsblureffect.html#blurHints-prop
+        self.blur_effect.setBlurHints(QtWidgets.QGraphicsBlurEffect.QualityHint)
+        self.blur_effect.setEnabled(False)
+        self.setGraphicsEffect(self.blur_effect)
 
         self.mainWidget = QtWidgets.QWidget(self)
         self.setCentralWidget(self.mainWidget)
@@ -119,32 +127,37 @@ class MainUi(QtWidgets.QMainWindow):
         vBox.setContentsMargins(0, 0, 0, 0)
 
         self.label = QtWidgets.QLabel()
+        # from https://stackoverflow.com/a/44044110/14558305
         self.label.setText(localization["mainUIElements"]["openImgFileText"])
-        self.label.setStyleSheet("color: white; background: #2E3440;")
+        self.label.setStyleSheet("""color: white; 
+                                    background: qradialgradient(cx:0.5, cy:0.5, radius: 2.5, fx:0.5, fy:0.5, stop:0 #2E3440, stop:1 black);""")
         self.label.setMinimumSize(16, 16)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         mainLabelFont = QtGui.QFont("Selawik", 32)
         mainLabelFont.setBold(True)
         self.label.setFont(mainLabelFont)
 
-        # https://stackoverflow.com/a/34802367/14558305
-        self.label.resizeEvent = (lambda old_method: (lambda event: (self.updateFunction(), old_method(event))[-1]))(self.label.resizeEvent)
-
         self.bottom = QtWidgets.QFrame()
         self.bottom.setMinimumHeight(90)
         self.bottom.setMaximumHeight(200)
         self.bottom.setContentsMargins(0, 0, 0, 0)
-        self.bottom.setStyleSheet("background: #525685;")
+        # from https://stackoverflow.com/q/45840527/14558305 (yes, the question)
+        self.bottom.setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop: 0 #525685, stop: 1 #3c3f61)")
 
         btHBox = QtWidgets.QHBoxLayout(self.bottom)
 
         self.detailsFileIcon = QtWidgets.QLabel()
-        icon_ = QtGui.QPixmap("data/assets/img/icon3.png")
-        icon = icon_.scaled(60, 60, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+        self.detailsFileIcon.setMinimumSize(60, 60)
+        self.detailsFileIcon.setMaximumSize(60, 60)
+        self.detailsFileIcon.setScaledContents(True)
+        # from https://stackoverflow.com/a/51401997/14558305
+        self.detailsFileIcon.setAttribute(QtCore.Qt.WA_NoSystemBackground);
+        icon = QtGui.QPixmap("data/assets/img/file.png")
         self.detailsFileIcon.setPixmap(QtGui.QPixmap(icon))
 
         self.fileLabel = QtWidgets.QLabel()
         self.fileLabel.setStyleSheet("color: white;")
+        self.fileLabel.setAttribute(QtCore.Qt.WA_NoSystemBackground);
         fileLabelFont = QtGui.QFont("Selawik", 14)
         fileLabelFont.setBold(True)
         self.fileLabel.setFont(fileLabelFont)
@@ -152,11 +165,14 @@ class MainUi(QtWidgets.QMainWindow):
 
         self.dateModifiedLabel = QtWidgets.QLabel()
         self.dateModifiedLabel.setStyleSheet("color: white;")
+        self.dateModifiedLabel.setAttribute(QtCore.Qt.WA_NoSystemBackground);
 
         self.dimensionsLabel = QtWidgets.QLabel()
         self.dimensionsLabel.setStyleSheet("color: white;")
+        self.dimensionsLabel.setAttribute(QtCore.Qt.WA_NoSystemBackground);
 
         btFileInfoVBox1Frame = QtWidgets.QFrame()
+        btFileInfoVBox1Frame.setAttribute(QtCore.Qt.WA_NoSystemBackground);
         btFileInfoVBox1 = QtWidgets.QVBoxLayout(btFileInfoVBox1Frame)
         btFileInfoVBox1.setContentsMargins(0, 0, 0, 0)
         btFileInfoVBox1.setAlignment(QtCore.Qt.AlignLeft)
@@ -164,19 +180,21 @@ class MainUi(QtWidgets.QMainWindow):
         btFileInfoVBox1.addWidget(self.dimensionsLabel)
 
         btFileInfoContainerHBoxFrame = QtWidgets.QFrame() # A really long name, I know
+        btFileInfoContainerHBoxFrame.setAttribute(QtCore.Qt.WA_NoSystemBackground);
         btFileInfoContainerHBox = QtWidgets.QHBoxLayout(btFileInfoContainerHBoxFrame)
         btFileInfoContainerHBox.setContentsMargins(0, 0, 0, 0)
         btFileInfoContainerHBox.setAlignment(QtCore.Qt.AlignLeft)
         btFileInfoContainerHBox.addWidget(btFileInfoVBox1Frame)
 
         btMainVBoxFrame = QtWidgets.QFrame()
+        btMainVBoxFrame.setAttribute(QtCore.Qt.WA_NoSystemBackground);
         btMainVBox = QtWidgets.QVBoxLayout(btMainVBoxFrame)
         btMainVBox.setAlignment(QtCore.Qt.AlignTop)
         btMainVBox.setContentsMargins(0, 0, 0, 0)
         btMainVBox.addWidget(self.fileLabel)
         btMainVBox.addWidget(btFileInfoContainerHBoxFrame)
 
-        btHBox.setAlignment(QtCore.Qt.AlignLeft) # This probably won't work in PyQt6
+        btHBox.setAlignment(QtCore.Qt.AlignLeft) # This probably won't work with PyQt6
         btHBox.addWidget(self.detailsFileIcon)
         btHBox.addWidget(btMainVBoxFrame)
 
@@ -209,7 +227,7 @@ class MainUi(QtWidgets.QMainWindow):
         openDirButton.setStatusTip("Open a directory file")
         openDirButton.triggered.connect(self.openDir)
 
-        exitButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/door.png"), localization["mainUIElements"]["menuBar"]["file"]["exitText"], self)
+        exitButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/door_small.png"), localization["mainUIElements"]["menuBar"]["file"]["exitText"], self)
         exitButton.setShortcut("CTRL+Q")
         exitButton.setStatusTip("Exit application")
         exitButton.triggered.connect(self.close)
@@ -242,12 +260,12 @@ class MainUi(QtWidgets.QMainWindow):
         resetCfg.setStatusTip("Reset the configuration file.")
         resetCfg.triggered.connect(self.resetConfigDialog)
 
-        helpButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon3.png"), localization["mainUIElements"]["menuBar"]["help"]["help"], self)
+        helpButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon3_small.png"), localization["mainUIElements"]["menuBar"]["help"]["help"], self)
         helpButton.setShortcut("F1")
         helpButton.setStatusTip("Open the help window.")
         helpButton.triggered.connect(self.openHelpWin)
 
-        aboutButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon3.png"), localization["mainUIElements"]["menuBar"]["help"]["about"], self)
+        aboutButton = QtWidgets.QAction(QtGui.QIcon("data/assets/img/icon3_small.png"), localization["mainUIElements"]["menuBar"]["help"]["about"], self)
         aboutButton.setShortcut("Shift+F1")
         aboutButton.setStatusTip("Open the about window.")
         aboutButton.triggered.connect(self.openAboutWin)
@@ -273,41 +291,75 @@ class MainUi(QtWidgets.QMainWindow):
         self.label.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
         self.label.addAction(openImgButton)
 
+        # from https://pythonpyqt.com/qtimer/
+        self.timer = QtCore.QTimer()
+        self.timer.timeout.connect(self.updateTimerFunc)
+
+        # from https://stackoverflow.com/a/34802367/14558305
+        self.label.resizeEvent = (lambda old_method: (lambda event: (self.updateFunction(1), old_method(event))[-1]))(self.label.resizeEvent)
+
         self.statusBar().showMessage("{} {}".format(localization["mainUIElements"]["statusBar"]["greetMessageBeginning"], ver))
         ascvLogger.info("GUI has been initialized.")
 
     # ISSUE: for some images, this REALLY makes the program lag
     # the foundation of the code comes from https://stackoverflow.com/a/43570124/14558305
-    def updateFunction(self):
+    def updateFunction(self, i):
         '''
         A function that, well, updates. Updates widgets, to be more exact.
         '''
 
-        mwWidth = self.label.frameGeometry().width()
-        mwHeight = self.label.frameGeometry().height()
+        self.mwWidth = self.label.frameGeometry().width()
+        self.mwHeight = self.label.frameGeometry().height()
 
         if self.imgFilePath != "":
-            # should probably not use Pillow for this, might change this later
-            # from https://stackoverflow.com/questions/6444548/how-do-i-get-the-picture-size-with-pil
-            im = Image.open(self.imgFilePath)
+            if i == 0:
+                # i == 0: set up things, update image to high quality image
 
-            pixmap_ = QtGui.QPixmap(self.imgFilePath)
-            pixmap = pixmap_.scaled(mwWidth, mwHeight, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-            self.label.setPixmap(pixmap)
+                # should probably not use Pillow for this, might change this later
+                # from https://stackoverflow.com/questions/6444548/how-do-i-get-the-picture-size-with-pil
 
-            dateModified = datetime.datetime.fromtimestamp(os.path.getmtime(self.imgFilePath)).strftime(date_format)
-            imWidth, imHeight = im.size
-            dimensions = f"{imWidth}x{imHeight}"
+                # NOTE: make it so the thumbnails don't get recreated every time
+                im = Image.open(self.imgFilePath)
+                self.imWidth, imHeight = im.size
+                imName = os.path.basename(self.imgFilePath)
 
-            self.fileLabel.setText(os.path.basename(self.imgFilePath))
-            self.dateModifiedLabel.setText(f"<b>Date modified:</b> {dateModified}")
-            self.dimensionsLabel.setText(f"<b>Dimensions:</b> {dimensions}")
+                imThumb = im
+                imThumb.thumbnail((500, 500))
+                #self.imTOut = f"data/user/temp/thumbnails/tn_{os.path.splitext(imName)[0]}.png"
+                self.imTOut = "data/user/temp/thumbnails/tn_current-thumb.png"
+                imThumb.save(self.imTOut, "PNG")
 
-            icon_ = QtGui.QPixmap("data/assets/img/file.png")
-            icon = icon_.scaled(60, 60, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-            self.detailsFileIcon.setPixmap(QtGui.QPixmap(icon))
+                pixmap_ = QtGui.QPixmap(self.imTOut)
+                pixmap = pixmap_.scaled(self.mwWidth, self.mwHeight, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+                self.label.setPixmap(pixmap)
+                dateModified = datetime.datetime.fromtimestamp(os.path.getmtime(self.imgFilePath)).strftime(date_format)
+                dimensions = f"{self.imWidth}x{imHeight}"
 
-            self.label.resize(mwWidth, mwHeight)
+                self.fileLabel.setText(imName)
+                self.dateModifiedLabel.setText(f"<b>Date modified:</b> {dateModified}")
+                self.dimensionsLabel.setText(f"<b>Dimensions:</b> {dimensions}")
+
+                pixmap_ = QtGui.QPixmap(self.imgFilePath)
+                pixmap = pixmap_.scaled(self.mwWidth, self.mwHeight, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+                self.label.setPixmap(pixmap)
+            elif i == 1:
+                # i == 1: low quality resize
+
+                # WARNING: this makes the timer start again after it times out while resizing an image. This calls the updateTimerFunc function again,
+                # which then swaps out the actual image with the thumbnail every time. This goes unnoticed, however, but STILL, I should *probably*
+                # fix that somehow.
+                if self.timer.isActive() == False:
+                    self.timer.start(250)
+
+                pixmap_ = QtGui.QPixmap(self.imTOut)
+                pixmap = pixmap_.scaled(self.mwWidth, self.mwHeight, QtCore.Qt.KeepAspectRatio)
+                self.label.setPixmap(pixmap)
+
+    def updateTimerFunc(self):
+        pixmap_ = QtGui.QPixmap(self.imgFilePath)
+        pixmap = pixmap_.scaled(self.mwWidth, self.mwHeight, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+        self.label.setPixmap(pixmap)
+        self.timer.stop()
 
     # I should clean up these two functions below soon
     def openImage(self):
@@ -390,7 +442,7 @@ class MainUi(QtWidgets.QMainWindow):
 
             self.imgFilePath = self.dirImageList[self.imageNumber]
 
-            self.updateFunction()
+            self.updateFunction(0)
             self.navButtonBack.setEnabled(True)
             self.navButtonForw.setEnabled(True)
         else:
@@ -405,7 +457,7 @@ class MainUi(QtWidgets.QMainWindow):
             self.imageNumber = len(self.dirImageList) - 1
 
         self.imgFilePath = self.dirImageList[self.imageNumber]
-        self.updateFunction()
+        self.updateFunction(0)
 
     def nextImage(self):
         ascvLogger.debug(f"Showing next image, imageNumber = {self.imageNumber}")
@@ -415,7 +467,7 @@ class MainUi(QtWidgets.QMainWindow):
             self.imageNumber = 0
 
         self.imgFilePath = self.dirImageList[self.imageNumber]
-        self.updateFunction()
+        self.updateFunction(0)
 
     def dumpJson(self):
         with open("data/user/config.json", "w", encoding="utf-8", newline="\n") as cf:
@@ -434,8 +486,10 @@ class MainUi(QtWidgets.QMainWindow):
 
     def closeEvent(self, event):
         if config["prompts"]["enableExitPrompt"]:
+            self.blur_effect.setEnabled(True)
+
             reply = QtWidgets.QMessageBox(self)
-            reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
+            reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
             reply.setWindowTitle(localization["mainUIElements"]["exitDialog"]["title"])
             reply.setText("<b>{}</b>".format(localization["mainUIElements"]["exitDialog"]["mainText"]))
             reply.setInformativeText("<i>{}</i>".format(localization["mainUIElements"]["exitDialog"]["informativeText"]))
@@ -448,8 +502,7 @@ class MainUi(QtWidgets.QMainWindow):
             buttonN.setText(localization["mainUIElements"]["commonQMessageBoxStrings"]["no"])
 
             checkbox = QtWidgets.QCheckBox(localization["mainUIElements"]["commonQMessageBoxStrings"]["dontShowAgain"])
-            icon_ = QtGui.QPixmap("data/assets/img/door.png")
-            icon = icon_.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            icon = QtGui.QPixmap("data/assets/img/door_small.png")
             reply.setIconPixmap(QtGui.QPixmap(icon))
             reply.setCheckBox(checkbox)
             reply.setModal(True)
@@ -468,6 +521,7 @@ class MainUi(QtWidgets.QMainWindow):
                 event.accept()
             else:
                 ascvLogger.info("Not exiting.")
+                self.blur_effect.setEnabled(False)
                 event.ignore()
 
         else:
@@ -481,8 +535,10 @@ class MainUi(QtWidgets.QMainWindow):
         (copy config.json from default_config to the user folder). If they respond with "Yes", the function
         resets the configuration to its defaults.
         '''
+        self.blur_effect.setEnabled(True)
+
         reply = QtWidgets.QMessageBox(self)
-        reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
+        reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
         reply.setWindowTitle(localization["mainUIElements"]["resetConfigDialog"]["title"])
         reply.setText("<b>{}</b>".format(localization["mainUIElements"]["resetConfigDialog"]["mainText"]))
         reply.setInformativeText("<i>{}</i>".format(localization["mainUIElements"]["resetConfigDialog"]["informativeText"]))
@@ -495,8 +551,7 @@ class MainUi(QtWidgets.QMainWindow):
         buttonN.setText(localization["mainUIElements"]["commonQMessageBoxStrings"]["no"])
 
         checkbox = QtWidgets.QCheckBox(localization["mainUIElements"]["resetConfigDialog"]["checkboxText"])
-        icon_ = QtGui.QPixmap("data/assets/img/icon3.png")
-        icon = icon_.scaled(48, 48, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+        icon = QtGui.QPixmap("data/assets/img/icon3_small.png")
         reply.setIconPixmap(QtGui.QPixmap(icon))
         reply.setCheckBox(checkbox)
         reply.setModal(True)
@@ -511,6 +566,8 @@ class MainUi(QtWidgets.QMainWindow):
         if x == QtWidgets.QMessageBox.Yes:
             shutil.copyfile("data/assets/default_config/config.json", "data/user/config.json")
             self.saveConfigOnExit = False
+        else:
+            self.blur_effect.setEnabled(False)
 
     # from https://stackoverflow.com/a/33741755/14558305
     def except_hook(self, cls, exception, traceback):
@@ -532,10 +589,11 @@ class MainUi(QtWidgets.QMainWindow):
         logViewer.setGeometry(geo)
 
         logViewer.setWindowTitle("Log Viewer")
-        logViewer.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
+        logViewer.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
         logViewer.setAttribute(QtCore.Qt.WA_QuitOnClose, True) # https://stackoverflow.com/questions/16468584/qwidget-doesnt-close-when-main-window-is-closed
 
         logTextEdit = QtWidgets.QPlainTextEdit(logViewer)
+        logTextEdit.setFont(QtGui.QFont("Cascadia Code"))
         logViewer.setCentralWidget(logTextEdit)
         logTextEdit.appendPlainText("Coming soon.")
 
@@ -549,13 +607,10 @@ class MainUi(QtWidgets.QMainWindow):
         helpWin.setAttribute(QtCore.Qt.WA_QuitOnClose, True)
         helpWin.setModal(True)
         helpWin.setWindowTitle("Help")
-        helpWin.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
+        helpWin.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
 
         icon = QtWidgets.QLabel()
-        icon.setPixmap(QtGui.QPixmap("data/assets/img/icon3.png"))
-        icon.setMinimumSize(64, 64)
-        icon.setMaximumSize(64, 64)
-        icon.setScaledContents(True)
+        icon.setPixmap(QtGui.QPixmap("data/assets/img/icon3_small64.png"))
 
         # from the about window
         programName = QtWidgets.QLabel("AscentViewer")
@@ -611,7 +666,7 @@ class MainUi(QtWidgets.QMainWindow):
         about.resize(900, 502)
         about.setObjectName("about")
         about.setModal(True)
-        about.setWindowIcon(QtGui.QIcon("data/assets/img/icon3.png"))
+        about.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
         about.gridLayout = QtWidgets.QGridLayout(about)
         about.gridLayout.setContentsMargins(0, 0, 0, 0)
         about.gridLayout.setObjectName("gridLayout")
@@ -646,6 +701,7 @@ class MainUi(QtWidgets.QMainWindow):
         font.setPointSize(36)
         font.setBold(True)
         font.setWeight(75)
+        #font.setStyleStrategy(QtGui.QFont.NoSubpixelAntialias | QtGui.QFont.PreferAntialias);
         about.programName.setFont(font)
         about.programName.setTextFormat(QtCore.Qt.PlainText)
         about.programName.setScaledContents(False)
@@ -922,7 +978,7 @@ if __name__ == "__main__":
     dark_palette = QtGui.QPalette()
     dark_palette.setColor(QtGui.QPalette.Window, QtGui.QColor(46, 52, 64))
     dark_palette.setColor(QtGui.QPalette.WindowText, QtCore.Qt.white)
-    dark_palette.setColor(QtGui.QPalette.Base, QtGui.QColor(38, 43, 53)) #59, 66, 82; 34, 38, 47
+    dark_palette.setColor(QtGui.QPalette.Base, QtGui.QColor(38, 43, 53)) #59, 66, 82; 34, 38, 47; 38, 43, 53
     dark_palette.setColor(QtGui.QPalette.AlternateBase, QtGui.QColor(46, 52, 64))
     dark_palette.setColor(QtGui.QPalette.ToolTipBase, QtCore.Qt.white)
     dark_palette.setColor(QtGui.QPalette.ToolTipText, QtCore.Qt.white)

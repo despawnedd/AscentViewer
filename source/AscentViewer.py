@@ -49,6 +49,6 @@ pycLocation = "AscentViewer-files/ascv_main.pyc"
 print("Compiling AscentViewer...")
 py_compile.compile(pyLocation, pycLocation) # from https://stackoverflow.com/a/5607315/14558305
 
-print(f"Python is located at {sys.executable}")
+print(f"Python is located at {sys.executable}") # from https://stackoverflow.com/a/2589722/14558305
 print("Starting AscentViewer...\n")
 subprocess.run([sys.executable, pyLocation])

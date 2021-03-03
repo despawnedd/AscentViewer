@@ -143,3 +143,11 @@ https://www.w3schools.com/cssref/css3_pr_opacity.asp
 https://stackoverflow.com/a/35861477/14558305
 https://stackoverflow.com/a/8369345/14558305
 https://stackoverflow.com/a/2589722/14558305
+https://stackoverflow.com/questions/678236/how-to-get-the-filename-without-the-extension-from-a-path-in-python
+https://stackoverflow.com/a/49255449/14558305
+https://stackoverflow.com/a/273962/14558305
+https://pythonpyqt.com/qtimer/
+https://stackoverflow.com/a/44044110/14558305
+https://stackoverflow.com/q/45840527/14558305
+https://stackoverflow.com/a/51401997/14558305
+https://www.geeksforgeeks.org/pyqt5-qlabel-setting-blur-radius-to-the-blur-effect/

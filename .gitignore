@@ -20,3 +20,5 @@ source/misc/icons_src/icon.log.csv
 source/misc/icons_src/icon.svg
 source/AscentViewer-files/test.py
 source/AscentViewer-files/data/assets/markdown/README.md
+source/AscentViewer-files/data/assets/localization/lang/secret.json
+source/AscentViewer-files/data/user/temp/thumbnails/tn_current-thumb.png
