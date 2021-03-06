@@ -26,11 +26,11 @@ Looking for old, pre-rename/Old Pre-release Beta code? Check out the ["pre-renam
 
 ## Screenshots
 
-![Main window screenshot](misc/examples/ascv_0.0.1_pre-release.png)
+![Main window screenshot](misc/examples/ascv_1.0.0_pre-release_1.png)
 
 > *AscentViewer's main window*
 
-![About window screenshot](misc/examples/ascv_0.0.1_pre-release_about.png)
+![About window screenshot](misc/examples/ascv_1.0.0_pre-release_about_1.png)
 
 > *AscentViewer's about window*
 
