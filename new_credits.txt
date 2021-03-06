@@ -151,3 +151,5 @@ https://stackoverflow.com/a/44044110/14558305
 https://stackoverflow.com/q/45840527/14558305
 https://stackoverflow.com/a/51401997/14558305
 https://www.geeksforgeeks.org/pyqt5-qlabel-setting-blur-radius-to-the-blur-effect/
+https://stackoverflow.com/a/4435752/14558305
+https://stackoverflow.com/a/36289772/14558305

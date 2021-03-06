@@ -37,7 +37,7 @@ from PIL import Image, ImageFont
 from lib.headerlike import *
 
 # from http://pantburk.info/?blog=77 and https://dzone.com/articles/python-custom-logging-handler-example
-class CustomHandler(logging.StreamHandler):
+class StatusBarHandler(logging.StreamHandler):
     def __init__(self, statusBar):
         '''
         The custom logging handler for the QStatusBar.
@@ -58,6 +58,22 @@ class CustomHandler(logging.StreamHandler):
     def flush(self):
         pass
 
+class InMemoryLogHandler(logging.StreamHandler):
+    def __init__(self):
+        global inMemoryLogString, inMemoryLogStringCurrent
+        inMemoryLogString = ""
+        inMemoryLogStringCurrent = ""
+        logging.Handler.__init__(self)
+
+    def emit(self, record):
+        global inMemoryLogString, inMemoryLogStringCurrent
+        inMemoryLogString += self.format(record)
+        inMemoryLogStringCurrent = self.format(record)
+        inMemoryLogString += "\n"
+
+    def flush(self):
+        pass
+
 class MainUi(QtWidgets.QMainWindow):
     def __init__(self):
         '''
@@ -74,13 +90,13 @@ class MainUi(QtWidgets.QMainWindow):
         sys.excepthook = self.except_hook # https://stackoverflow.com/a/33741755/14558305
 
         # from http://pantburk.info/?blog=77. This code allows the status bar to show warning messages from loggers
-        customHandler = CustomHandler(self.statusBar())
-        customHandler.setLevel(logging.WARN)
+        vStatusBarHandler = StatusBarHandler(self.statusBar())
+        vStatusBarHandler.setLevel(logging.WARN)
 
         formatter = logging.Formatter("%(levelname)s: %(message)s")
-        customHandler.setFormatter(formatter)
+        vStatusBarHandler.setFormatter(formatter)
 
-        ascvLogger.addHandler(customHandler)
+        ascvLogger.addHandler(vStatusBarHandler)
 
         # =====================================================
         # gui related stuff:
@@ -219,6 +235,7 @@ class MainUi(QtWidgets.QMainWindow):
         mainMenu = self.menuBar()
 
         fileMenu = mainMenu.addMenu(localization["mainUIElements"]["menuBar"]["file"]["title"])
+        editMenu = mainMenu.addMenu(localization["mainUIElements"]["menuBar"]["edit"]["title"])
         navMenu = mainMenu.addMenu(localization["mainUIElements"]["menuBar"]["navigation"]["title"])
         toolsMenu = mainMenu.addMenu(localization["mainUIElements"]["menuBar"]["tools"]["title"])
         if config["debug"]["enableDebugMenu"]:
@@ -239,6 +256,11 @@ class MainUi(QtWidgets.QMainWindow):
         exitButton.setShortcut("CTRL+Q")
         exitButton.setStatusTip("Exit application")
         exitButton.triggered.connect(self.close)
+
+        settingsButton = QtWidgets.QAction(QtGui.QIcon(), localization["mainUIElements"]["menuBar"]["edit"]["settings"], self)
+        settingsButton.setShortcut("CTRL+SHIFT+E")
+        settingsButton.setStatusTip("Open the settings window")
+        settingsButton.triggered.connect(self.openSettingsWIn)
 
         self.navButtonBack = QtWidgets.QAction(QtGui.QIcon(), localization["mainUIElements"]["menuBar"]["navigation"]["back"], self)
         self.navButtonBack.setShortcut("Left")
@@ -282,6 +304,8 @@ class MainUi(QtWidgets.QMainWindow):
         fileMenu.addAction(openDirButton)
         fileMenu.addSeparator()
         fileMenu.addAction(exitButton)
+
+        editMenu.addAction(settingsButton)
 
         navMenu.addAction(self.navButtonBack)
         navMenu.addAction(self.navButtonForw)
@@ -591,6 +615,21 @@ class MainUi(QtWidgets.QMainWindow):
     def dummyExceptionFunc(self):
         raise Exception("Dummy exception!")
 
+    def openSettingsWIn(self):
+        settings = QtWidgets.QDialog(self, QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowCloseButtonHint)
+
+        settings.resize(700, 500)
+        geo = settings.geometry()
+        geo.moveCenter(self.geometry().center())
+        settings.setGeometry(geo)
+
+        settings.setAttribute(QtCore.Qt.WA_QuitOnClose, True)
+        settings.setModal(True)
+        settings.setWindowTitle("Settings")
+        #settings.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
+
+        settings.show()
+
     def openLogWin(self):
         # not using a modal QDialog (like the About window) here because I want this window to be non-modal
         logViewer = QtWidgets.QMainWindow(self, QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowCloseButtonHint)
@@ -604,17 +643,77 @@ class MainUi(QtWidgets.QMainWindow):
         logViewer.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
         logViewer.setAttribute(QtCore.Qt.WA_QuitOnClose, True) # https://stackoverflow.com/questions/16468584/qwidget-doesnt-close-when-main-window-is-closed
 
-        logTextEdit = QtWidgets.QPlainTextEdit(logViewer)
-        logTextEdit.setFont(QtGui.QFont("Cascadia Code"))
-        logViewer.setCentralWidget(logTextEdit)
-        logTextEdit.appendPlainText("Coming soon.")
+        label = QtWidgets.QLabel("AscentViewer's Log Viewer")
+        font = QtGui.QFont("Selawik", 14)
+        font.setBold(True)
+        label.setFont(font)
+
+        monospaceFont = QtGui.QFontDatabase.systemFont(QtGui.QFontDatabase.FixedFont)
+        monospaceFont.setPointSize(10)
+
+        self.logTextEdit = QtWidgets.QPlainTextEdit(logViewer)
+
+        self.logViewerCheckbox = QtWidgets.QCheckBox("Read-only")
+        self.logViewerCheckbox.setChecked(True)
+        # thanks to https://stackoverflow.com/a/36289772/14558305 for making me realize it's "toggled" and not "clicked"
+        self.logViewerCheckbox.toggled.connect(self.logTextEditChangeMode)
+
+        self.logTextEditChangeMode()
+        self.logTextEditRefresh()
+
+        spacer = QtWidgets.QSpacerItem(10, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Maximum)
+
+        copyButton = QtWidgets.QPushButton("Copy")
+        copyButton.clicked.connect(self.logTextEditCopy)
+
+        refreshButton = QtWidgets.QPushButton("Refresh")
+        refreshButton.clicked.connect(self.logTextEditRefresh)
+
+        clearButton = QtWidgets.QPushButton("Clear")
+        clearButton.clicked.connect(self.logTextEditClear)
+
+        buttonHBoxFrame = QtWidgets.QFrame()
+        buttonHBox = QtWidgets.QHBoxLayout(buttonHBoxFrame)
+        buttonHBox.setContentsMargins(0, 0, 0, 0)
+        buttonHBox.addWidget(self.logViewerCheckbox)
+        buttonHBox.addItem(spacer)
+        buttonHBox.addWidget(copyButton)
+        buttonHBox.addWidget(refreshButton)
+        buttonHBox.addWidget(clearButton)
+
+        mainVBoxFrame = QtWidgets.QFrame()
+        logViewer.setCentralWidget(mainVBoxFrame)
+        mainVBox = QtWidgets.QVBoxLayout(mainVBoxFrame)
+        mainVBox.setAlignment(QtCore.Qt.AlignLeft)
+        mainVBox.addWidget(label)
+        mainVBox.addWidget(self.logTextEdit)
+        mainVBox.addWidget(buttonHBoxFrame)
 
         logViewer.show()
+    
+    def logTextEditChangeMode(self):
+        if self.logViewerCheckbox.isChecked():
+            self.logTextEdit.setReadOnly(True)
+        else:
+            self.logTextEdit.setReadOnly(False)
+
+    def logTextEditClear(self):
+        self.logTextEdit.clear()
+
+    def logTextEditRefresh(self):
+        self.logTextEdit.setPlainText(inMemoryLogString)
+
+    def logTextEditCopy(self):
+        self.logTextEdit.selectAll()
+        self.logTextEdit.copy()
 
     def openHelpWin(self):
         helpWin = QtWidgets.QDialog(self, QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowCloseButtonHint)
 
         helpWin.resize(400, 600)
+        geo = helpWin.geometry()
+        geo.moveCenter(self.geometry().center())
+        helpWin.setGeometry(geo)
 
         helpWin.setAttribute(QtCore.Qt.WA_QuitOnClose, True)
         helpWin.setModal(True)
@@ -626,9 +725,7 @@ class MainUi(QtWidgets.QMainWindow):
 
         # from the about window
         programName = QtWidgets.QLabel("AscentViewer")
-        font = QtGui.QFont()
-        font.setFamily("Selawik")
-        font.setPointSize(26)
+        font = QtGui.QFont("Selawik", 26)
         font.setBold(True)
         programName.setFont(font)
 
@@ -939,8 +1036,8 @@ if __name__ == "__main__":
     config = json.load(open("data/user/config.json", encoding="utf-8")) # using json instead of QSettings, for now
     lang = config["localization"]["lang"]
     localization = json.load(open(f"data/assets/localization/lang/{lang}.json", encoding="utf-8"))
-    logfile = f"data/user/temp/logs/log_{datetime.datetime.now().strftime(date_format_file)}.log"
 
+    # If this causes issues, disable deleting logs on startup.
     print("Deleting logs on statup is ", end="")
     if config["temporary_files"]["logs"]["deleteLogsOnStartup"]:
         print("enabled, erasing all logs...")
@@ -950,16 +1047,29 @@ if __name__ == "__main__":
     else:
         print("disabled, not deleting logs.")
 
+    logfile = f"data/user/temp/logs/log_{datetime.datetime.now().strftime(date_format_file)}.log"
+    #inMemoryLogfile = tempfile.SpooledTemporaryFile()
+
+    mainFormatterString = "[%(asctime)s | %(name)s | %(funcName)s | %(levelname)s] %(message)s"
+    mainFormatter = logging.Formatter(mainFormatterString, date_format)
+
     # thanks to Jan and several other sources for this
     loggingLevel = getattr(logging, config["debug"]["logging"]["loggingLevel"])
     logging.basicConfig(level=loggingLevel,
                         handlers=[logging.StreamHandler(), logging.FileHandler(logfile, "a", "utf-8")],
-                        format="[%(asctime)s | %(name)s | %(funcName)s | %(levelname)s] %(message)s",
+                        format=mainFormatterString,
                         datefmt=date_format)
 
     ascvLogger = logging.getLogger("Main logger")
     stderrLogger = logging.getLogger("stderr logger")
     sys.stderr = StreamToLogger(stderrLogger, logging.ERROR)
+
+    # from http://pantburk.info/?blog=77
+    vInMemoryLogHandler = InMemoryLogHandler()
+    vInMemoryLogHandler.setLevel(getattr(logging, config["debug"]["logging"]["loggingLevel"]))
+    vInMemoryLogHandler.setFormatter(mainFormatter)
+
+    ascvLogger.addHandler(vInMemoryLogHandler)
 
     with open(logfile, "a") as f: # this code is a bit messy but all this does is just write the same thing both to the console and the logfile
         logIntroLine = "="*20 + "[ BEGIN LOG ]" + "="*20

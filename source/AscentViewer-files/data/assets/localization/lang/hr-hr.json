@@ -12,6 +12,11 @@
                 "openDirText": "Otvori &mapu...",
                 "exitText": "&Izađi"
             },
+            "edit":
+            {
+                "title": "&Uredi",
+                "settings": "&Postavke"
+            },
             "navigation":
             {
                 "title": "&Navigacija",

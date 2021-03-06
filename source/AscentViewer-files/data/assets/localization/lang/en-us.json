@@ -12,6 +12,11 @@
                 "openDirText": "Open &folder...",
                 "exitText": "&Exit"
             },
+            "edit":
+            {
+                "title": "&Edit",
+                "settings": "&Settings"
+            },
             "navigation":
             {
                 "title": "&Navigation",
