@@ -1029,10 +1029,6 @@ if __name__ == "__main__":
     except:
         pass
 
-    ver = "0.0.1_dev-3.0-PyQt5"
-    date_format_file = "%d%m%Y_%H%M%S"
-    date_format = "%d/%m/%Y %H:%M:%S"
-
     config = json.load(open("data/user/config.json", encoding="utf-8")) # using json instead of QSettings, for now
     lang = config["localization"]["lang"]
     localization = json.load(open(f"data/assets/localization/lang/{lang}.json", encoding="utf-8"))

@@ -38,7 +38,7 @@ except:
 # from https://stackoverflow.com/a/6598286/14558305
 def my_except_hook(exctype, value, traceback):
     if exctype == KeyboardInterrupt:
-        print("KeyboardInterrupt occurred.")
+        print("\nKeyboardInterrupt occurred.")
     else:
         sys.__excepthook__(exctype, value, traceback)
 sys.excepthook = my_except_hook
