@@ -23,5 +23,8 @@
             "deleteLogsOnStartup": false
         }
     },
+    "experimental": {
+        "enableExperimentalUI": false
+    },
     "hellMode": false
 }

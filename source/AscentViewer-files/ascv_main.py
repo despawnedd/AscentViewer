@@ -112,13 +112,14 @@ class MainUi(QtWidgets.QMainWindow):
 
         self.statusBar().setStyleSheet("background: #777CC1;")
 
-        # from https://www.geeksforgeeks.org/pyqt5-qlabel-setting-blur-radius-to-the-blur-effect/
-        self.blur_effect = QtWidgets.QGraphicsBlurEffect()
-        self.blur_effect.setBlurRadius(25)
-        # from https://doc.qt.io/qt-5/qgraphicsblureffect.html#blurHints-prop
-        self.blur_effect.setBlurHints(QtWidgets.QGraphicsBlurEffect.QualityHint)
-        self.blur_effect.setEnabled(False)
-        self.setGraphicsEffect(self.blur_effect)
+        if config["experimental"]["enableExperimentalUI"]:
+            # from https://www.geeksforgeeks.org/pyqt5-qlabel-setting-blur-radius-to-the-blur-effect/
+            self.blur_effect = QtWidgets.QGraphicsBlurEffect()
+            self.blur_effect.setBlurRadius(25)
+            # from https://doc.qt.io/qt-5/qgraphicsblureffect.html#blurHints-prop
+            self.blur_effect.setBlurHints(QtWidgets.QGraphicsBlurEffect.QualityHint)
+            self.blur_effect.setEnabled(False)
+            self.setGraphicsEffect(self.blur_effect)
 
         self.mainWidget = QtWidgets.QWidget(self)
         self.setCentralWidget(self.mainWidget)
@@ -127,10 +128,13 @@ class MainUi(QtWidgets.QMainWindow):
         vBox.setContentsMargins(0, 0, 0, 0)
 
         self.label = QtWidgets.QLabel()
-        # from https://stackoverflow.com/a/44044110/14558305
         self.label.setText(localization["mainUIElements"]["openImgFileText"])
-        self.label.setStyleSheet("""color: white; 
-                                    background: qradialgradient(cx:0.5, cy:0.5, radius: 2.5, fx:0.5, fy:0.5, stop:0 #2E3440, stop:1 black);""")
+        if config["experimental"]["enableExperimentalUI"]:
+            # from https://stackoverflow.com/a/44044110/14558305
+            self.label.setStyleSheet("""color: white; 
+                                        background: qradialgradient(cx:0.5, cy:0.5, radius: 2.5, fx:0.5, fy:0.5, stop:0 #2E3440, stop:1 black);""")
+        else:
+            self.label.setStyleSheet("color: white; background: #2E3440;")
         self.label.setMinimumSize(16, 16)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         mainLabelFont = QtGui.QFont("Selawik", 32)
@@ -141,8 +145,12 @@ class MainUi(QtWidgets.QMainWindow):
         self.bottom.setMinimumHeight(90)
         self.bottom.setMaximumHeight(200)
         self.bottom.setContentsMargins(0, 0, 0, 0)
-        # from https://stackoverflow.com/q/45840527/14558305 (yes, the question)
-        self.bottom.setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop: 0 #525685, stop: 1 #3c3f61)")
+        
+        if config["experimental"]["enableExperimentalUI"]:
+            # from https://stackoverflow.com/q/45840527/14558305 (yes, the question)
+            self.bottom.setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop: 0 #525685, stop: 1 #3c3f61)")
+        else:
+            self.bottom.setStyleSheet("background: #525685;")
 
         btHBox = QtWidgets.QHBoxLayout(self.bottom)
 
@@ -486,7 +494,8 @@ class MainUi(QtWidgets.QMainWindow):
 
     def closeEvent(self, event):
         if config["prompts"]["enableExitPrompt"]:
-            self.blur_effect.setEnabled(True)
+            if config["experimental"]["enableExperimentalUI"]:
+                self.blur_effect.setEnabled(True)
 
             reply = QtWidgets.QMessageBox(self)
             reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
@@ -521,7 +530,8 @@ class MainUi(QtWidgets.QMainWindow):
                 event.accept()
             else:
                 ascvLogger.info("Not exiting.")
-                self.blur_effect.setEnabled(False)
+                if config["experimental"]["enableExperimentalUI"]:
+                    self.blur_effect.setEnabled(False)
                 event.ignore()
 
         else:
@@ -535,7 +545,8 @@ class MainUi(QtWidgets.QMainWindow):
         (copy config.json from default_config to the user folder). If they respond with "Yes", the function
         resets the configuration to its defaults.
         '''
-        self.blur_effect.setEnabled(True)
+        if config["experimental"]["enableExperimentalUI"]:
+            self.blur_effect.setEnabled(True)
 
         reply = QtWidgets.QMessageBox(self)
         reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
@@ -567,7 +578,8 @@ class MainUi(QtWidgets.QMainWindow):
             shutil.copyfile("data/assets/default_config/config.json", "data/user/config.json")
             self.saveConfigOnExit = False
         else:
-            self.blur_effect.setEnabled(False)
+            if config["experimental"]["enableExperimentalUI"]:
+                self.blur_effect.setEnabled(False)
 
     # from https://stackoverflow.com/a/33741755/14558305
     def except_hook(self, cls, exception, traceback):
