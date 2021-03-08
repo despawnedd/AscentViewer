@@ -27,12 +27,12 @@ import platform
 import signal
 import glob
 import shutil
-import pkg_resources
 import datetime
 import logging
 
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PIL import Image, ImageFont
+from pkg_resources import get_distribution
 
 from lib.headerlike import *
 
@@ -333,7 +333,6 @@ class MainUi(QtWidgets.QMainWindow):
         self.statusBar().showMessage("{} {}".format(localization["mainUIElements"]["statusBar"]["greetMessageBeginning"], ver))
         ascvLogger.info("GUI has been initialized.")
 
-    # ISSUE: for some images, this REALLY makes the program lag
     # the foundation of the code comes from https://stackoverflow.com/a/43570124/14558305
     def updateFunction(self, i):
         '''
@@ -522,7 +521,6 @@ class MainUi(QtWidgets.QMainWindow):
                 self.blur_effect.setEnabled(True)
 
             reply = QtWidgets.QMessageBox(self)
-            reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
             reply.setWindowTitle(localization["mainUIElements"]["exitDialog"]["title"])
             reply.setText("<b>{}</b>".format(localization["mainUIElements"]["exitDialog"]["mainText"]))
             reply.setInformativeText("<i>{}</i>".format(localization["mainUIElements"]["exitDialog"]["informativeText"]))
@@ -573,7 +571,6 @@ class MainUi(QtWidgets.QMainWindow):
             self.blur_effect.setEnabled(True)
 
         reply = QtWidgets.QMessageBox(self)
-        reply.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
         reply.setWindowTitle(localization["mainUIElements"]["resetConfigDialog"]["title"])
         reply.setText("<b>{}</b>".format(localization["mainUIElements"]["resetConfigDialog"]["mainText"]))
         reply.setInformativeText("<i>{}</i>".format(localization["mainUIElements"]["resetConfigDialog"]["informativeText"]))
@@ -626,7 +623,6 @@ class MainUi(QtWidgets.QMainWindow):
         settings.setAttribute(QtCore.Qt.WA_QuitOnClose, True)
         settings.setModal(True)
         settings.setWindowTitle("Settings")
-        #settings.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
 
         settings.show()
 
@@ -640,7 +636,6 @@ class MainUi(QtWidgets.QMainWindow):
         logViewer.setGeometry(geo)
 
         logViewer.setWindowTitle("Log Viewer")
-        logViewer.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
         logViewer.setAttribute(QtCore.Qt.WA_QuitOnClose, True) # https://stackoverflow.com/questions/16468584/qwidget-doesnt-close-when-main-window-is-closed
 
         label = QtWidgets.QLabel("AscentViewer's Log Viewer")
@@ -718,7 +713,6 @@ class MainUi(QtWidgets.QMainWindow):
         helpWin.setAttribute(QtCore.Qt.WA_QuitOnClose, True)
         helpWin.setModal(True)
         helpWin.setWindowTitle("Help")
-        helpWin.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
 
         icon = QtWidgets.QLabel()
         icon.setPixmap(QtGui.QPixmap("data/assets/img/icon3_small64.png"))
@@ -775,7 +769,6 @@ class MainUi(QtWidgets.QMainWindow):
         about.resize(900, 502)
         about.setObjectName("about")
         about.setModal(True)
-        about.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
         about.gridLayout = QtWidgets.QGridLayout(about)
         about.gridLayout.setContentsMargins(0, 0, 0, 0)
         about.gridLayout.setObjectName("gridLayout")
@@ -997,7 +990,7 @@ class MainUi(QtWidgets.QMainWindow):
             about.label_9.setText(_translate("Form", "unknown"))
         about.label_2.setText(_translate("Form", localization["mainUIElements"]["aboutWindow"]["PyQtVersion"]))
         try:
-            about.label_10.setText(_translate("Form", pkg_resources.get_distribution("PyQt5").version))
+            about.label_10.setText(_translate("Form", get_distribution("PyQt5").version))
         except:
             about.label_10.setText(_translate("Form", "unknown"))
         about.label_11.setText(_translate("Form", localization["mainUIElements"]["aboutWindow"]["description"]))
