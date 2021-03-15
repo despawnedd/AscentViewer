@@ -154,3 +154,18 @@ https://www.geeksforgeeks.org/pyqt5-qlabel-setting-blur-radius-to-the-blur-effec
 https://stackoverflow.com/a/4435752/14558305
 https://stackoverflow.com/a/36289772/14558305
 https://blog.usejournal.com/why-and-how-to-make-a-requirements-txt-f329c685181e
+https://stackoverflow.com/a/9084583/14558305
+https://forum.qt.io/topic/82263/how-to-hide-arrow-of-setmenu/2
+https://stackoverflow.com/a/13800546/14558305
+https://stackoverflow.com/a/940655/14558305
+https://stackoverflow.com/a/35821092/14558305
+WARNING: https://stackoverflow.com/a/48501804/14558305
+https://stackoverflow.com/a/46055806/14558305
+https://stackoverflow.com/a/30077543/14558305
+https://stackoverflow.com/a/35161981/14558305
+https://bugreports.qt.io/browse/QTBUG-55092 # this thing made me figure out something related to text styling
+https://forum.qt.io/topic/89473/how-can-i-change-padding-for-icon-on-qmenubar-item # both the inital question and answer helped me
+https://www.w3schools.com/css/css_padding.asp
+https://forum.qt.io/topic/77778/trying-to-control-individual-qmenu-titles-color/4
+https://stackoverflow.com/questions/10898399/using-variables-in-qt-stylesheets
+https://www.geeksforgeeks.org/python-string-replace/

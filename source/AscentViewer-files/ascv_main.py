@@ -126,8 +126,6 @@ class MainUi(QtWidgets.QMainWindow):
         self.move(config["windowProperties"]["x"], config["windowProperties"]["y"])
         self.setWindowIcon(QtGui.QIcon("data/assets/img/icon3_small.png"))
 
-        self.statusBar().setStyleSheet("background: #777CC1;")
-
         if config["experimental"]["enableExperimentalUI"]:
             # from https://www.geeksforgeeks.org/pyqt5-qlabel-setting-blur-radius-to-the-blur-effect/
             self.blur_effect = QtWidgets.QGraphicsBlurEffect()
@@ -144,93 +142,17 @@ class MainUi(QtWidgets.QMainWindow):
         vBox.setContentsMargins(0, 0, 0, 0)
 
         self.label = QtWidgets.QLabel()
+        self.label.setObjectName("MainImageLabel")
         self.label.setText(localization["mainUIElements"]["openImgFileText"])
         if config["experimental"]["enableExperimentalUI"]:
             # from https://stackoverflow.com/a/44044110/14558305
             self.label.setStyleSheet("""color: white; 
                                         background: qradialgradient(cx:0.5, cy:0.5, radius: 2.5, fx:0.5, fy:0.5, stop:0 #2E3440, stop:1 black);""")
-        else:
-            self.label.setStyleSheet("color: white; background: #2E3440;")
         self.label.setMinimumSize(16, 16)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         mainLabelFont = QtGui.QFont("Selawik", 32)
         mainLabelFont.setBold(True)
         self.label.setFont(mainLabelFont)
-
-        self.bottom = QtWidgets.QFrame()
-        self.bottom.setMinimumHeight(90)
-        self.bottom.setMaximumHeight(200)
-        self.bottom.setContentsMargins(0, 0, 0, 0)
-        
-        if config["experimental"]["enableExperimentalUI"]:
-            # from https://stackoverflow.com/q/45840527/14558305 (yes, the question)
-            self.bottom.setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop: 0 #525685, stop: 1 #3c3f61)")
-        else:
-            self.bottom.setStyleSheet("background: #525685;")
-
-        btHBox = QtWidgets.QHBoxLayout(self.bottom)
-
-        self.detailsFileIcon = QtWidgets.QLabel()
-        self.detailsFileIcon.setMinimumSize(60, 60)
-        self.detailsFileIcon.setMaximumSize(60, 60)
-        self.detailsFileIcon.setScaledContents(True)
-        # from https://stackoverflow.com/a/51401997/14558305
-        self.detailsFileIcon.setAttribute(QtCore.Qt.WA_NoSystemBackground);
-        icon = QtGui.QPixmap("data/assets/img/file.png")
-        self.detailsFileIcon.setPixmap(QtGui.QPixmap(icon))
-
-        self.fileLabel = QtWidgets.QLabel()
-        self.fileLabel.setStyleSheet("color: white;")
-        self.fileLabel.setAttribute(QtCore.Qt.WA_NoSystemBackground);
-        fileLabelFont = QtGui.QFont("Selawik", 14)
-        fileLabelFont.setBold(True)
-        self.fileLabel.setFont(fileLabelFont)
-        self.fileLabel.setText(localization["mainUIElements"]["panelText"])
-
-        self.dateModifiedLabel = QtWidgets.QLabel()
-        self.dateModifiedLabel.setStyleSheet("color: white;")
-        self.dateModifiedLabel.setAttribute(QtCore.Qt.WA_NoSystemBackground);
-
-        self.dimensionsLabel = QtWidgets.QLabel()
-        self.dimensionsLabel.setStyleSheet("color: white;")
-        self.dimensionsLabel.setAttribute(QtCore.Qt.WA_NoSystemBackground);
-
-        btFileInfoVBox1Frame = QtWidgets.QFrame()
-        btFileInfoVBox1Frame.setAttribute(QtCore.Qt.WA_NoSystemBackground);
-        btFileInfoVBox1 = QtWidgets.QVBoxLayout(btFileInfoVBox1Frame)
-        btFileInfoVBox1.setContentsMargins(0, 0, 0, 0)
-        btFileInfoVBox1.setAlignment(QtCore.Qt.AlignLeft)
-        btFileInfoVBox1.addWidget(self.dateModifiedLabel)
-        btFileInfoVBox1.addWidget(self.dimensionsLabel)
-
-        btFileInfoContainerHBoxFrame = QtWidgets.QFrame() # A really long name, I know
-        btFileInfoContainerHBoxFrame.setAttribute(QtCore.Qt.WA_NoSystemBackground);
-        btFileInfoContainerHBox = QtWidgets.QHBoxLayout(btFileInfoContainerHBoxFrame)
-        btFileInfoContainerHBox.setContentsMargins(0, 0, 0, 0)
-        btFileInfoContainerHBox.setAlignment(QtCore.Qt.AlignLeft)
-        btFileInfoContainerHBox.addWidget(btFileInfoVBox1Frame)
-
-        btMainVBoxFrame = QtWidgets.QFrame()
-        btMainVBoxFrame.setAttribute(QtCore.Qt.WA_NoSystemBackground);
-        btMainVBox = QtWidgets.QVBoxLayout(btMainVBoxFrame)
-        btMainVBox.setAlignment(QtCore.Qt.AlignTop)
-        btMainVBox.setContentsMargins(0, 0, 0, 0)
-        btMainVBox.addWidget(self.fileLabel)
-        btMainVBox.addWidget(btFileInfoContainerHBoxFrame)
-
-        btHBox.setAlignment(QtCore.Qt.AlignLeft) # This probably won't work with PyQt6
-        btHBox.addWidget(self.detailsFileIcon)
-        btHBox.addWidget(btMainVBoxFrame)
-
-        splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
-        splitter.addWidget(self.label)
-        splitter.addWidget(self.bottom)
-        splitter.setCollapsible(1, False)
-        splitter.setStretchFactor(0, 1)
-        splitter.setSizes([1, config["windowProperties"]["bottomSplitterPanelH"]])
-        splitter.setStyleSheet("QSplitter::handle{background: #777CC1; height: 2;}")
-
-        vBox.addWidget(splitter)
 
         mainMenu = self.menuBar()
 
@@ -260,7 +182,7 @@ class MainUi(QtWidgets.QMainWindow):
         settingsButton = QtWidgets.QAction(QtGui.QIcon(), localization["mainUIElements"]["menuBar"]["edit"]["settings"], self)
         settingsButton.setShortcut("CTRL+SHIFT+E")
         settingsButton.setStatusTip("Open the settings window")
-        settingsButton.triggered.connect(self.openSettingsWIn)
+        settingsButton.triggered.connect(self.openSettingsWin)
 
         self.navButtonBack = QtWidgets.QAction(QtGui.QIcon(), localization["mainUIElements"]["menuBar"]["navigation"]["back"], self)
         self.navButtonBack.setShortcut("Left")
@@ -320,8 +242,136 @@ class MainUi(QtWidgets.QMainWindow):
         helpMenu.addSeparator()
         helpMenu.addAction(aboutButton)
 
+        bottomButton = QtWidgets.QToolButton()
+        bottomButton.setShortcut("CTRL+ALT+M")
+        bottomButton.setMenu(QtWidgets.QMenu(bottomButton))
+        bottomButton.setPopupMode(QtWidgets.QToolButton.InstantPopup)
+        bottomButton.setFixedSize(20, 20)
+
+        self.bottomButtonCopyDetails = QtWidgets.QAction("&Copy details", self)
+        self.bottomButtonCopyDetails.triggered.connect(self.bottomCopyFunc)
+        self.bottomButtonCopyDetails.setEnabled(False)
+
+        bottomButton.menu().addAction(self.bottomButtonCopyDetails)
+        bottomButton.menu().addSeparator()
+
+        bottomButtonSizeMenu = bottomButton.menu().addMenu("Details Panel &size")
+
+        # NOTE: https://stackoverflow.com/a/48501804/14558305
+        size90 = QtWidgets.QAction("&Small (90) (Default)", self)
+        size90.triggered.connect(lambda state, h=90: self.bottomChangeSizeFunc(h))
+
+        size130 = QtWidgets.QAction("&Normal (130)", self)
+        size130.triggered.connect(lambda state, h=130: self.bottomChangeSizeFunc(h))
+
+        size160 = QtWidgets.QAction("&Large (160)", self)
+        size160.triggered.connect(lambda state, h=160: self.bottomChangeSizeFunc(h))
+
+        size200 = QtWidgets.QAction("&Huge (200)", self)
+        size200.triggered.connect(lambda state, h=200: self.bottomChangeSizeFunc(h))
+
+        bottomButtonSizeMenu.addActions([size90, size130, size160, size200])
+
+        bottomButtonColumnSettings = QtWidgets.QAction("Details Panel column &settings", self)
+        bottomButtonColumnSettings.triggered.connect(self.bottomColumnSettings)
+
+        bottomButtonAccentColorSettings = QtWidgets.QAction("&Accent color settings", self)
+        bottomButtonAccentColorSettings.triggered.connect(self.accentColorSettings)
+
+        bottomButton.menu().addAction(bottomButtonColumnSettings)
+        bottomButton.menu().addSeparator()
+        bottomButton.menu().addAction(bottomButtonAccentColorSettings)
+
+        bottomButtonVBoxFrame = QtWidgets.QFrame()
+        bottomButtonVBox = QtWidgets.QVBoxLayout(bottomButtonVBoxFrame)
+        bottomButtonVBox.setAlignment(QtCore.Qt.AlignTop) # This probably won't work with PyQt6
+        bottomButtonVBox.setContentsMargins(0, 0, 0, 0)
+        bottomButtonVBox.addWidget(bottomButton)
+
+        self.bottom = QtWidgets.QFrame()
+        self.bottom.setObjectName("Bottom")
+        self.bottom.setMinimumHeight(90)
+        self.bottom.setMaximumHeight(200)
+        self.bottom.setContentsMargins(0, 0, 0, 0)
+        
+        if config["experimental"]["enableExperimentalUI"]:
+            # from https://stackoverflow.com/q/45840527/14558305 (yes, the question)
+            self.bottom.setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop: 0 #525685, stop: 1 #3c3f61)")
+
+        btHBox = QtWidgets.QHBoxLayout(self.bottom)
+
+        self.detailsFileIcon = QtWidgets.QLabel()
+        self.detailsFileIcon.setFixedSize(60, 60)
+        self.detailsFileIcon.setScaledContents(True)
+        # from https://stackoverflow.com/a/51401997/14558305
+        self.detailsFileIcon.setAttribute(QtCore.Qt.WA_NoSystemBackground);
+        icon = QtGui.QPixmap("data/assets/img/file.png")
+        self.detailsFileIcon.setPixmap(QtGui.QPixmap(icon))
+
+        self.fileLabel = QtWidgets.QLabel()
+        self.fileLabel.setStyleSheet("color: white;")
+        self.fileLabel.setAttribute(QtCore.Qt.WA_NoSystemBackground);
+        fileLabelFont = QtGui.QFont("Selawik", 14)
+        fileLabelFont.setBold(True)
+        self.fileLabel.setFont(fileLabelFont)
+        self.fileLabel.setText(localization["mainUIElements"]["panelText"])
+
+        self.dateModifiedLabel = QtWidgets.QLabel()
+        self.dateModifiedLabel.setStyleSheet("color: white;")
+        self.dateModifiedLabel.setAttribute(QtCore.Qt.WA_NoSystemBackground);
+
+        self.dimensionsLabel = QtWidgets.QLabel()
+        self.dimensionsLabel.setStyleSheet("color: white;")
+        self.dimensionsLabel.setAttribute(QtCore.Qt.WA_NoSystemBackground);
+
+        self.fileLabel.setTextInteractionFlags(QtCore.Qt.TextSelectableByMouse)
+        self.dateModifiedLabel.setTextInteractionFlags(QtCore.Qt.TextSelectableByMouse)
+        self.dimensionsLabel.setTextInteractionFlags(QtCore.Qt.TextSelectableByMouse)
+
+        btFileInfoVBox1Frame = QtWidgets.QFrame()
+        btFileInfoVBox1Frame.setAttribute(QtCore.Qt.WA_NoSystemBackground);
+        btFileInfoVBox1 = QtWidgets.QVBoxLayout(btFileInfoVBox1Frame)
+        btFileInfoVBox1.setContentsMargins(0, 0, 0, 0)
+        btFileInfoVBox1.setAlignment(QtCore.Qt.AlignLeft)
+        btFileInfoVBox1.addWidget(self.dateModifiedLabel)
+        btFileInfoVBox1.addWidget(self.dimensionsLabel)
+
+        btFileInfoContainerHBoxFrame = QtWidgets.QFrame() # A really long name, I know
+        btFileInfoContainerHBoxFrame.setAttribute(QtCore.Qt.WA_NoSystemBackground);
+        btFileInfoContainerHBox = QtWidgets.QHBoxLayout(btFileInfoContainerHBoxFrame)
+        btFileInfoContainerHBox.setContentsMargins(0, 0, 0, 0)
+        btFileInfoContainerHBox.setAlignment(QtCore.Qt.AlignLeft)
+        btFileInfoContainerHBox.addWidget(btFileInfoVBox1Frame)
+
+        btMainVBoxFrame = QtWidgets.QFrame()
+        btMainVBoxFrame.setAttribute(QtCore.Qt.WA_NoSystemBackground);
+        btMainVBox = QtWidgets.QVBoxLayout(btMainVBoxFrame)
+        btMainVBox.setAlignment(QtCore.Qt.AlignTop)
+        btMainVBox.setContentsMargins(0, 0, 0, 0)
+        btMainVBox.addWidget(self.fileLabel)
+        btMainVBox.addWidget(btFileInfoContainerHBoxFrame)
+
+        bottomSpacer = QtWidgets.QSpacerItem(10, 0, QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Maximum)
+
+        btHBox.setAlignment(QtCore.Qt.AlignLeft) # This probably won't work with PyQt6 too
+        btHBox.addWidget(self.detailsFileIcon)
+        btHBox.addWidget(btMainVBoxFrame)
+        btHBox.addItem(bottomSpacer)
+        btHBox.addWidget(bottomButtonVBoxFrame)
+
+        self.splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        self.splitter.setObjectName("MainSplitter")
+        self.splitter.addWidget(self.label)
+        self.splitter.addWidget(self.bottom)
+        self.splitter.setCollapsible(1, False)
+        self.splitter.setStretchFactor(0, 1)
+        self.splitter.setSizes([1, config["windowProperties"]["bottomSplitterPanelH"]])
+
+        vBox.addWidget(self.splitter)
+
         self.label.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
         self.label.addAction(openImgButton)
+        self.label.addAction(openDirButton)
 
         # from https://pythonpyqt.com/qtimer/
         self.timer = QtCore.QTimer()
@@ -331,7 +381,15 @@ class MainUi(QtWidgets.QMainWindow):
         self.label.resizeEvent = (lambda old_method: (lambda event: (self.updateFunction(1), old_method(event))[-1]))(self.label.resizeEvent)
 
         self.statusBar().showMessage("{} {}".format(localization["mainUIElements"]["statusBar"]["greetMessageBeginning"], ver))
+
+        #self.setStyleSheet(stylesheet)
         ascvLogger.info("GUI has been initialized.")
+
+    def bottomCopyFunc(self, height):
+        print(self.fileLabel.text())
+
+    def bottomChangeSizeFunc(self, height):
+        self.splitter.setSizes([1, height])
 
     # the foundation of the code comes from https://stackoverflow.com/a/43570124/14558305
     def updateFunction(self, i):
@@ -476,6 +534,7 @@ class MainUi(QtWidgets.QMainWindow):
             self.updateFunction(0)
             self.navButtonBack.setEnabled(True)
             self.navButtonForw.setEnabled(True)
+            self.bottomButtonCopyDetails.setEnabled(True)
         else:
             ascvLogger.info(f"Succesfully created dirImageList_, but it's empty! Not setting dirImageList to dirImageList_")
 
@@ -612,7 +671,62 @@ class MainUi(QtWidgets.QMainWindow):
     def dummyExceptionFunc(self):
         raise Exception("Dummy exception!")
 
-    def openSettingsWIn(self):
+    def bottomColumnSettings(self):
+        settings = QtWidgets.QDialog(self, QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowCloseButtonHint)
+
+        settings.resize(350, 500)
+        geo = settings.geometry()
+        geo.moveCenter(self.geometry().center())
+        settings.setGeometry(geo)
+
+        settings.setAttribute(QtCore.Qt.WA_QuitOnClose, True)
+        settings.setModal(True)
+        settings.setWindowTitle("Columns")
+
+        settings.show()
+
+    def accentColorSettings(self):
+        acsettings = QtWidgets.QDialog(self, QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowCloseButtonHint)
+
+        acsettings.resize(300, 200)
+        geo = acsettings.geometry()
+        geo.moveCenter(self.geometry().center())
+        acsettings.setGeometry(geo)
+
+        acsettings.setAttribute(QtCore.Qt.WA_QuitOnClose, True)
+        acsettings.setModal(True)
+        acsettings.setWindowTitle("Accent Color")
+
+        mainVBox = QtWidgets.QVBoxLayout(acsettings)
+        mainVBox.setAlignment(QtCore.Qt.AlignTop)
+
+        firstHBoxFrame = QtWidgets.QFrame()
+        firstHBox = QtWidgets.QVBoxLayout(firstHBoxFrame)
+        firstHBox.setAlignment(QtCore.Qt.AlignLeft)
+
+        secondHBoxFrame = QtWidgets.QFrame()
+        secondHBox = QtWidgets.QVBoxLayout(secondHBoxFrame)
+        secondHBox.setAlignment(QtCore.Qt.AlignLeft)
+
+        thirdHBoxFrame = QtWidgets.QFrame()
+        thirdHBox = QtWidgets.QVBoxLayout(thirdHBoxFrame)
+        thirdHBox.setAlignment(QtCore.Qt.AlignLeft)
+
+        testLabel = QtWidgets.QLabel("accentColorMain: " + config["theme"]["accentColorMain"])
+        testLabel2 = QtWidgets.QLabel("accentColorDarker: " + config["theme"]["accentColorDarker"])
+        testLabel3 = QtWidgets.QLabel("accentColorLighter: " + config["theme"]["accentColorLighter"])
+
+        firstHBox.addWidget(testLabel)
+        secondHBox.addWidget(testLabel2)
+        thirdHBox.addWidget(testLabel3)
+
+        mainVBox.addWidget(firstHBoxFrame)
+        mainVBox.addWidget(secondHBoxFrame)
+        mainVBox.addWidget(thirdHBoxFrame)
+
+        acsettings.show()
+
+    def openSettingsWin(self):
         settings = QtWidgets.QDialog(self, QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowCloseButtonHint)
 
         settings.resize(700, 500)
@@ -644,9 +758,11 @@ class MainUi(QtWidgets.QMainWindow):
         label.setFont(font)
 
         monospaceFont = QtGui.QFontDatabase.systemFont(QtGui.QFontDatabase.FixedFont)
-        monospaceFont.setPointSize(10)
+        #monospaceFont.setPointSize(10)
+        #monospaceFont = QtGui.QFont("Cascadia Code", 8)
 
         self.logTextEdit = QtWidgets.QPlainTextEdit(logViewer)
+        self.logTextEdit.setFont(monospaceFont)
 
         self.logViewerCheckbox = QtWidgets.QCheckBox("Read-only")
         self.logViewerCheckbox.setChecked(True)
@@ -656,7 +772,7 @@ class MainUi(QtWidgets.QMainWindow):
         self.logTextEditChangeMode()
         self.logTextEditRefresh()
 
-        spacer = QtWidgets.QSpacerItem(10, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Maximum)
+        spacer = QtWidgets.QSpacerItem(20, 0, QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Maximum)
 
         copyButton = QtWidgets.QPushButton("Copy")
         copyButton.clicked.connect(self.logTextEditCopy)
@@ -779,9 +895,7 @@ class MainUi(QtWidgets.QMainWindow):
         about.verticalLayout_4 = QtWidgets.QVBoxLayout()
         about.verticalLayout_4.setObjectName("verticalLayout_4")
         about.image = QtWidgets.QLabel(about)
-        about.image.setMinimumSize(QtCore.QSize(300, 300))
-        about.image.setMaximumSize(QtCore.QSize(300, 300))
-        about.image.setText("")
+        about.image.setFixedSize(300, 300)
         about.image.setPixmap(QtGui.QPixmap("data/assets/img/icon3.png"))
         about.image.setScaledContents(True)
         about.image.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
@@ -937,9 +1051,7 @@ class MainUi(QtWidgets.QMainWindow):
         about.horizontalLayout_7 = QtWidgets.QHBoxLayout(about.widget1)
         about.horizontalLayout_7.setObjectName("horizontalLayout_7")
         about.label_5 = QtWidgets.QLabel(about.widget1)
-        about.label_5.setMinimumSize(QtCore.QSize(16, 16))
-        about.label_5.setMaximumSize(QtCore.QSize(16, 16))
-        about.label_5.setText("")
+        about.label_5.setFixedSize(16, 16)
         about.label_5.setTextFormat(QtCore.Qt.PlainText)
         about.label_5.setPixmap(QtGui.QPixmap("data/assets/img/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png"))
         about.label_5.setScaledContents(True)
@@ -958,9 +1070,7 @@ class MainUi(QtWidgets.QMainWindow):
         about.horizontalLayout_6 = QtWidgets.QHBoxLayout(about.widget2)
         about.horizontalLayout_6.setObjectName("horizontalLayout_6")
         about.label_3 = QtWidgets.QLabel(about.widget2)
-        about.label_3.setMinimumSize(QtCore.QSize(16, 16))
-        about.label_3.setMaximumSize(QtCore.QSize(16, 16))
-        about.label_3.setText("")
+        about.label_3.setFixedSize(16, 16)
         about.label_3.setTextFormat(QtCore.Qt.PlainText)
         about.label_3.setPixmap(QtGui.QPixmap("data/assets/img/Material-Icons/public-white-18dp/1x/baseline_public_white_18dp.png"))
         about.label_3.setScaledContents(True)
@@ -1085,7 +1195,7 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
 
     # based on https://gist.github.com/QuantumCD/6245215 and https://www.nordtheme.com/docs/colors-and-palettes
-    app.setStyle("Fusion")
+    app.setStyle(config["theme"]["style"])
     dark_palette = QtGui.QPalette()
     dark_palette.setColor(QtGui.QPalette.Window, QtGui.QColor(46, 52, 64))
     dark_palette.setColor(QtGui.QPalette.WindowText, QtCore.Qt.white)
@@ -1097,11 +1207,18 @@ if __name__ == "__main__":
     dark_palette.setColor(QtGui.QPalette.Button, QtGui.QColor(34, 38, 47))
     dark_palette.setColor(QtGui.QPalette.ButtonText, QtCore.Qt.white)
     dark_palette.setColor(QtGui.QPalette.BrightText, QtGui.QColor(191, 97, 106))
-    dark_palette.setColor(QtGui.QPalette.Link, QtGui.QColor(129, 161, 193))
-    dark_palette.setColor(QtGui.QPalette.Highlight, QtGui.QColor(119, 124, 193))
+    dark_palette.setColor(QtGui.QPalette.Link, QtGui.QColor(config["theme"]["accentColorLighter"]))
+    dark_palette.setColor(QtGui.QPalette.Highlight, QtGui.QColor(config["theme"]["accentColorMain"]))
     dark_palette.setColor(QtGui.QPalette.HighlightedText, QtCore.Qt.white)
     app.setPalette(dark_palette)
-    app.setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }")
+
+    with open("data/assets/themes/{}.qss".format(config["theme"]["name"]), "r") as file:
+        stylesheet = file.read()
+
+    stylesheet = stylesheet.replace("@accentColorMain", config["theme"]["accentColorMain"])
+    stylesheet = stylesheet.replace("@accentColorDarker", config["theme"]["accentColorDarker"])
+
+    app.setStyleSheet(stylesheet)
 
     window = MainUi()
     window.show()

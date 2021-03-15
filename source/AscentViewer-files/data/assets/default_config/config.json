@@ -6,6 +6,14 @@
         "y": 100,
         "bottomSplitterPanelH": 90
     },
+    "theme": {
+        "name": "AscentedNordDark",
+        "style": "Fusion",
+        "accentColorMain": "#777cc1",
+        "accentColorDarker": "#525685",
+        "accentColorLighter": "#a3a8e6",
+        "accentColorIsALightColor": false
+    },
     "localization": {
         "lang": "en-us"
     },

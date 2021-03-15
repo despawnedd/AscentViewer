@@ -1,0 +1,81 @@
+/* The main AscentViewer theme, based on Nord (nordtheme.com) */
+
+QToolTip
+{
+    color: #ffffff;
+    background-color: #2a82da;
+    border: 1px solid white;
+}
+
+QMenu
+{
+    background-color: rgb(38, 43, 53);
+    border: 1px;
+    border-style: solid;
+    border-color: #1C1F27;
+}
+
+QMenu::separator {
+    height: 1px;
+    background: #3b4252;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/* from https://forum.qt.io/topic/89473/how-can-i-change-padding-for-icon-on-qmenubar-item */
+QMenu::item
+{
+    background-color: rgb(38, 43, 53);
+    min-height: 20px;
+    padding: 2px 20px 2px 10px;
+    padding-left: 10px;
+    padding-right: 20px;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+/* these icons are really, REALLY broken | just a note: this piece of code below (QMenu::icon) does not work if the piece of code above (QMenu::item) is not there */
+QMenu::icon
+{
+    padding-left: 10px;
+}
+
+QMenu::item:disabled
+{
+    background-color: rgb(38, 43, 53);
+    color: #3b4252;
+}
+
+QMenu::item:selected
+{
+    background-color: @accentColorMain;
+}
+
+QLabel#MainImageLabel
+{
+    color: white;
+    background: #2E3440;
+}
+
+QSplitter::handle#MainSplitter
+{
+    background: @accentColorMain;
+    height: 2;
+}
+
+QFrame#Bottom
+{
+    background: @accentColorDarker;
+}
+
+QToolButton::menu-indicator 
+{
+    image: url(data/assets/img/dropdown_arrow.png);
+    subcontrol-position: center;
+    subcontrol-origin: padding;
+}
+
+QStatusBar
+{
+    background: @accentColorMain;
+}
